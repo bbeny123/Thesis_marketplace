@@ -2,20 +2,20 @@
 --  Example data for Table PROVINCES
 --------------------------------------------------------
 
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (1, 'dolnośląskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (2, 'kujawsko-pomorskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (3, 'lubelskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (4, 'lubuskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (5, 'łódzkie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (6, 'małopolskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (7, 'mazowieckie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (8, 'opolskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (9, 'podkarpackie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (10, 'podlaskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (11, 'pomorskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (12, 'śląskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (13, 'świętokrzyskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (14, 'warmińsko-mazurskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (15, 'wielkopolskie');
-Insert into PROVINCES (PRV_ID,PRV_NAME) values (16, 'zachodniopomorskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (1, 'dolnośląskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (2, 'kujawsko-pomorskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (3, 'lubelskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (4, 'lubuskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (5, 'łódzkie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (6, 'małopolskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (7, 'mazowieckie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (8, 'opolskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (9, 'podkarpackie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (10, 'podlaskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (11, 'pomorskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (12, 'śląskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (13, 'świętokrzyskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (14, 'warmińsko-mazurskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (15, 'wielkopolskie');
+INSERT INTO PROVINCES (PRV_ID, PRV_NAME) VALUES (16, 'zachodniopomorskie');
 COMMIT;

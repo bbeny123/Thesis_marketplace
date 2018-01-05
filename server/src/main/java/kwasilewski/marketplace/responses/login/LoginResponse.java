@@ -10,20 +10,26 @@ public class LoginResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private String city;
+    private Long prvId;
+    private String phone;
     private Date avatarDate;
     private String token;
 
     public LoginResponse() {
     }
 
-    public LoginResponse(UserData userData, String token) {
+    public LoginResponse(UserData userData) {
         if (userData != null) {
             this.id = userData.getId();
             this.email = userData.getEmail();
             this.firstName = userData.getFirstName();
             this.lastName = userData.getLastName();
+            this.city = userData.getCity();
+            this.prvId = userData.getPrvId();
+            this.phone = userData.getPhone();
             this.avatarDate = userData.getAvatarDate();
-            this.token = token;
+            this.token = userData.getToken();
         }
     }
 
@@ -57,6 +63,30 @@ public class LoginResponse {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Date getAvatarDate() {

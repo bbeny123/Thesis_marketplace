@@ -4,7 +4,8 @@ public enum MKTError {
 
     USER_INVALID_LOGIN_OR_PASSWORD(1, "Invalid login or password"),
     USER_ALREADY_EXISTS(2, "User already exists"),
-    USER_NOT_EXISTS(4, "User does not exists"),
+    USER_NOT_EXISTS(3, "User does not exists"),
+    WRONG_TOKEN(4, "Wrong token"),
     NOT_AUTHORIZED(5, "Not authorized");
 
     private final int code;

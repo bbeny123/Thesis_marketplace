@@ -5,6 +5,7 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,13 @@ public class UserDAO {
 
     @PersistenceContext
     private EntityManager em;
+
+    private final TokenDAO tokenDAO;
+
+    @Autowired
+    public UserDAO(TokenDAO tokenDAO) {
+        this.tokenDAO = tokenDAO;
+    }
 
     public List<UserData> getAll(UserContext ctx) throws DataAccessException, MKTException {
         if (!ctx.isAdmin()) {
@@ -50,15 +58,19 @@ public class UserDAO {
         }
     }
 
+    @Transactional
     public UserData login(String email, String password) throws DataAccessException, MKTException {
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user WHERE user.email = :email AND user.password = :password", UserData.class);
         query.setParameter("email", email);
         query.setParameter("password", password);
+        UserData user;
         try {
-            return query.getSingleResult();
+            user = query.getSingleResult();
         } catch (NoResultException e) {
             throw new MKTException(MKTError.USER_INVALID_LOGIN_OR_PASSWORD);
         }
+        user.setToken(tokenDAO.create(user.getId()));
+        return user;
     }
 
     @Transactional

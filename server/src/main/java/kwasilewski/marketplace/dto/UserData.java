@@ -42,6 +42,9 @@ public class UserData {
     @Column(name = "USR_CITY")
     private String city;
 
+    @Column(name = "USR_PRV_ID")
+    private Long prvId;
+
     @Column(name = "USR_PHONE")
     private String phone;
 
@@ -55,6 +58,9 @@ public class UserData {
 
     @Column(name = "USR_ADMIN")
     private boolean admin;
+
+    @Transient
+    private String token;
 
     public Long getId() {
         return id;
@@ -104,6 +110,14 @@ public class UserData {
         this.city = city;
     }
 
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -134,6 +148,14 @@ public class UserData {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public ProvinceData getProvince() {

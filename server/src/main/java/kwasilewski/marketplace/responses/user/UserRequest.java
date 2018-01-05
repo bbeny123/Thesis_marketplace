@@ -8,6 +8,8 @@ public class UserRequest {
     private String password;
     private String firstName;
     private String lastName;
+    private String city;
+    private Long prvId;
     private String phone;
 
     public UserRequest() {
@@ -45,6 +47,22 @@ public class UserRequest {
         this.lastName = lastName;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -59,6 +77,8 @@ public class UserRequest {
         user.setPassword(this.password);
         user.setFirstName(this.firstName);
         user.setLastName(this.lastName);
+        user.setCity(this.city);
+        user.setPrvId(this.prvId);
         user.setPhone(this.phone);
         return user;
     }

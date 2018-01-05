@@ -17,9 +17,15 @@ public class TokenData {
     @Column(name = "TKN_ID")
     private Long id;
 
+    @Column(name = "TKN_USR_ID")
+    private Long usrId;
+
+    @Column(name = "TKN_TOKEN")
+    private String token;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "TKN_DATE")
-    private Date date;
+    private Date date = new Date();
 
     public Long getId() {
         return id;
@@ -27,6 +33,22 @@ public class TokenData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUsrId() {
+        return usrId;
+    }
+
+    public void setUsrId(Long usrId) {
+        this.usrId = usrId;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Date getDate() {

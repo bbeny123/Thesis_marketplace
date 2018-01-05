@@ -5,7 +5,6 @@ import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.responses.login.LoginRequest;
 import kwasilewski.marketplace.responses.login.LoginResponse;
-import kwasilewski.marketplace.responses.login.TokenResponse;
 import kwasilewski.marketplace.responses.user.UserRequest;
 import kwasilewski.marketplace.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +42,9 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TokenResponse> checkToken(@ServiceContext UserContext ctx) {
+    public ResponseEntity<LoginResponse> checkToken(@ServiceContext UserContext ctx) {
         UserData user = userService.findUser(ctx.getUserId());
-        return new ResponseEntity<>(new TokenResponse(user.getAvatarDate()), HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(user), HttpStatus.OK);
     }
 
 

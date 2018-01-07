@@ -10,11 +10,3 @@ CREATE TABLE SUBCATEGORIES
   CONSTRAINT FK_SCT_CAT_ID FOREIGN KEY (SCT_CAT_ID) REFERENCES CATEGORIES (CAT_ID),
   CONSTRAINT UN_SCT_NAME_CAT_ID UNIQUE (SCT_CAT_ID, SCT_NAME)
 );
-
---------------------------------------------------------
---  Sequence for Table SUBCATEGORIES
---------------------------------------------------------
-
-CREATE SEQUENCE SEQ_SCT_ID
-  START WITH 1
-  INCREMENT BY 1;

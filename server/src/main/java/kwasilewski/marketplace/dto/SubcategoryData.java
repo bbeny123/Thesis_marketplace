@@ -4,17 +4,20 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "SUBCATEGORIES")
-@SequenceGenerator(name = "SEQ_SCT_ID", sequenceName = "SEQ_SCT_ID", allocationSize = 1)
+@SequenceGenerator(name = "SEQ_CAT_ID", sequenceName = "SEQ_CAT_ID", allocationSize = 1)
 public class SubcategoryData {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SCT_CAT_ID", insertable = false, updatable = false)
     private CategoryData category;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SCT_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_ID")
     @Column(name = "SCT_ID")
     private Long id;
+
+    @Column(name = "SCT_CAT_ID")
+    private Long catId;
 
     @Column(name = "SCT_NAME")
     private String name;
@@ -25,6 +28,14 @@ public class SubcategoryData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCatId() {
+        return catId;
+    }
+
+    public void setCatId(Long catId) {
+        this.catId = catId;
     }
 
     public String getName() {

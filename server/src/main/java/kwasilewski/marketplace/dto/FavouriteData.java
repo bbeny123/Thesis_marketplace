@@ -20,12 +20,23 @@ public class FavouriteData {
     @Column(name = "FAV_ID")
     private Long id;
 
+    @Column(name = "FAV_USR_ID")
+    private Long usrId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUsrId() {
+        return usrId;
+    }
+
+    public void setUsrId(Long usrId) {
+        this.usrId = usrId;
     }
 
     public UserData getUser() {

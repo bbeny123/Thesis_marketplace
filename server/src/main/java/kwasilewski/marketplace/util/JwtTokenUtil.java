@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class JwtTokenUtil {
 
     private final static String key = "something";
-    private final static long expTime = TimeUnit.DAYS.toMillis(30);
+    private final static int expDays = 30;
 
     public static String createToken(Long usrId) throws JwtException {
-        long expMillis = System.currentTimeMillis() + expTime;
+        long expMillis = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(expDays);
         return Jwts.builder().setSubject(usrId.toString()).signWith(SignatureAlgorithm.HS512, key).setExpiration(new Date(expMillis)).compact();
     }
 
@@ -24,6 +24,6 @@ public class JwtTokenUtil {
     }
 
     public static Date minimumTokenDate() {
-        return Date.from(LocalDateTime.now().minusDays(30).atZone(ZoneId.systemDefault()).toInstant());
+        return Date.from(LocalDateTime.now().minusDays(expDays).atZone(ZoneId.systemDefault()).toInstant());
     }
 }

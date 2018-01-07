@@ -3,9 +3,11 @@ package kwasilewski.marketplace.controller;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.UserData;
+import kwasilewski.marketplace.responses.AdSearchRequest;
 import kwasilewski.marketplace.responses.login.LoginRequest;
 import kwasilewski.marketplace.responses.login.LoginResponse;
 import kwasilewski.marketplace.responses.user.UserRequest;
+import kwasilewski.marketplace.services.AdService;
 import kwasilewski.marketplace.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/rest")
 public class RESTController extends AbstractRestController {
 
-    @Autowired
     private final UserService userService;
+    private final AdService adService;
 
-
-    public RESTController(UserService userService) {
+    @Autowired
+    public RESTController(UserService userService, AdService adService) {
         super();
         this.userService = userService;
+        this.adService = adService;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,5 +50,9 @@ public class RESTController extends AbstractRestController {
         return new ResponseEntity<>(new LoginResponse(user), HttpStatus.OK);
     }
 
-
+    @RequestMapping(value = "/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> checkToken(AdSearchRequest request) {
+        adService.findAds(request);
+        return ResponseEntity.ok().build();
+    }
 }

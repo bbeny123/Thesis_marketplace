@@ -27,7 +27,7 @@ public class SpringServerConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtSecuredInterceptor())
                 .addPathPatterns("/rest/**")
-                .excludePathPatterns("/rest/login", "/rest/register");
+                .excludePathPatterns("/rest/login", "/rest/register", "/rest/ads");
     }
 
     @Override

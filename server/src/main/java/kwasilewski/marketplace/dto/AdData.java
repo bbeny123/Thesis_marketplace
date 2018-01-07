@@ -9,6 +9,10 @@ import java.util.List;
 @SequenceGenerator(name = "SEQ_ADS_ID", sequenceName = "SEQ_ADS_ID", allocationSize = 1)
 public class AdData {
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ADS_CAT_ID", insertable = false, updatable = false)
+    private SubcategoryData category;
+
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PhotoData> photos;
 
@@ -18,10 +22,8 @@ public class AdData {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_USR_ID", insertable = false, updatable = false)
     private UserData user;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ADS_CAT_ID", insertable = false, updatable = false)
-    private CategoryData category;
+    @Column(name = "ADS_USR_ID")
+    private Long usrId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_CUR_ID", insertable = false, updatable = false)
@@ -35,6 +37,12 @@ public class AdData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADS_ID")
     @Column(name = "ADS_ID")
     private Long id;
+    @Column(name = "ADS_CAT_ID")
+    private Long catId;
+    @Column(name = "ADS_PRV_ID")
+    private Long prvId;
+    @Transient
+    private PhotoData miniature;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ADS_DATE")
@@ -61,12 +69,48 @@ public class AdData {
     @Column(name = "ADS_ACTIVE")
     private boolean active;
 
+    public static String getSortingMethod(int sortingMethod) {
+        switch (sortingMethod) {
+            case SortingMethod.CHEAPEST:
+                return "price";
+            case SortingMethod.MOSTEXPENSIVE:
+                return "price DESC";
+            case SortingMethod.NEWEST:
+            default:
+                return "date DESC";
+        }
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUsrId() {
+        return usrId;
+    }
+
+    public void setUsrId(Long usrId) {
+        this.usrId = usrId;
+    }
+
+    public Long getCatId() {
+        return catId;
+    }
+
+    public void setCatId(Long catId) {
+        this.catId = catId;
+    }
+
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
     }
 
     public Date getDate() {
@@ -133,6 +177,14 @@ public class AdData {
         this.active = active;
     }
 
+    public PhotoData getMiniature() {
+        return miniature;
+    }
+
+    public void setMiniature(PhotoData miniature) {
+        this.miniature = miniature;
+    }
+
     public UserData getUser() {
         return user;
     }
@@ -141,11 +193,11 @@ public class AdData {
         this.user = user;
     }
 
-    public CategoryData getCategory() {
+    public SubcategoryData getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryData category) {
+    public void setCategory(SubcategoryData category) {
         this.category = category;
     }
 
@@ -179,5 +231,11 @@ public class AdData {
 
     public void setFavourites(List<FavouriteData> favourites) {
         this.favourites = favourites;
+    }
+
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
     }
 }

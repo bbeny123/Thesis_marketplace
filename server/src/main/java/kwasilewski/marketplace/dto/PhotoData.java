@@ -16,6 +16,9 @@ public class PhotoData {
     @Column(name = "PHT_ID")
     private Long id;
 
+    @Column(name = "PHT_ADS_ID")
+    private Long adId;
+
     @Column(name = "PHT_MINIATURE")
     private boolean miniature;
 
@@ -29,6 +32,14 @@ public class PhotoData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAdId() {
+        return adId;
+    }
+
+    public void setAdId(Long adId) {
+        this.adId = adId;
     }
 
     public boolean isMiniature() {

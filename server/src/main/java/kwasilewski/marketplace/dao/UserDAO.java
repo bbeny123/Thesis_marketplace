@@ -31,9 +31,7 @@ public class UserDAO {
     }
 
     public List<UserData> getAll(UserContext ctx) throws DataAccessException, MKTException {
-        if (!ctx.isAdmin()) {
-            throw new MKTException(MKTError.NOT_AUTHORIZED);
-        }
+        if (!ctx.isAdmin()) throw new MKTException(MKTError.NOT_AUTHORIZED);
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user", UserData.class);
         return query.getResultList();
     }
@@ -75,20 +73,24 @@ public class UserDAO {
 
     @Transactional
     public void create(UserData user) throws DataAccessException, MKTException {
-        if (find(user.getEmail()) != null) {
-            throw new MKTException(MKTError.USER_ALREADY_EXISTS);
-        }
+        if (find(user.getEmail()) != null) throw new MKTException(MKTError.USER_ALREADY_EXISTS);
         this.em.persist(user);
+    }
+
+    @Transactional
+    public void modify(UserContext ctx, UserData user) throws DataAccessException, MKTException {
+        if (user.getId() == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
+        else if (!ctx.isAdmin() || !user.getId().equals(ctx.getUserId()) || find(user.getId()) == null)
+            throw new MKTException(MKTError.NOT_AUTHORIZED);
+        this.em.merge(user);
     }
 
     @Transactional
     public void promote(UserContext ctx, Long id) throws DataAccessException, MKTException {
         UserData user = id == null ? null : find(id);
-        if (user == null) {
-            throw new MKTException(MKTError.USER_NOT_EXISTS);
-        } else if (!ctx.isAdmin() || user.getId().equals(ctx.getUserId())) {
+        if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
+        else if (!ctx.isAdmin() || user.getId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
-        }
         user.setAdmin(true);
         this.em.merge(user);
     }
@@ -96,11 +98,9 @@ public class UserDAO {
     @Transactional
     public void remove(UserContext ctx, Long id) throws DataAccessException, MKTException {
         UserData user = id == null ? null : find(id);
-        if (user == null) {
-            throw new MKTException(MKTError.USER_NOT_EXISTS);
-        } else if (!ctx.isAdmin() || user.getId().equals(ctx.getUserId())) {
+        if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
+        else if (!ctx.isAdmin() || user.getId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
-        }
         this.em.remove(user);
     }
 

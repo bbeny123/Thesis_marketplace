@@ -1,10 +1,8 @@
-package kwasilewski.marketplace.responses;
+package kwasilewski.marketplace.dto.requests;
 
-public class AdSearchRequest {
+public class AdSearchData extends ListData {
 
     private int sortingMethod = 1;
-    private int offset = 0;
-    private int maxResults = 5;
     private String title;
     private Long prvId;
     private Long catId;
@@ -17,22 +15,6 @@ public class AdSearchRequest {
 
     public void setSortingMethod(int sortingMethod) {
         this.sortingMethod = sortingMethod;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public int getMaxResults() {
-        return maxResults;
-    }
-
-    public void setMaxResults(int maxResults) {
-        this.maxResults = maxResults;
     }
 
     public String getTitle() {

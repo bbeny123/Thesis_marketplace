@@ -3,9 +3,9 @@ package kwasilewski.marketplace.controller;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.UserData;
-import kwasilewski.marketplace.responses.AdSearchRequest;
-import kwasilewski.marketplace.responses.login.LoginRequest;
-import kwasilewski.marketplace.responses.login.LoginResponse;
+import kwasilewski.marketplace.dto.requests.AdSearchData;
+import kwasilewski.marketplace.dto.requests.LoginData;
+import kwasilewski.marketplace.dto.responses.LoginResponse;
 import kwasilewski.marketplace.responses.user.UserRequest;
 import kwasilewski.marketplace.services.AdService;
 import kwasilewski.marketplace.services.UserService;
@@ -39,7 +39,7 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws Exception {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginData request) throws Exception {
         UserData user = userService.loginUser(request.getEmail(), request.getPassword());
         return new ResponseEntity<>(new LoginResponse(user), HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> checkToken(AdSearchRequest request) {
+    public ResponseEntity<?> checkToken(AdSearchData request) {
         adService.findAds(request);
         return ResponseEntity.ok().build();
     }

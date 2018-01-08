@@ -23,6 +23,9 @@ public class FavouriteData {
     @Column(name = "FAV_USR_ID")
     private Long usrId;
 
+    @Column(name = "FAV_ADS_ID")
+    private Long adId;
+
     public Long getId() {
         return id;
     }
@@ -37,6 +40,14 @@ public class FavouriteData {
 
     public void setUsrId(Long usrId) {
         this.usrId = usrId;
+    }
+
+    public Long getAdId() {
+        return adId;
+    }
+
+    public void setAdId(Long adId) {
+        this.adId = adId;
     }
 
     public UserData getUser() {

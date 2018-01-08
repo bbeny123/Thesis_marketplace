@@ -1,11 +1,11 @@
-package kwasilewski.marketplace.responses.login;
+package kwasilewski.marketplace.dto.requests;
 
-public class LoginRequest {
+public class LoginData {
 
     private String email;
     private String password;
 
-    public LoginRequest() {
+    public LoginData() {
     }
 
     public String getEmail() {

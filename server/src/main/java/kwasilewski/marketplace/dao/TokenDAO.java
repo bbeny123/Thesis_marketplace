@@ -32,11 +32,8 @@ public class TokenDAO {
         TypedQuery<Long> query = this.em.createQuery("SELECT COUNT(tkn) FROM TokenData tkn WHERE tkn.token = :token AND tkn.date >= :date", Long.class);
         query.setParameter("token", token);
         query.setParameter("date", JwtTokenUtil.minimumTokenDate());
-        if (query.getSingleResult() != 0) {
-            return true;
-        } else {
-            throw new MKTException(MKTError.WRONG_TOKEN);
-        }
+        if (query.getSingleResult() != 1) throw new MKTException(MKTError.WRONG_TOKEN);
+        return true;
     }
 
 }

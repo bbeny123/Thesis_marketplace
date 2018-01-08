@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.responses.login;
+package kwasilewski.marketplace.dto.responses;
 
 import kwasilewski.marketplace.dto.UserData;
 

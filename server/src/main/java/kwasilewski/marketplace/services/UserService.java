@@ -20,6 +20,26 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
+    public void createUser(UserData user) throws DataAccessException, MKTException {
+        userDAO.create(user);
+    }
+
+    public void modifyUser(UserContext ctx, UserData user) throws DataAccessException, MKTException {
+        userDAO.modify(ctx, user);
+    }
+
+    public void promoteUser(UserContext ctx, Long userId) throws DataAccessException, MKTException {
+        userDAO.promote(ctx, userId);
+    }
+
+    public void removeUser(UserContext ctx, Long userId) throws DataAccessException, MKTException {
+        userDAO.remove(ctx, userId);
+    }
+
+    public UserData loginUser(String email, String password) throws DataAccessException, MKTException {
+        return userDAO.login(email, password);
+    }
+
     public List<UserData> getAllUsers(UserContext ctx) throws DataAccessException, MKTException {
         return userDAO.getAll(ctx);
     }
@@ -32,20 +52,7 @@ public class UserService {
         return userDAO.find(email);
     }
 
-    public UserData loginUser(String email, String password) throws DataAccessException, MKTException {
-        return userDAO.login(email, password);
-    }
 
-    public void createUser(UserData user) throws DataAccessException, MKTException {
-        userDAO.create(user);
-    }
 
-    public void promoteUser(UserContext ctx, Long userId) throws DataAccessException, MKTException {
-        userDAO.promote(ctx, userId);
-    }
-
-    public void removeUser(UserContext ctx, Long userId) throws DataAccessException, MKTException {
-        userDAO.remove(ctx, userId);
-    }
 
 }

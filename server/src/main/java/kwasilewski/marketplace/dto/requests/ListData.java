@@ -1,10 +1,9 @@
-package kwasilewski.marketplace.responses;
+package kwasilewski.marketplace.dto.requests;
 
-public class UserAdsRequest {
+public class ListData {
 
     private int offset = 0;
     private int maxResults = 5;
-    private boolean active = true;
 
     public int getOffset() {
         return offset;
@@ -22,11 +21,4 @@ public class UserAdsRequest {
         this.maxResults = maxResults;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }

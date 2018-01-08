@@ -3,10 +3,11 @@ package kwasilewski.marketplace.dao;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
+import kwasilewski.marketplace.dto.requests.ListData;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
-import kwasilewski.marketplace.responses.FavouriteRequest;
-import kwasilewski.marketplace.util.JwtTokenUtil;
+import kwasilewski.marketplace.util.DateTimeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,40 +24,63 @@ public class FavouriteDAO {
     @PersistenceContext
     private EntityManager em;
 
+    private final AdDAO adDAO;
+    private final PhotoDAO photoDAO;
+
+    @Autowired
+    public FavouriteDAO(AdDAO adDAO, PhotoDAO photoDAO) {
+        this.adDAO = adDAO;
+        this.photoDAO = photoDAO;
+    }
+
     @Transactional
-    public void create(FavouriteData favouriteData) throws MKTException {
-        if (favouriteData.getId() != null) throw new MKTException(MKTError.FAVOURITE_ALREADY_EXISTS);
-        this.em.persist(favouriteData);
+    public void create(UserContext ctx, Long adId) throws DataAccessException, MKTException {
+        if (adId == null || ctx.getUserId() == null || alreadyFavourite(ctx.getUserId(), adId) || adDAO.findWithNoPhotos(adId) == null)
+            throw new MKTException(MKTError.NOT_AUTHORIZED);
+        FavouriteData fav = new FavouriteData();
+        fav.setUsrId(ctx.getUserId());
+        fav.setAdId(adId);
+        this.em.persist(fav);
     }
 
     @Transactional
     public void remove(UserContext ctx, Long id) throws MKTException {
-        if (id == null) throw new MKTException(MKTError.FAVOURITE_NOT_EXISTS);
-        FavouriteData favouriteData = find(ctx, id);
-        if (favouriteData == null) throw new MKTException(MKTError.NOT_AUTHORIZED);
-        this.em.remove(favouriteData);
+        FavouriteData fav = id != null ? find(ctx, id) : null;
+        if (fav == null) throw new MKTException(MKTError.FAVOURITE_NOT_EXISTS);
+        this.em.remove(fav);
     }
 
-    public List<AdData> find(UserContext ctx, FavouriteRequest search) throws DataAccessException {
+    public List<AdData> find(UserContext ctx, ListData criteria) throws DataAccessException {
         String queryStr = "SELECT fav.ad FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.ad.active = TRUE AND fav.ad.date >= :date ORDER BY fav.ad.date DESC";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("usrId", ctx.getUserId());
-        query.setParameter("date", JwtTokenUtil.minimumTokenDate());
-        query.setFirstResult(search.getOffset());
-        query.setMaxResults(search.getMaxResults());
-        return query.getResultList();
+        query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
+        query.setFirstResult(criteria.getOffset());
+        query.setMaxResults(criteria.getMaxResults());
+        List<AdData> ads = query.getResultList();
+        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ad.getId())));
+        return ads;
     }
 
     public FavouriteData find(UserContext ctx, Long id) throws DataAccessException {
-        String queryStr = "SELECT fav FROM FavouriteData fav WHERE fav.id = :id AND fav.usrId = :usrId";
+        String queryStr = "SELECT fav FROM FavouriteData fav WHERE fav.id = :id";
+        queryStr += !ctx.isAdmin() ? " AND fav.usrId = :usrId" : "";
         TypedQuery<FavouriteData> query = this.em.createQuery(queryStr, FavouriteData.class);
         query.setParameter("id", id);
-        query.setParameter("usrId", ctx.getUserId());
+        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    private boolean alreadyFavourite(Long usrId, Long adId) {
+        String queryStr = "SELECT COUNT(fav) FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.adId = :adId";
+        TypedQuery<Long> query = this.em.createQuery(queryStr, Long.class);
+        query.setParameter("usrId", usrId);
+        query.setParameter("adId", adId);
+        return query.getSingleResult() == 1;
     }
 
 }

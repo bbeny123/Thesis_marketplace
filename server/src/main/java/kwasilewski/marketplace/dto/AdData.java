@@ -37,12 +37,14 @@ public class AdData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADS_ID")
     @Column(name = "ADS_ID")
     private Long id;
-    @Column(name = "ADS_CAT_ID")
-    private Long catId;
-    @Column(name = "ADS_PRV_ID")
-    private Long prvId;
     @Transient
     private PhotoData miniature;
+
+    @Column(name = "ADS_CAT_ID")
+    private Long catId;
+
+    @Column(name = "ADS_PRV_ID")
+    private Long prvId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ADS_DATE")
@@ -185,6 +187,22 @@ public class AdData {
         this.miniature = miniature;
     }
 
+    public List<PhotoData> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoData> photos) {
+        this.photos = photos;
+    }
+
+    public List<FavouriteData> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(List<FavouriteData> favourites) {
+        this.favourites = favourites;
+    }
+
     public UserData getUser() {
         return user;
     }
@@ -217,25 +235,10 @@ public class AdData {
         this.province = province;
     }
 
-    public List<PhotoData> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<PhotoData> photos) {
-        this.photos = photos;
-    }
-
-    public List<FavouriteData> getFavourites() {
-        return favourites;
-    }
-
-    public void setFavourites(List<FavouriteData> favourites) {
-        this.favourites = favourites;
-    }
-
     public interface SortingMethod {
         int NEWEST = 1;
         int CHEAPEST = 2;
         int MOSTEXPENSIVE = 3;
     }
+
 }

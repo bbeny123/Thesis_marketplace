@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dto.requests;
 
-public class ListData {
+public class ListRequest {
 
     private int offset = 0;
     private int maxResults = 5;

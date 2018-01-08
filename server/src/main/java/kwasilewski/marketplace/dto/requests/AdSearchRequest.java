@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dto.requests;
 
-public class AdSearchData extends ListData {
+public class AdSearchRequest extends ListRequest {
 
     private int sortingMethod = 1;
     private String title;

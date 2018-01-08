@@ -1,6 +1,7 @@
 package kwasilewski.marketplace.dao;
 
 import kwasilewski.marketplace.dto.TokenData;
+import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.JwtTokenUtil;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -28,12 +30,15 @@ public class TokenDAO {
         return token;
     }
 
-    public boolean check(String token) throws DataAccessException, MKTException {
-        TypedQuery<Long> query = this.em.createQuery("SELECT COUNT(tkn) FROM TokenData tkn WHERE tkn.token = :token AND tkn.date >= :date", Long.class);
+    public UserData check(String token) throws DataAccessException, MKTException {
+        TypedQuery<UserData> query = this.em.createQuery("SELECT tkn.user FROM TokenData tkn WHERE tkn.token = :token AND tkn.date >= :date", UserData.class);
         query.setParameter("token", token);
         query.setParameter("date", JwtTokenUtil.minimumTokenDate());
-        if (query.getSingleResult() != 1) throw new MKTException(MKTError.WRONG_TOKEN);
-        return true;
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new MKTException(MKTError.WRONG_TOKEN);
+        }
     }
 
 }

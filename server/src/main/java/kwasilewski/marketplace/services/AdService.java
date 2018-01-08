@@ -3,8 +3,8 @@ package kwasilewski.marketplace.services;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.AdDAO;
 import kwasilewski.marketplace.dto.AdData;
-import kwasilewski.marketplace.dto.requests.AdSearchData;
-import kwasilewski.marketplace.dto.requests.UserAdsData;
+import kwasilewski.marketplace.dto.requests.AdSearchRequest;
+import kwasilewski.marketplace.dto.requests.UserAdsRequest;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -54,11 +54,11 @@ public class AdService {
         return adDAO.find(ctx, id);
     }
 
-    public List<AdData> findAds(AdSearchData criteria) throws DataAccessException {
+    public List<AdData> findAds(AdSearchRequest criteria) throws DataAccessException {
         return adDAO.find(criteria);
     }
 
-    public List<AdData> findAds(UserContext ctx, UserAdsData criteria) throws DataAccessException {
+    public List<AdData> findAds(UserContext ctx, UserAdsRequest criteria) throws DataAccessException {
         return adDAO.find(ctx, criteria);
     }
 

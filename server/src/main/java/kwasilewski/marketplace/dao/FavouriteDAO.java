@@ -3,7 +3,7 @@ package kwasilewski.marketplace.dao;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
-import kwasilewski.marketplace.dto.requests.ListData;
+import kwasilewski.marketplace.dto.requests.ListRequest;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;
@@ -44,13 +44,13 @@ public class FavouriteDAO {
     }
 
     @Transactional
-    public void remove(UserContext ctx, Long id) throws MKTException {
-        FavouriteData fav = id != null ? find(ctx, id) : null;
+    public void remove(UserContext ctx, Long adId) throws DataAccessException, MKTException {
+        FavouriteData fav = adId != null ? find(ctx, adId) : null;
         if (fav == null) throw new MKTException(MKTError.FAVOURITE_NOT_EXISTS);
         this.em.remove(fav);
     }
 
-    public List<AdData> find(UserContext ctx, ListData criteria) throws DataAccessException {
+    public List<AdData> find(UserContext ctx, ListRequest criteria) throws DataAccessException {
         String queryStr = "SELECT fav.ad FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.ad.active = TRUE AND fav.ad.date >= :date ORDER BY fav.ad.date DESC";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("usrId", ctx.getUserId());
@@ -62,12 +62,11 @@ public class FavouriteDAO {
         return ads;
     }
 
-    public FavouriteData find(UserContext ctx, Long id) throws DataAccessException {
-        String queryStr = "SELECT fav FROM FavouriteData fav WHERE fav.id = :id";
-        queryStr += !ctx.isAdmin() ? " AND fav.usrId = :usrId" : "";
+    public FavouriteData find(UserContext ctx, Long adId) throws DataAccessException {
+        String queryStr = "SELECT fav FROM FavouriteData fav WHERE fav.adId = :adId AND fav.usrId = :usrId";
         TypedQuery<FavouriteData> query = this.em.createQuery(queryStr, FavouriteData.class);
-        query.setParameter("id", id);
-        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
+        query.setParameter("adId", adId);
+        query.setParameter("usrId", ctx.getUserId());
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

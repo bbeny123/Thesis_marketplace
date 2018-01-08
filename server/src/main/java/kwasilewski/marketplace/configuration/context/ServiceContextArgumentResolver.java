@@ -35,8 +35,8 @@ public class ServiceContextArgumentResolver extends AbstractHandlerMethodArgumen
         UserContext ctx = new UserContext();
         if (token != null) {
             try {
-                ctx.changeUser(JwtTokenUtil.getIdFromToken(token));
-                tokenService.checkToken(token);
+                ctx.setUserId(JwtTokenUtil.getIdFromToken(token));
+                ctx.changeUser(tokenService.checkToken(token));
             } catch (SignatureException | MKTException e) {
                 logger.warn("resolveArgument", "Invalid JwtToken");
             }

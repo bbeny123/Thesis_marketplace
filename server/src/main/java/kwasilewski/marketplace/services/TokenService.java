@@ -1,6 +1,7 @@
 package kwasilewski.marketplace.services;
 
 import kwasilewski.marketplace.dao.TokenDAO;
+import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -16,7 +17,7 @@ public class TokenService {
         this.tokenDAO = tokenDAO;
     }
 
-    public boolean checkToken(String token) throws DataAccessException, MKTException {
+    public UserData checkToken(String token) throws DataAccessException, MKTException {
         return tokenDAO.check(token);
     }
 

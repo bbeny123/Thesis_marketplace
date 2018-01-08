@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dto.requests;
 
-public class UserAdsData extends ListData {
+public class UserAdsRequest extends ListRequest {
 
     private boolean active = true;
 

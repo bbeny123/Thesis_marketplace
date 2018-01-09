@@ -21,5 +21,5 @@ CREATE TABLE USERS
 --------------------------------------------------------
 
 CREATE SEQUENCE SEQ_USR_ID
-  START WITH 1
+  START WITH 3
   INCREMENT BY 1;

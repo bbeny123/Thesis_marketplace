@@ -13,5 +13,5 @@ CREATE TABLE CURRENCIES
 --------------------------------------------------------
 
 CREATE SEQUENCE SEQ_CUR_ID
-  START WITH 1
+  START WITH 5
   INCREMENT BY 1;

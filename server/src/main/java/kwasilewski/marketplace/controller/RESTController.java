@@ -3,6 +3,8 @@ package kwasilewski.marketplace.controller;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.UserData;
+import kwasilewski.marketplace.dtoext.CategoryResponse;
+import kwasilewski.marketplace.dtoext.ShortResponse;
 import kwasilewski.marketplace.dtoext.ad.AdRequest;
 import kwasilewski.marketplace.dtoext.ad.AdResponse;
 import kwasilewski.marketplace.dtoext.ad.AdSearchRequest;
@@ -10,9 +12,7 @@ import kwasilewski.marketplace.dtoext.ad.AdUserRequest;
 import kwasilewski.marketplace.dtoext.user.LoginRequest;
 import kwasilewski.marketplace.dtoext.user.LoginResponse;
 import kwasilewski.marketplace.dtoext.user.UserRequest;
-import kwasilewski.marketplace.services.AdService;
-import kwasilewski.marketplace.services.FavouriteService;
-import kwasilewski.marketplace.services.UserService;
+import kwasilewski.marketplace.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,16 +26,32 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/rest")
 public class RESTController extends AbstractRESTController {
 
+    private final ProvinceService provinceService;
+    private final CategoryService categoryService;
     private final UserService userService;
     private final AdService adService;
     private final FavouriteService favouriteService;
 
     @Autowired
-    public RESTController(UserService userService, AdService adService, FavouriteService favouriteService) {
+    public RESTController(ProvinceService provinceService, CategoryService categoryService, UserService userService, AdService adService, FavouriteService favouriteService) {
         super();
+        this.provinceService = provinceService;
+        this.categoryService = categoryService;
         this.userService = userService;
         this.adService = adService;
         this.favouriteService = favouriteService;
+    }
+
+    @RequestMapping(value = "/provinces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getProvinces() {
+        List<ShortResponse> provinces = provinceService.getAllProvinces().stream().map(ShortResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(provinces, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCategories() {
+        List<CategoryResponse> categories = categoryService.getAllCategories().stream().map(CategoryResponse::new).collect(Collectors.toList());
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,7 +1,6 @@
 package kwasilewski.marketplace.dto;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -47,14 +46,6 @@ public class UserData {
 
     @Column(name = "USR_PHONE")
     private String phone;
-
-    @Column(name = "USR_AVATAR")
-    @Lob
-    private String avatar;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "USR_AVATAR_DATE")
-    private Date avatarDate;
 
     @Column(name = "USR_ADMIN")
     private boolean admin = false;
@@ -124,22 +115,6 @@ public class UserData {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Date getAvatarDate() {
-        return avatarDate;
-    }
-
-    public void setAvatarDate(Date avatarDate) {
-        this.avatarDate = avatarDate;
     }
 
     public boolean isAdmin() {

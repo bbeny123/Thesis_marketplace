@@ -2,8 +2,6 @@ package kwasilewski.marketplace.dtoext.user;
 
 import kwasilewski.marketplace.dto.UserData;
 
-import java.util.Date;
-
 public class LoginResponse {
 
     private Long id;
@@ -13,7 +11,6 @@ public class LoginResponse {
     private String city;
     private Long prvId;
     private String phone;
-    private Date avatarDate;
     private String token;
 
     public LoginResponse(UserData userData) {
@@ -24,7 +21,6 @@ public class LoginResponse {
         this.city = userData.getCity();
         this.prvId = userData.getPrvId();
         this.phone = userData.getPhone();
-        this.avatarDate = userData.getAvatarDate();
         this.token = userData.getToken();
     }
 
@@ -82,14 +78,6 @@ public class LoginResponse {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Date getAvatarDate() {
-        return avatarDate;
-    }
-
-    public void setAvatarDate(Date avatarDate) {
-        this.avatarDate = avatarDate;
     }
 
     public String getToken() {

@@ -44,6 +44,12 @@ public class RESTController extends AbstractRESTController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserRequest request) throws Exception {
+        userService.modifyUser(ctx, request.getUserData());
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws Exception {
         UserData user = userService.loginUser(request.getEmail(), request.getPassword());
@@ -55,12 +61,6 @@ public class RESTController extends AbstractRESTController {
         return new ResponseEntity<>(new LoginResponse(ctx.getUser()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, UserRequest request) throws Exception {
-        userService.modifyUser(ctx, request.getUserData());
-        return ResponseEntity.ok().build();
-    }
-
     @RequestMapping(value = "/user/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdUserRequest request) {
         List<AdResponse> ads = adService.findAds(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/user/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdResponse> findUserAds(@ServiceContext UserContext ctx, @PathVariable Long id) {
+    public ResponseEntity<AdResponse> findUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) {
         return new ResponseEntity<>(new AdResponse(adService.findAd(ctx, id)), HttpStatus.OK);
     }
 
@@ -79,18 +79,18 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/ads", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAd(@ServiceContext UserContext ctx, AdRequest request) throws Exception {
+    public ResponseEntity<?> createAd(@ServiceContext UserContext ctx, @RequestBody AdRequest request) throws Exception {
         adService.createAd(request.getAdData(ctx));
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/ads/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyAd(@ServiceContext UserContext ctx, AdRequest request) throws Exception {
+    @RequestMapping(value = "/ads/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> modifyAd(@ServiceContext UserContext ctx, @RequestBody AdRequest request) throws Exception {
         adService.modifyAd(ctx, request.getAdData(ctx));
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/ads/{id}/status", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/ads/{id}/status", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changeAdStatus(@ServiceContext UserContext ctx, @PathVariable Long id) throws Exception {
         adService.changeStatus(ctx, id);
         return ResponseEntity.ok().build();

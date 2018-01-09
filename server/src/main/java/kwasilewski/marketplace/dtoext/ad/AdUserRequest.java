@@ -1,6 +1,8 @@
-package kwasilewski.marketplace.dto.requests;
+package kwasilewski.marketplace.dtoext.ad;
 
-public class UserAdsRequest extends ListRequest {
+import kwasilewski.marketplace.dtoext.ListRequest;
+
+public class AdUserRequest extends ListRequest {
 
     private boolean active = true;
 

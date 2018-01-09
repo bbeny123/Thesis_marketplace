@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-public abstract class AbstractRestController extends AbstractController {
+public abstract class AbstractRESTController extends AbstractController {
 
-    public AbstractRestController() {
+    public AbstractRESTController() {
         super();
     }
 

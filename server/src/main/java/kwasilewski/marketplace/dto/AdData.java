@@ -28,6 +28,8 @@ public class AdData {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_CUR_ID", insertable = false, updatable = false)
     private CurrencyData currency;
+    @Column(name = "ADS_CUR_ID")
+    private Long curId = 1L;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_PRV_ID", insertable = false, updatable = false)
@@ -48,7 +50,7 @@ public class AdData {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ADS_DATE")
-    private Date date;
+    private Date date = new Date();
 
     @Column(name = "ADS_TITLE")
     private String title;
@@ -66,10 +68,10 @@ public class AdData {
     private String phone;
 
     @Column(name = "ADS_VIEWS")
-    private Long views;
+    private Long views = 0L;
 
     @Column(name = "ADS_ACTIVE")
-    private boolean active;
+    private boolean active = true;
 
     public static String getSortingMethod(int sortingMethod) {
         switch (sortingMethod) {
@@ -113,6 +115,14 @@ public class AdData {
 
     public void setPrvId(Long prvId) {
         this.prvId = prvId;
+    }
+
+    public Long getCurId() {
+        return curId;
+    }
+
+    public void setCurId(Long curId) {
+        this.curId = curId;
     }
 
     public Date getDate() {

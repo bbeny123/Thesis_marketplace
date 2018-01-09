@@ -1,20 +1,28 @@
-package kwasilewski.marketplace.dto.requests;
+package kwasilewski.marketplace.dtoext.ad;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.PhotoData;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdRequest {
+
     private Long id;
+    @NotBlank
     private Long catId;
+    @NotBlank
     private Long prvId;
+    @NotBlank
     private String title;
     private String description;
+    @NotBlank
     private Long price;
+    @NotBlank
     private String city;
+    @NotBlank
     private String phone;
     private String miniature;
     private List<String> photos;
@@ -103,7 +111,7 @@ public class AdRequest {
         AdData ad = new AdData();
         ad.setId(this.id);
         ad.setUsrId(ctx.getUserId());
-        ad.setCatId(this.catId); //TODO: walidacja
+        ad.setCatId(this.catId);
         ad.setPrvId(this.prvId);
         ad.setTitle(this.title);
         ad.setDescription(this.description);

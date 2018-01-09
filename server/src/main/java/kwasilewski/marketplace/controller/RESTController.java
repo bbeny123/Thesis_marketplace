@@ -3,9 +3,13 @@ package kwasilewski.marketplace.controller;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.UserData;
-import kwasilewski.marketplace.dto.requests.*;
-import kwasilewski.marketplace.dto.responses.AdResponse;
-import kwasilewski.marketplace.dto.responses.LoginResponse;
+import kwasilewski.marketplace.dtoext.ad.AdRequest;
+import kwasilewski.marketplace.dtoext.ad.AdResponse;
+import kwasilewski.marketplace.dtoext.ad.AdSearchRequest;
+import kwasilewski.marketplace.dtoext.ad.AdUserRequest;
+import kwasilewski.marketplace.dtoext.user.LoginRequest;
+import kwasilewski.marketplace.dtoext.user.LoginResponse;
+import kwasilewski.marketplace.dtoext.user.UserRequest;
 import kwasilewski.marketplace.services.AdService;
 import kwasilewski.marketplace.services.FavouriteService;
 import kwasilewski.marketplace.services.UserService;
@@ -20,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/rest")
-public class RESTController extends AbstractRestController {
+public class RESTController extends AbstractRESTController {
 
     private final UserService userService;
     private final AdService adService;
@@ -35,7 +39,7 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody RegisterRequest request) throws Exception {
+    public ResponseEntity<?> createUser(@RequestBody UserRequest request) throws Exception {
         userService.createUser(request.getUserData());
         return ResponseEntity.ok().build();
     }
@@ -51,8 +55,14 @@ public class RESTController extends AbstractRestController {
         return new ResponseEntity<>(new LoginResponse(ctx.getUser()), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, UserRequest request) throws Exception {
+        userService.modifyUser(ctx, request.getUserData());
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/user/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, UserAdsRequest request) {
+    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdUserRequest request) {
         List<AdResponse> ads = adService.findAds(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
@@ -63,7 +73,7 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/user/favourites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findFavourites(@ServiceContext UserContext ctx, UserAdsRequest request) {
+    public ResponseEntity<?> findFavourites(@ServiceContext UserContext ctx, AdUserRequest request) {
         List<AdResponse> ads = favouriteService.findFavourites(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
@@ -75,7 +85,7 @@ public class RESTController extends AbstractRestController {
     }
 
     @RequestMapping(value = "/ads/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyAd(@ServiceContext UserContext ctx, @PathVariable Long id, AdRequest request) throws Exception {
+    public ResponseEntity<?> modifyAd(@ServiceContext UserContext ctx, AdRequest request) throws Exception {
         adService.modifyAd(ctx, request.getAdData(ctx));
         return ResponseEntity.ok().build();
     }

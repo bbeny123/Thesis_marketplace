@@ -3,7 +3,7 @@ package kwasilewski.marketplace.dao;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
-import kwasilewski.marketplace.dto.requests.ListRequest;
+import kwasilewski.marketplace.dtoext.ListRequest;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;

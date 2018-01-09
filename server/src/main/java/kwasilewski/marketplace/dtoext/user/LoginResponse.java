@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.dto.responses;
+package kwasilewski.marketplace.dtoext.user;
 
 import kwasilewski.marketplace.dto.UserData;
 
@@ -16,21 +16,16 @@ public class LoginResponse {
     private Date avatarDate;
     private String token;
 
-    public LoginResponse() {
-    }
-
     public LoginResponse(UserData userData) {
-        if (userData != null) {
-            this.id = userData.getId();
-            this.email = userData.getEmail();
-            this.firstName = userData.getFirstName();
-            this.lastName = userData.getLastName();
-            this.city = userData.getCity();
-            this.prvId = userData.getPrvId();
-            this.phone = userData.getPhone();
-            this.avatarDate = userData.getAvatarDate();
-            this.token = userData.getToken();
-        }
+        this.id = userData.getId();
+        this.email = userData.getEmail();
+        this.firstName = userData.getFirstName();
+        this.lastName = userData.getLastName();
+        this.city = userData.getCity();
+        this.prvId = userData.getPrvId();
+        this.phone = userData.getPhone();
+        this.avatarDate = userData.getAvatarDate();
+        this.token = userData.getToken();
     }
 
     public Long getId() {

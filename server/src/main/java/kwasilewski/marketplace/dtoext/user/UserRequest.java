@@ -1,15 +1,27 @@
-package kwasilewski.marketplace.dto.requests;
+package kwasilewski.marketplace.dtoext.user;
 
 import kwasilewski.marketplace.dto.UserData;
+import org.hibernate.validator.constraints.NotBlank;
 
-public class RegisterRequest {
+public class UserRequest {
 
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String firstName;
+
     private String lastName;
+
+    @NotBlank
     private String city;
+
+    @NotBlank
     private Long prvId;
+
     private String phone;
 
     public String getEmail() {

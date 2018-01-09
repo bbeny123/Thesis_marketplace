@@ -57,7 +57,7 @@ public class UserData {
     private Date avatarDate;
 
     @Column(name = "USR_ADMIN")
-    private boolean admin;
+    private boolean admin = false;
 
     @Transient
     private String token;

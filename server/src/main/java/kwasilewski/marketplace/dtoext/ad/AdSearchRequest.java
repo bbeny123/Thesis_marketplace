@@ -1,4 +1,6 @@
-package kwasilewski.marketplace.dto.requests;
+package kwasilewski.marketplace.dtoext.ad;
+
+import kwasilewski.marketplace.dtoext.ListRequest;
 
 public class AdSearchRequest extends ListRequest {
 

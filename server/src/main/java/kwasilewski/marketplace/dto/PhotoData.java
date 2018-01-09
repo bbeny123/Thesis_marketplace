@@ -20,7 +20,7 @@ public class PhotoData {
     private Long adId;
 
     @Column(name = "PHT_MINIATURE")
-    private boolean miniature;
+    private boolean miniature = false;
 
     @Column(name = "PHT_PHOTO")
     @Lob

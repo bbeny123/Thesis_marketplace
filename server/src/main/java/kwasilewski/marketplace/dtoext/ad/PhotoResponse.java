@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.dto.responses;
+package kwasilewski.marketplace.dtoext.ad;
 
 import kwasilewski.marketplace.dto.PhotoData;
 

@@ -38,4 +38,5 @@ public class FavouriteService {
     public FavouriteData findFavourite(UserContext ctx, Long id) throws DataAccessException {
         return favouriteDAO.find(ctx, id);
     }
+
 }

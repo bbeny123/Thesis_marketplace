@@ -65,4 +65,5 @@ public class PhotoData {
     public void setAd(AdData ad) {
         this.ad = ad;
     }
+
 }

@@ -31,4 +31,5 @@ public class ProvinceData {
     public void setName(String name) {
         this.name = name;
     }
+
 }

@@ -11,8 +11,8 @@ import java.util.Date;
 
 public abstract class AbstractController {
 
-    public static final String ISO_DATE_FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
     final Logger logger;
+    private static final String ISO_DATE_FORMAT_LONG = "yyyy-MM-dd HH:mm:ss";
 
     public AbstractController() {
         this.logger = LogManager.getLogger(this.getClass());

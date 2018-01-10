@@ -22,17 +22,22 @@ public class UserContext implements Serializable {
         this.admin = currentUser.isAdmin();
     }
 
+    public void changeUser(UserData user) {
+        this.user = user;
+        this.admin = user.isAdmin();
+    }
+
+    public boolean isUser() {
+        return !admin;
+    }
+
     public UserData getUser() {
         return user;
     }
 
+
     public void setUser(UserData user) {
         this.user = user;
-    }
-
-    public void changeUser(UserData user) {
-        this.user = user;
-        this.admin = user.isAdmin();
     }
 
     public Long getUserId() {
@@ -43,11 +48,12 @@ public class UserContext implements Serializable {
         this.userId = userId;
     }
 
-    public boolean isUser() {
-        return !admin;
+    public boolean isAdmin() {
+        return admin;
     }
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
 }

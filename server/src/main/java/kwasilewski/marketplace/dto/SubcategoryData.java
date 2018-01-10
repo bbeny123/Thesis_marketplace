@@ -53,4 +53,5 @@ public class SubcategoryData {
     public void setCategory(CategoryData category) {
         this.category = category;
     }
+
 }

@@ -92,4 +92,5 @@ public class AdDetailsResponse extends AdResponse {
     public void setViews(Long views) {
         this.views = views;
     }
+
 }

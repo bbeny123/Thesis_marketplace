@@ -27,4 +27,5 @@ public class PhotoResponse {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
 }

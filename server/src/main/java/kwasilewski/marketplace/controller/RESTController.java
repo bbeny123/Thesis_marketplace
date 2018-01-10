@@ -139,4 +139,5 @@ public class RESTController extends AbstractRESTController {
         favouriteService.removeFavourite(ctx, id);
         return ResponseEntity.ok().build();
     }
+
 }

@@ -26,6 +26,9 @@ public class UserData {
     @Column(name = "USR_ID")
     private Long id;
 
+    @Column(name = "USR_PRV_ID")
+    private Long prvId;
+
     @Column(name = "USR_EMAIL")
     private String email;
 
@@ -40,9 +43,6 @@ public class UserData {
 
     @Column(name = "USR_CITY")
     private String city;
-
-    @Column(name = "USR_PRV_ID")
-    private Long prvId;
 
     @Column(name = "USR_PHONE")
     private String phone;
@@ -59,6 +59,14 @@ public class UserData {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
     }
 
     public String getEmail() {
@@ -99,14 +107,6 @@ public class UserData {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public Long getPrvId() {
-        return prvId;
-    }
-
-    public void setPrvId(Long prvId) {
-        this.prvId = prvId;
     }
 
     public String getPhone() {

@@ -30,4 +30,5 @@ public class CurrencyData {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
 }

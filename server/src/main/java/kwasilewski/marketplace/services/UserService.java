@@ -52,7 +52,4 @@ public class UserService {
         return userDAO.find(email);
     }
 
-
-
-
 }

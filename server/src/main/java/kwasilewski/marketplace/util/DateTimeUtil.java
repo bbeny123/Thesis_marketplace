@@ -11,4 +11,5 @@ public class DateTimeUtil {
     public static Date getMinAdActiveDate() {
         return Date.from(LocalDateTime.now().minusDays(expDays).atZone(ZoneId.systemDefault()).toInstant());
     }
+
 }

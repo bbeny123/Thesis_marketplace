@@ -26,4 +26,5 @@ public class JwtTokenUtil {
     public static Date minimumTokenDate() {
         return Date.from(LocalDateTime.now().minusDays(expDays).atZone(ZoneId.systemDefault()).toInstant());
     }
+
 }

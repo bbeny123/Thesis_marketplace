@@ -21,4 +21,5 @@ public class CategoryResponse extends ShortResponse {
     public void setSubcategories(List<ShortResponse> subcategories) {
         this.subcategories = subcategories;
     }
+
 }

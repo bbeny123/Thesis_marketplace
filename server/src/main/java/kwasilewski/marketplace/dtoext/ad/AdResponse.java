@@ -46,4 +46,5 @@ public class AdResponse {
     public void setMiniature(String miniature) {
         this.miniature = miniature;
     }
+
 }

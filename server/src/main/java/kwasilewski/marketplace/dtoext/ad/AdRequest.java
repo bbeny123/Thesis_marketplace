@@ -124,4 +124,5 @@ public class AdRequest {
         photoData.setPhoto(photo);
         return photoData;
     }
+
 }

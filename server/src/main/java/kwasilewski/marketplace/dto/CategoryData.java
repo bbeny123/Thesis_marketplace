@@ -42,4 +42,5 @@ public class CategoryData {
     public void setSubcategories(List<SubcategoryData> subcategories) {
         this.subcategories = subcategories;
     }
+
 }

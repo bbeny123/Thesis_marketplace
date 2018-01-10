@@ -66,4 +66,5 @@ public class TokenData {
     public void setUser(UserData user) {
         this.user = user;
     }
+
 }

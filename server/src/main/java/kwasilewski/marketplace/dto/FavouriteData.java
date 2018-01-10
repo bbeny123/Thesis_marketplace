@@ -65,4 +65,5 @@ public class FavouriteData {
     public void setAd(AdData ad) {
         this.ad = ad;
     }
+
 }

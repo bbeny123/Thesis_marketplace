@@ -10,9 +10,11 @@ import java.util.List;
 @SequenceGenerator(name = "SEQ_ADS_ID", sequenceName = "SEQ_ADS_ID", allocationSize = 1)
 public class AdData {
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ADS_CAT_ID", insertable = false, updatable = false)
-    private SubcategoryData category;
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
+    }
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhotoData> photos;
@@ -23,14 +25,14 @@ public class AdData {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_USR_ID", insertable = false, updatable = false)
     private UserData user;
-    @Column(name = "ADS_USR_ID")
-    private Long usrId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ADS_CAT_ID", insertable = false, updatable = false)
+    private SubcategoryData category;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_CUR_ID", insertable = false, updatable = false)
     private CurrencyData currency;
-    @Column(name = "ADS_CUR_ID")
-    private Long curId = 1L;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ADS_PRV_ID", insertable = false, updatable = false)
@@ -40,11 +42,15 @@ public class AdData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADS_ID")
     @Column(name = "ADS_ID")
     private Long id;
-    @Transient
-    private PhotoData miniature;
+
+    @Column(name = "ADS_USR_ID")
+    private Long usrId;
 
     @Column(name = "ADS_CAT_ID")
     private Long catId;
+
+    @Column(name = "ADS_CUR_ID")
+    private Long curId = 1L;
 
     @Column(name = "ADS_PRV_ID")
     private Long prvId;
@@ -74,17 +80,8 @@ public class AdData {
     @Column(name = "ADS_ACTIVE")
     private boolean active = true;
 
-    public static String getSortingMethod(int sortingMethod) {
-        switch (sortingMethod) {
-            case SortingMethod.CHEAPEST:
-                return "price";
-            case SortingMethod.MOSTEXPENSIVE:
-                return "price DESC";
-            case SortingMethod.NEWEST:
-            default:
-                return "date DESC";
-        }
-    }
+    @Transient
+    private PhotoData miniature;
 
     public Long getId() {
         return id;
@@ -110,20 +107,20 @@ public class AdData {
         this.catId = catId;
     }
 
-    public Long getPrvId() {
-        return prvId;
-    }
-
-    public void setPrvId(Long prvId) {
-        this.prvId = prvId;
-    }
-
     public Long getCurId() {
         return curId;
     }
 
     public void setCurId(Long curId) {
         this.curId = curId;
+    }
+
+    public Long getPrvId() {
+        return prvId;
+    }
+
+    public void setPrvId(Long prvId) {
+        this.prvId = prvId;
     }
 
     public Date getDate() {
@@ -198,23 +195,6 @@ public class AdData {
         this.miniature = miniature;
     }
 
-    public List<PhotoData> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<PhotoData> photos) {
-        this.photos = new ArrayList<>(photos);
-        photos.forEach(photo -> photo.setAd(this));
-    }
-
-    public List<FavouriteData> getFavourites() {
-        return favourites;
-    }
-
-    public void setFavourites(List<FavouriteData> favourites) {
-        this.favourites = favourites;
-    }
-
     public UserData getUser() {
         return user;
     }
@@ -247,10 +227,33 @@ public class AdData {
         this.province = province;
     }
 
-    public interface SortingMethod {
-        int NEWEST = 1;
-        int CHEAPEST = 2;
-        int MOSTEXPENSIVE = 3;
+    public List<PhotoData> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoData> photos) {
+        this.photos = new ArrayList<>(photos);
+        photos.forEach(photo -> photo.setAd(this));
+    }
+
+    public List<FavouriteData> getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(List<FavouriteData> favourites) {
+        this.favourites = favourites;
+    }
+
+    public static String getSortingMethod(int sortingMethod) {
+        switch (sortingMethod) {
+            case SortingMethod.CHEAPEST:
+                return "price";
+            case SortingMethod.MOSTEXPENSIVE:
+                return "price DESC";
+            case SortingMethod.NEWEST:
+            default:
+                return "date DESC";
+        }
     }
 
 }

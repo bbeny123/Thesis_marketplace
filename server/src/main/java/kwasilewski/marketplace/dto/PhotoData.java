@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class PhotoData {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PHT_ADS_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "PHT_ADS_ID")
     private AdData ad;
 
     @Id
@@ -16,7 +16,7 @@ public class PhotoData {
     @Column(name = "PHT_ID")
     private Long id;
 
-    @Column(name = "PHT_ADS_ID")
+    @Column(name = "PHT_ADS_ID", insertable = false, updatable = false)
     private Long adId;
 
     @Column(name = "PHT_MINIATURE")

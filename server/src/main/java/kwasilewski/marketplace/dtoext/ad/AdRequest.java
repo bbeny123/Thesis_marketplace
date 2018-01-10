@@ -3,37 +3,21 @@ package kwasilewski.marketplace.dtoext.ad;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.PhotoData;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdRequest {
 
-    private Long id;
-    @NotBlank
     private Long catId;
-    @NotBlank
     private Long prvId;
-    @NotBlank
     private String title;
     private String description;
-    @NotBlank
     private Long price;
-    @NotBlank
     private String city;
-    @NotBlank
     private String phone;
     private String miniature;
-    private List<String> photos;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private List<String> photos = new ArrayList<>();
 
     public Long getCatId() {
         return catId;
@@ -109,7 +93,6 @@ public class AdRequest {
 
     public AdData getAdData(UserContext ctx) {
         AdData ad = new AdData();
-        ad.setId(this.id);
         ad.setUsrId(ctx.getUserId());
         ad.setCatId(this.catId);
         ad.setPrvId(this.prvId);
@@ -119,6 +102,12 @@ public class AdRequest {
         ad.setCity(this.city);
         ad.setPhone(this.phone);
         ad.setPhotos(getPhotosList());
+        return ad;
+    }
+
+    public AdData getAdData(UserContext ctx, Long id) {
+        AdData ad = getAdData(ctx);
+        ad.setId(id);
         return ad;
     }
 

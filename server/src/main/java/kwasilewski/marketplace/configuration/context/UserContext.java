@@ -32,6 +32,7 @@ public class UserContext implements Serializable {
 
     public void changeUser(UserData user) {
         this.user = user;
+        this.admin = user.isAdmin();
     }
 
     public Long getUserId() {
@@ -42,8 +43,8 @@ public class UserContext implements Serializable {
         this.userId = userId;
     }
 
-    public boolean isAdmin() {
-        return admin;
+    public boolean isUser() {
+        return !admin;
     }
 
     public void setAdmin(boolean admin) {

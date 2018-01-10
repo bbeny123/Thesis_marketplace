@@ -35,7 +35,7 @@ public class FavouriteDAO {
 
     @Transactional
     public void create(UserContext ctx, Long adId) throws DataAccessException, MKTException {
-        if (adId == null || ctx.getUserId() == null || alreadyFavourite(ctx.getUserId(), adId) || adDAO.findWithNoPhotos(adId) == null)
+        if (adId == null || ctx.getUserId() == null || alreadyFavourite(ctx.getUserId(), adId) || adDAO.find(adId) == null)
             throw new MKTException(MKTError.NOT_AUTHORIZED);
         FavouriteData fav = new FavouriteData();
         fav.setUsrId(ctx.getUserId());

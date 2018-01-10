@@ -1,27 +1,15 @@
 package kwasilewski.marketplace.dtoext.user;
 
 import kwasilewski.marketplace.dto.UserData;
-import org.hibernate.validator.constraints.NotBlank;
 
 public class UserRequest {
 
-    @NotBlank
     private String email;
-
-    @NotBlank
     private String password;
-
-    @NotBlank
     private String firstName;
-
     private String lastName;
-
-    @NotBlank
     private String city;
-
-    @NotBlank
     private Long prvId;
-
     private String phone;
 
     public String getEmail() {
@@ -89,6 +77,12 @@ public class UserRequest {
         user.setCity(this.city);
         user.setPrvId(this.prvId);
         user.setPhone(this.phone);
+        return user;
+    }
+
+    public UserData getUserData(Long id) {
+        UserData user = getUserData();
+        user.setId(id);
         return user;
     }
 }

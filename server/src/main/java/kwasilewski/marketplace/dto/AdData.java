@@ -1,6 +1,7 @@
 package kwasilewski.marketplace.dto;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class AdData {
     @JoinColumn(name = "ADS_CAT_ID", insertable = false, updatable = false)
     private SubcategoryData category;
 
-    @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhotoData> photos;
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -202,7 +203,8 @@ public class AdData {
     }
 
     public void setPhotos(List<PhotoData> photos) {
-        this.photos = photos;
+        this.photos = new ArrayList<>(photos);
+        photos.forEach(photo -> photo.setAd(this));
     }
 
     public List<FavouriteData> getFavourites() {

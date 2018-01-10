@@ -16,7 +16,7 @@ public class CategoryDAO {
     private EntityManager em;
 
     public List<CategoryData> getAll() throws DataAccessException {
-        TypedQuery<CategoryData> query = this.em.createQuery("SELECT cat FROM CategoryData cat JOIN SubcategoryData cat.subcategories", CategoryData.class);
+        TypedQuery<CategoryData> query = this.em.createQuery("SELECT cat FROM CategoryData cat", CategoryData.class);
         return query.getResultList();
     }
 

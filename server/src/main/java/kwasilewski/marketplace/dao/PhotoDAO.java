@@ -31,10 +31,10 @@ public class PhotoDAO {
 
     public PhotoData findMiniature(UserContext ctx, Long adId) throws DataAccessException {
         String queryStr = "SELECT pht FROM PhotoData pht WHERE pht.adId = :adId AND pht.miniature = TRUE";
-        queryStr += !ctx.isAdmin() ? " AND pht.ad.usrId = :usrId" : "";
+        queryStr += ctx.isUser() ? " AND pht.ad.usrId = :usrId" : "";
         TypedQuery<PhotoData> query = this.em.createQuery(queryStr, PhotoData.class);
         query.setParameter("adId", adId);
-        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
+        if (ctx.isUser()) query.setParameter("usrId", ctx.getUserId());
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

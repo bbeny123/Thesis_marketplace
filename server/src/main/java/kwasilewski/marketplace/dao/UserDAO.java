@@ -39,8 +39,8 @@ public class UserDAO {
     @Transactional
     public void modify(UserContext ctx, UserData user) throws DataAccessException, MKTException {
         UserData usr = user.getId() == null ? null : find(user.getId());
-        if (usr == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
-        else if ((!ctx.isAdmin() && !usr.getId().equals(ctx.getUserId())) || (!usr.getEmail().equals(user.getEmail()) && find(user.getEmail()) != null))
+        if (usr == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
+        else if ((ctx.isUser() && !usr.getId().equals(ctx.getUserId())) || (!usr.getEmail().equals(user.getEmail()) && find(user.getEmail()) != null))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
         this.em.merge(user);
     }
@@ -49,7 +49,7 @@ public class UserDAO {
     public void promote(UserContext ctx, Long id) throws DataAccessException, MKTException {
         UserData user = id != null ? find(id) : null;
         if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
-        else if (!ctx.isAdmin() || user.getId().equals(ctx.getUserId()))
+        else if (ctx.isUser() || user.getId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
         user.setAdmin(true);
         this.em.merge(user);
@@ -57,7 +57,7 @@ public class UserDAO {
 
     @Transactional
     public void remove(UserContext ctx, Long id) throws DataAccessException, MKTException {
-        if (!ctx.isAdmin() || id == null || id.equals(ctx.getUserId())) throw new MKTException(MKTError.NOT_AUTHORIZED);
+        if (ctx.isUser() || id == null || id.equals(ctx.getUserId())) throw new MKTException(MKTError.NOT_AUTHORIZED);
         UserData user = find(id);
         if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
         this.em.remove(user);
@@ -79,7 +79,7 @@ public class UserDAO {
     }
 
     public List<UserData> getAll(UserContext ctx) throws DataAccessException, MKTException {
-        if (!ctx.isAdmin()) throw new MKTException(MKTError.NOT_AUTHORIZED);
+        if (ctx.isUser()) throw new MKTException(MKTError.NOT_AUTHORIZED);
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user", UserData.class);
         return query.getResultList();
     }

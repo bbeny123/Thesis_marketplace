@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <title>Marketplace - Photos</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${param.error}">
+        <label class="error">Error!</label>
+    </div>
+    <div th:if="${param.success}">
+        <label class="success">Success!</label>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad ID</th>
+            <th>Ad Status</th>
+            <th>Miniature</th>
+            <th>Photo</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pht : ${photos}">
+            <td th:text="${pht.id}">ID</td>
+            <td th:text="${pht.adId}">Name</td>
+            <td th:if="${pht.ad.active}" th:text="Active">Ad Status</td>
+            <td th:if="${!pht.ad.active}" th:text="Inactive">Ad Status</td>
+            <td th:if="${pht.miniature}" th:text="Yes">Miniature</td>
+            <td th:if="${!pht.miniature}" th:text="No">Miniature</td>
+            <td><img th:src="@{'data:image/jpeg;base64,' + ${pht.photo}}"/></td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+</div>
+</body>
+</html>

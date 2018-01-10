@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <title>Marketplace - Provinces</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${param.error}">
+        <label class="error">Error!</label>
+    </div>
+    <div th:if="${param.success}">
+        <label class="success">Success!</label>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Users</th>
+            <th>Ads</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="prv : ${provinces}">
+            <td th:text="${prv.id}">ID</td>
+            <td th:text="${prv.name}">Name</td>
+            <td th:text="${prv.usersNumber}">Users</td>
+            <td th:text="${prv.adsNumber}">Ads</td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+</div>
+</body>
+</html>

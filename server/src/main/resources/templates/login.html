@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <title>Marketplace - Login</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${param.error}">
+        <label class="error">Login Error!</label>
+    </div>
+    <div th:if="${param.logout}">
+        <label> You have been logged out. </label>
+    </div>
+    <form th:action="@{/login}" method="post">
+        <input type="hidden" id="password" name="password"/>
+        <table class="table table-striped">
+            <tr><td><label> E-mail : <input type="email" id="email" name="email"/> </label></td></tr>
+            <tr><td><label> Password : <input type="password" id="rawPassword"/> </label></td></tr>
+            <tr><td> <button type="submit" onclick="prePost()" class="btn btn-default" autofocus="autofocus">Sign In</button></td></tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

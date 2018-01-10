@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <title>Marketplace - Categories</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${param.error}">
+        <label class="error">Error!</label>
+    </div>
+    <div th:if="${param.success}">
+        <label class="success">Success!</label>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Number of Subcategories</th>
+            <th>Ads</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cat : ${categories}">
+            <td th:text="${cat.id}">ID</td>
+            <td th:text="${cat.name}">Name</td>
+            <td th:text="${cat.subcategories.size()}">Subcategories</td>
+            <td th:text="${cat.adsNumber}">Ads</td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+</div>
+</body>
+</html>

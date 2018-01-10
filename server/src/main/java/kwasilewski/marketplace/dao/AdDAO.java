@@ -12,10 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 @Repository
@@ -75,17 +72,20 @@ public class AdDAO {
         }
     }
 
-    public AdData find(Long id) throws DataAccessException {
+    public AdData find(Long id, boolean incrementViews) throws DataAccessException {
         String queryStr = "SELECT ad FROM AdData ad WHERE ad.id = :id";
         queryStr += getActiveQuery(true);
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("id", id);
         query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
+        AdData result;
         try {
-            return query.getSingleResult();
+            result = query.getSingleResult();
+            if(incrementViews) incrementViews(result.getId());
         } catch (NoResultException e) {
-            return null;
+            result = null;
         }
+        return result;
     }
 
     public AdData find(UserContext ctx, Long id) throws DataAccessException {
@@ -134,6 +134,12 @@ public class AdDAO {
         List<AdData> ads = query.getResultList();
         ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ctx, ad.getId())));
         return ads;
+    }
+
+    private void incrementViews(Long id) {
+        Query query = this.em.createQuery("UPDATE AdData ad SET ad.views = ad.views+1 WHERE ad.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     private String getActiveQuery(boolean active) {

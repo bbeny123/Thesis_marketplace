@@ -47,7 +47,7 @@ public class AdService {
     }
 
     public AdData findAd(Long id) throws DataAccessException {
-        return adDAO.find(id);
+        return adDAO.find(id, true);
     }
 
     public AdData findAd(UserContext ctx, Long id) throws DataAccessException {

@@ -165,6 +165,10 @@ public class UserData {
         this.favourites = favourites;
     }
 
+    public String getName() {
+        return lastName != null && !lastName.isEmpty() ? firstName + " " + lastName : firstName;
+    }
+
     public String getRole() {
         if (isAdmin()) {
             return "ADMIN";

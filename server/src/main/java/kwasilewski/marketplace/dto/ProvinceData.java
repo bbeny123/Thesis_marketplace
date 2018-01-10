@@ -1,9 +1,6 @@
 package kwasilewski.marketplace.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "PROVINCES")
@@ -15,6 +12,12 @@ public class ProvinceData {
 
     @Column(name = "PRV_NAME")
     private String name;
+
+    @Transient
+    private Long usersNumber;
+
+    @Transient
+    private Long adsNumber;
 
     public Long getId() {
         return id;
@@ -32,4 +35,19 @@ public class ProvinceData {
         this.name = name;
     }
 
+    public Long getUsersNumber() {
+        return usersNumber;
+    }
+
+    public void setUsersNumber(Long usersNumber) {
+        this.usersNumber = usersNumber;
+    }
+
+    public Long getAdsNumber() {
+        return adsNumber;
+    }
+
+    public void setAdsNumber(Long adsNumber) {
+        this.adsNumber = adsNumber;
+    }
 }

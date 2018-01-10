@@ -10,12 +10,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Repository
 public class PhotoDAO {
 
     @PersistenceContext
     private EntityManager em;
+
+    public List<PhotoData> getAll(UserContext ctx) throws DataAccessException {
+        if(ctx.isUser()) return null;
+        TypedQuery<PhotoData> query = this.em.createQuery("SELECT pht FROM PhotoData pht", PhotoData.class);
+        return query.getResultList();
+    }
 
     public PhotoData findMiniature(Long adId) {
         String queryStr = "SELECT pht FROM PhotoData pht WHERE pht.adId = :adId AND pht.miniature = TRUE AND pht.ad.active = TRUE and pht.ad.date >= :date";

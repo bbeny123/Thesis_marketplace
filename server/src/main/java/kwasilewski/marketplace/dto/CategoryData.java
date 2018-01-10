@@ -19,6 +19,9 @@ public class CategoryData {
     @Column(name = "CAT_NAME")
     private String name;
 
+    @Transient
+    private Long adsNumber;
+
     public Long getId() {
         return id;
     }
@@ -41,6 +44,14 @@ public class CategoryData {
 
     public void setSubcategories(List<SubcategoryData> subcategories) {
         this.subcategories = subcategories;
+    }
+
+    public Long getAdsNumber() {
+        return adsNumber;
+    }
+
+    public void setAdsNumber(Long adsNumber) {
+        this.adsNumber = adsNumber;
     }
 
 }

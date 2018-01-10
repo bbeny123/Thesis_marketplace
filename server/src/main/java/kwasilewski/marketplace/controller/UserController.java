@@ -24,7 +24,7 @@ public class UserController extends AbstractWebController {
         return url;
     }
 
-    @RequestMapping(value = "users/promote", method = RequestMethod.PUT)
+    @RequestMapping(value = "users/promote", method = RequestMethod.PATCH)
     public String promoteUser(Long id) throws Exception {
         userService.promoteUser(getUserContext(), id);
         return success;

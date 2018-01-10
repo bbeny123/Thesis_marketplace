@@ -20,4 +20,16 @@ public class ProvinceDAO {
         return query.getResultList();
     }
 
+    public Long getUserNumber(Long id) throws DataAccessException {
+        TypedQuery<Long> query = this.em.createQuery("SELECT COUNT(user) FROM UserData user WHERE user.prvId = :id", Long.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
+    public Long getAdsNumber(Long id) throws DataAccessException {
+        TypedQuery<Long> query = this.em.createQuery("SELECT COUNT(ad) FROM AdData ad WHERE ad.prvId = :id", Long.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
+    }
+
 }

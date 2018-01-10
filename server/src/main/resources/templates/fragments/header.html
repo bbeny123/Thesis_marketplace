@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div class="container">
+    <div th:fragment="header">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" th:href="@{/}">Home</a>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" th:href="@{/users}" sec:authorize="hasAuthority('ADMIN')">Users</a></li>
+                        <li><a href="#" th:href="@{/ads}" sec:authorize="hasAuthority('ADMIN')">Ads</a></li>
+                        <li><a href="#" th:href="@{/categories}" sec:authorize="hasAuthority('ADMIN')">Categories</a></li>
+                        <li><a href="#" th:href="@{/subcategories}" sec:authorize="hasAuthority('ADMIN')">Subcategories</a></li>
+                        <li><a href="#" th:href="@{/provinces}" sec:authorize="hasAuthority('ADMIN')">Provinces</a></li>
+                        <li><a href="#" th:href="@{/photos}" sec:authorize="hasAuthority('ADMIN')">Photos</a></li>
+                        <li><a href="#" th:href="@{/login}" sec:authorize="!isAuthenticated()">Sign In</a></li>
+                        <li><form name="logout" th:action="@{/logout}" method="post"><input type="hidden" value="Sign Out"/></form><a href="javascript:document.forms['logout'].submit()" sec:authorize="isAuthenticated()">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <img src="../../static/images/marketplace_header.jpg" class="img-rounded img-responsive" th:src="@{/images/marketplace_header.jpg}"/><br/>
+        </div>
+    </div>
+</div>
+</body>
+</html>

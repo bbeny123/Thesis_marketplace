@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <title>Marketplace - Ads</title>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${param.error}">
+        <label class="error">Error!</label>
+    </div>
+    <div th:if="${param.success}">
+        <label class="success">Success!</label>
+    </div>
+    <table id="data" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Category</th>
+            <th>Subcategory</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>City</th>
+            <th>Province</th>
+            <th>Phone</th>
+            <th>Views</th>
+            <th>Status</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ad : ${ads}">
+            <td th:text="${ad.id}">ID</td>
+            <td th:text="${ad.user.getName()}">User</td>
+            <td th:text="${ad.category.category.name}">Category</td>
+            <td th:text="${ad.category.name}">Subcategory</td>
+            <td th:text="${ad.title}">Title</td>
+            <td th:text="${ad.price} + ' ' + ${ad.currency.symbol}">Price</td>
+            <td th:text="${ad.city}">City</td>
+            <td th:text="${ad.province.name}">Province</td>
+            <td th:text="${ad.phone}">Phone</td>
+            <td th:text="${ad.views}">Views</td>
+            <td><form th:name="changeStatus + ${ad.id}" th:action="@{/ads/changeStatus}" th:method="patch"><input type="hidden" name="id" th:value="${ad.id}" /></form><a th:href="'javascript:document.forms[\'changeStatus' + ${ad.id} + '\'].submit();'"><span th:if="${!ad.active}">Activate</span><span th:if="${ad.active}">Deactivate</span></a></td>
+            <td><form th:name="delete + ${ad.id}" th:action="@{/ads/delete}" th:method="delete"><input type="hidden" name="id" th:value="${ad.id}" /></form><a th:href="'javascript:document.forms[\'delete' + ${ad.id} + '\'].submit();'">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+</div>
+</body>
+</html>

@@ -5,7 +5,6 @@ import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.CategoryDataExt;
-import kwasilewski.marketplace.dtoext.ConfigDataExt;
 import kwasilewski.marketplace.dtoext.HintDataExt;
 import kwasilewski.marketplace.dtoext.ad.*;
 import kwasilewski.marketplace.dtoext.user.LoginDataExt;
@@ -42,11 +41,6 @@ public class RESTController extends AbstractRESTController {
         this.favouriteService = favouriteService;
     }
 
-    @RequestMapping(value = "/configuration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getConfiguration() {
-        return new ResponseEntity<>(new ConfigDataExt(), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/provinces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProvinces() {
         List<HintDataExt> provinces = provinceService.getAllProvinces().stream().map(HintDataExt::new).collect(Collectors.toList());
@@ -76,9 +70,9 @@ public class RESTController extends AbstractRESTController {
         return new ResponseEntity<>(new UserDataExt(ctx.getUser()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @PathVariable Long id, @RequestBody UserDataExt request) throws Exception {
-        userService.modifyUser(ctx, request.getUserData(id));
+    @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserDataExt request) throws Exception {
+        userService.modifyUser(ctx, request.getUserData(ctx.getUserId()));
         return ResponseEntity.ok().build();
     }
 
@@ -95,7 +89,7 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/user/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdMinimalDataExt> getUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws MKTException {
+    public ResponseEntity<AdDetailsDataExt> getUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws MKTException {
         AdData ad = adService.findAd(ctx, id);
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
         return new ResponseEntity<>(new AdDetailsDataExt(ad), HttpStatus.OK);
@@ -126,7 +120,7 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdMinimalDataExt> getAd(@PathVariable Long id) throws MKTException {
+    public ResponseEntity<AdDetailsDataExt> getAd(@PathVariable Long id) throws MKTException {
         AdData ad = adService.findAd(id);
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
         return new ResponseEntity<>(new AdDetailsDataExt(ad), HttpStatus.OK);

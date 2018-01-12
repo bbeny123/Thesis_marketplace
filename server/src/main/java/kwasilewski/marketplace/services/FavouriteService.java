@@ -4,7 +4,7 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.FavouriteDAO;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
-import kwasilewski.marketplace.dtoext.ListRequest;
+import kwasilewski.marketplace.dtoext.ad.ListRequest;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

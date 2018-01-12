@@ -6,8 +6,7 @@ import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.CategoryResponse;
 import kwasilewski.marketplace.dtoext.ConfigResponse;
-import kwasilewski.marketplace.dtoext.ListRequest;
-import kwasilewski.marketplace.dtoext.ShortResponse;
+import kwasilewski.marketplace.dtoext.HintResponse;
 import kwasilewski.marketplace.dtoext.ad.*;
 import kwasilewski.marketplace.dtoext.user.LoginRequest;
 import kwasilewski.marketplace.dtoext.user.LoginResponse;
@@ -51,7 +50,7 @@ public class RESTController extends AbstractRESTController {
 
     @RequestMapping(value = "/provinces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProvinces() {
-        List<ShortResponse> provinces = provinceService.getAllProvinces().stream().map(ShortResponse::new).collect(Collectors.toList());
+        List<HintResponse> provinces = provinceService.getAllProvinces().stream().map(HintResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(provinces, HttpStatus.OK);
     }
 
@@ -91,7 +90,7 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/user/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdUserRequest request) {
+    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdSearchRequest request) {
         List<AdResponse> ads = adService.findAds(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }

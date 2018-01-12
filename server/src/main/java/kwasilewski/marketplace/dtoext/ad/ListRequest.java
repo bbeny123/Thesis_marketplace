@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.dtoext;
+package kwasilewski.marketplace.dtoext.ad;
 
 public class ListRequest {
 

@@ -5,20 +5,20 @@ import kwasilewski.marketplace.dto.CategoryData;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CategoryResponse extends ShortResponse {
+public class CategoryResponse extends HintResponse {
 
-    private List<ShortResponse> subcategories;
+    private List<HintResponse> subcategories;
 
     public CategoryResponse(CategoryData cat) {
         super(cat);
-        subcategories = cat.getSubcategories().stream().map(ShortResponse::new).collect(Collectors.toList());
+        subcategories = cat.getSubcategories().stream().map(HintResponse::new).collect(Collectors.toList());
     }
 
-    public List<ShortResponse> getSubcategories() {
+    public List<HintResponse> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(List<ShortResponse> subcategories) {
+    public void setSubcategories(List<HintResponse> subcategories) {
         this.subcategories = subcategories;
     }
 

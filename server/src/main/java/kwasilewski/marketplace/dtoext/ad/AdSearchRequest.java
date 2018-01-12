@@ -1,7 +1,5 @@
 package kwasilewski.marketplace.dtoext.ad;
 
-import kwasilewski.marketplace.dtoext.ListRequest;
-
 public class AdSearchRequest extends ListRequest {
 
     private int sortingMethod = 1;
@@ -10,6 +8,7 @@ public class AdSearchRequest extends ListRequest {
     private Long catId;
     private Long priceMin;
     private Long priceMax;
+    private boolean active = true;
 
     public int getSortingMethod() {
         return sortingMethod;
@@ -59,4 +58,11 @@ public class AdSearchRequest extends ListRequest {
         this.priceMax = priceMax;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

@@ -3,7 +3,6 @@ package kwasilewski.marketplace.dao;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dtoext.ad.AdSearchRequest;
-import kwasilewski.marketplace.dtoext.ad.AdUserRequest;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;
@@ -123,7 +122,7 @@ public class AdDAO {
         return ads;
     }
 
-    public List<AdData> find(UserContext ctx, AdUserRequest criteria) throws DataAccessException {
+    public List<AdData> find(UserContext ctx, AdSearchRequest criteria) throws DataAccessException {
         String queryStr = "SELECT ad FROM AdData ad WHERE ad.usrId = :usrId";
         queryStr += getActiveQuery(criteria.isActive()) + " ORDER BY ad.date DESC";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);

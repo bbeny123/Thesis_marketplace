@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dtoext.ad;
 
-public class ListRequest {
+public class ListSearchDataExt {
 
     private int offset = 0;
     private int maxResults = 5;

@@ -1,44 +1,13 @@
-package kwasilewski.marketplace.dtoext.user;
+package kwasilewski.marketplace.dto.user;
 
-import kwasilewski.marketplace.dto.UserData;
+public class UserData extends LoginRequest {
 
-public class LoginResponse {
-
-    private Long id;
-    private String email;
     private String firstName;
     private String lastName;
     private String city;
     private Long prvId;
     private String phone;
-    private String token;
-
-    public LoginResponse(UserData userData) {
-        this.id = userData.getId();
-        this.email = userData.getEmail();
-        this.firstName = userData.getFirstName();
-        this.lastName = userData.getLastName();
-        this.city = userData.getCity();
-        this.prvId = userData.getPrvId();
-        this.phone = userData.getPhone();
-        this.token = userData.getToken();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    private String token; // only for logging in
 
     public String getFirstName() {
         return firstName;
@@ -87,5 +56,4 @@ public class LoginResponse {
     public void setToken(String token) {
         this.token = token;
     }
-
 }

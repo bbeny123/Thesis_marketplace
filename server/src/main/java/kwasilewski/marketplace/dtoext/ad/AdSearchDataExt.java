@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dtoext.ad;
 
-public class AdSearchRequest extends ListRequest {
+public class AdSearchDataExt extends ListSearchDataExt {
 
     private int sortingMethod = 1;
     private String title;
@@ -8,7 +8,7 @@ public class AdSearchRequest extends ListRequest {
     private Long catId;
     private Long priceMin;
     private Long priceMax;
-    private boolean active = true;
+    private boolean active = true; // only for user's ads
 
     public int getSortingMethod() {
         return sortingMethod;

@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dtoext;
 
-public class ConfigResponse {
+public class ConfigDataExt {
 
     private String baseUrl = "http://localhost:8080/rest";
     private String provincesPath = "/provinces";

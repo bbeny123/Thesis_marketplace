@@ -1,11 +1,11 @@
 package kwasilewski.marketplace.dtoext.user;
 
-public class LoginRequest {
+public class LoginDataExt {
 
-    private String email;
-    private String password;
+    protected String email;
+    protected String password;
 
-    public LoginRequest() {
+    public LoginDataExt() {
     }
 
     public String getEmail() {

@@ -3,7 +3,7 @@ package kwasilewski.marketplace.dao;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
-import kwasilewski.marketplace.dtoext.ad.ListRequest;
+import kwasilewski.marketplace.dtoext.ad.ListSearchDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;
@@ -50,7 +50,7 @@ public class FavouriteDAO {
         this.em.remove(fav);
     }
 
-    public List<AdData> find(UserContext ctx, ListRequest criteria) throws DataAccessException {
+    public List<AdData> find(UserContext ctx, ListSearchDataExt criteria) throws DataAccessException {
         String queryStr = "SELECT fav.ad FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.ad.active = TRUE AND fav.ad.date >= :date ORDER BY fav.ad.date DESC";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("usrId", ctx.getUserId());

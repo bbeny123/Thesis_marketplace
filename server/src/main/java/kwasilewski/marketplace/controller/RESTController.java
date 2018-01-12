@@ -4,13 +4,12 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
-import kwasilewski.marketplace.dtoext.CategoryResponse;
-import kwasilewski.marketplace.dtoext.ConfigResponse;
-import kwasilewski.marketplace.dtoext.HintResponse;
+import kwasilewski.marketplace.dtoext.CategoryDataExt;
+import kwasilewski.marketplace.dtoext.ConfigDataExt;
+import kwasilewski.marketplace.dtoext.HintDataExt;
 import kwasilewski.marketplace.dtoext.ad.*;
-import kwasilewski.marketplace.dtoext.user.LoginRequest;
-import kwasilewski.marketplace.dtoext.user.LoginResponse;
-import kwasilewski.marketplace.dtoext.user.UserRequest;
+import kwasilewski.marketplace.dtoext.user.LoginDataExt;
+import kwasilewski.marketplace.dtoext.user.UserDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.services.*;
@@ -45,65 +44,65 @@ public class RESTController extends AbstractRESTController {
 
     @RequestMapping(value = "/configuration", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getConfiguration() {
-        return new ResponseEntity<>(new ConfigResponse(), HttpStatus.OK);
+        return new ResponseEntity<>(new ConfigDataExt(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/provinces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProvinces() {
-        List<HintResponse> provinces = provinceService.getAllProvinces().stream().map(HintResponse::new).collect(Collectors.toList());
+        List<HintDataExt> provinces = provinceService.getAllProvinces().stream().map(HintDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(provinces, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCategories() {
-        List<CategoryResponse> categories = categoryService.getAllCategories().stream().map(CategoryResponse::new).collect(Collectors.toList());
+        List<CategoryDataExt> categories = categoryService.getAllCategories().stream().map(CategoryDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@RequestBody UserRequest request) throws Exception {
+    public ResponseEntity<?> register(@RequestBody UserDataExt request) throws Exception {
         userService.createUser(request.getUserData());
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) throws Exception {
+    public ResponseEntity<UserDataExt> login(@RequestBody LoginDataExt request) throws Exception {
         UserData user = userService.loginUser(request.getEmail(), request.getPassword());
-        return new ResponseEntity<>(new LoginResponse(user), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDataExt(user), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponse> checkToken(@ServiceContext UserContext ctx) {
-        return new ResponseEntity<>(new LoginResponse(ctx.getUser()), HttpStatus.OK);
+    public ResponseEntity<UserDataExt> checkToken(@ServiceContext UserContext ctx) {
+        return new ResponseEntity<>(new UserDataExt(ctx.getUser()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @PathVariable Long id, @RequestBody UserRequest request) throws Exception {
+    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @PathVariable Long id, @RequestBody UserDataExt request) throws Exception {
         userService.modifyUser(ctx, request.getUserData(id));
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/user/ads", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createAd(@ServiceContext UserContext ctx, @RequestBody AdRequest request) throws Exception {
+    public ResponseEntity<?> createAd(@ServiceContext UserContext ctx, @RequestBody AdDataExt request) throws Exception {
         adService.createAd(request.getAdData(ctx));
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/user/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdSearchRequest request) {
-        List<AdResponse> ads = adService.findAds(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
+    public ResponseEntity<?> findUserAds(@ServiceContext UserContext ctx, AdSearchDataExt request) {
+        List<AdMinimalDataExt> ads = adService.findAds(ctx, request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdResponse> getUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws MKTException {
+    public ResponseEntity<AdMinimalDataExt> getUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws MKTException {
         AdData ad = adService.findAd(ctx, id);
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
-        return new ResponseEntity<>(new AdDetailsResponse(ad), HttpStatus.OK);
+        return new ResponseEntity<>(new AdDetailsDataExt(ad), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/user/ads/{id}", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyUserAd(@ServiceContext UserContext ctx, @PathVariable Long id, @RequestBody AdRequest request) throws Exception {
+    public ResponseEntity<?> modifyUserAd(@ServiceContext UserContext ctx, @PathVariable Long id, @RequestBody AdDataExt request) throws Exception {
         adService.modifyAd(ctx, request.getAdData(ctx, id));
         return ResponseEntity.ok().build();
     }
@@ -115,22 +114,22 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/user/favourites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findUserFavourites(@ServiceContext UserContext ctx, ListRequest request) {
-        List<AdResponse> ads = favouriteService.findFavourites(ctx, request).stream().map(AdResponse::new).collect(Collectors.toList());
+    public ResponseEntity<?> findUserFavourites(@ServiceContext UserContext ctx, ListSearchDataExt request) {
+        List<AdMinimalDataExt> ads = favouriteService.findFavourites(ctx, request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/ads", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAds(AdSearchRequest request) {
-        List<AdResponse> ads = adService.findAds(request).stream().map(AdResponse::new).collect(Collectors.toList());
+    public ResponseEntity<?> findAds(AdSearchDataExt request) {
+        List<AdMinimalDataExt> ads = adService.findAds(request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AdResponse> getAd(@PathVariable Long id) throws MKTException {
+    public ResponseEntity<AdMinimalDataExt> getAd(@PathVariable Long id) throws MKTException {
         AdData ad = adService.findAd(id);
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
-        return new ResponseEntity<>(new AdDetailsResponse(ad), HttpStatus.OK);
+        return new ResponseEntity<>(new AdDetailsDataExt(ad), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/ads/{id}/favourite", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -6,18 +6,26 @@ import kwasilewski.marketplace.dto.PhotoData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class AdRequest {
+public class AdDataExt extends AdMinimalDataExt {
 
-    private Long catId;
-    private Long prvId;
-    private String title;
-    private String description;
-    private Long price;
-    private String city;
-    private String phone;
-    private String miniature;
-    private List<String> photos = new ArrayList<>();
+    protected Long catId;
+    protected Long prvId;
+    protected String description;
+    protected String city;
+    protected String phone;
+    protected List<String> photos;
+
+    AdDataExt(AdData ad) {
+        super(ad);
+        this.catId = ad.getCatId();
+        this.prvId = ad.getPrvId();
+        this.description = ad.getDescription();
+        this.city = ad.getCity();
+        this.phone = ad.getPhone();
+        this.photos = ad.getPhotos().stream().map(PhotoData::getPhoto).collect(Collectors.toList());
+    }
 
     public Long getCatId() {
         return catId;
@@ -35,28 +43,12 @@ public class AdRequest {
         this.prvId = prvId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
     }
 
     public String getCity() {
@@ -73,14 +65,6 @@ public class AdRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getMiniature() {
-        return miniature;
-    }
-
-    public void setMiniature(String miniature) {
-        this.miniature = miniature;
     }
 
     public List<String> getPhotos() {

@@ -4,22 +4,22 @@ import kwasilewski.marketplace.dto.CategoryData;
 import kwasilewski.marketplace.dto.ProvinceData;
 import kwasilewski.marketplace.dto.SubcategoryData;
 
-public class HintResponse {
+public class HintDataExt {
 
     private Long id;
     private String name;
 
-    public HintResponse(ProvinceData prv) {
+    public HintDataExt(ProvinceData prv) {
         this.id = prv.getId();
         this.name = prv.getName();
     }
 
-    public HintResponse(CategoryData cat) {
+    public HintDataExt(CategoryData cat) {
         this.id = cat.getId();
         this.name = cat.getName();
     }
 
-    public HintResponse(SubcategoryData cat) {
+    public HintDataExt(SubcategoryData cat) {
         this.id = cat.getId();
         this.name = cat.getName();
     }

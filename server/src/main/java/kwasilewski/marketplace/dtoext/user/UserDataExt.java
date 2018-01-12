@@ -2,30 +2,23 @@ package kwasilewski.marketplace.dtoext.user;
 
 import kwasilewski.marketplace.dto.UserData;
 
-public class UserRequest {
+public class UserDataExt extends LoginDataExt {
 
-    private String email;
-    private String password;
     private String firstName;
     private String lastName;
     private String city;
     private Long prvId;
     private String phone;
+    private String token; // only for logging in
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public UserDataExt(UserData userData) {
+        this.email = userData.getEmail();
+        this.firstName = userData.getFirstName();
+        this.lastName = userData.getLastName();
+        this.city = userData.getCity();
+        this.prvId = userData.getPrvId();
+        this.phone = userData.getPhone();
+        this.token = userData.getToken();
     }
 
     public String getFirstName() {
@@ -68,6 +61,14 @@ public class UserRequest {
         this.phone = phone;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public UserData getUserData() {
         UserData user = new UserData();
         user.setEmail(this.email);
@@ -85,5 +86,4 @@ public class UserRequest {
         user.setId(id);
         return user;
     }
-
 }

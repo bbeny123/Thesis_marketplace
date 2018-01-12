@@ -2,13 +2,17 @@ package kwasilewski.marketplace.dtoext.ad;
 
 import kwasilewski.marketplace.dto.AdData;
 
-public class AdResponse {
-    private Long id;
-    private String title;
-    private Long price;
-    private String miniature;
+public class AdMinimalDataExt {
 
-    public AdResponse(AdData ad) {
+    protected Long id;
+    protected String title;
+    protected Long price;
+    protected String miniature;
+
+    AdMinimalDataExt() {
+    }
+
+    public AdMinimalDataExt(AdData ad) {
         this.id = ad.getId();
         this.title = ad.getTitle();
         this.price = ad.getPrice();

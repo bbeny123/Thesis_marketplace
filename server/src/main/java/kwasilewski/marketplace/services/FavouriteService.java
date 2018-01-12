@@ -4,7 +4,7 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.FavouriteDAO;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.FavouriteData;
-import kwasilewski.marketplace.dtoext.ad.ListRequest;
+import kwasilewski.marketplace.dtoext.ad.ListSearchDataExt;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -31,7 +31,7 @@ public class FavouriteService {
         favouriteDAO.remove(ctx, adId);
     }
 
-    public List<AdData> findFavourites(UserContext ctx, ListRequest criteria) throws DataAccessException {
+    public List<AdData> findFavourites(UserContext ctx, ListSearchDataExt criteria) throws DataAccessException {
         return favouriteDAO.find(ctx, criteria);
     }
 

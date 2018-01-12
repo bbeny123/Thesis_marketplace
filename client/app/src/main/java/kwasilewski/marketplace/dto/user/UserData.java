@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.dto.user;
 
-public class UserData extends LoginRequest {
+public class UserData extends LoginData {
 
     private String firstName;
     private String lastName;
@@ -56,4 +56,5 @@ public class UserData extends LoginRequest {
     public void setToken(String token) {
         this.token = token;
     }
+
 }

@@ -39,4 +39,15 @@ public class AdMinimalData {
         this.miniature = miniature;
     }
 
+//    @Override
+//    public boolean equals(Object obj) {
+//        return obj instanceof AdMinimalData && (obj == this || id.equals(((AdMinimalData) obj).getId()));
+//    }
+//
+//    @Override
+//    public int hashCode()
+//    {
+//        return id != null ? id.hashCode() : 0;
+//    }
+
 }

@@ -11,6 +11,9 @@ public class UserDataExt extends LoginDataExt {
     private String phone;
     private String token; // only for logging in
 
+    public UserDataExt() {
+    }
+
     public UserDataExt(UserData userData) {
         this.email = userData.getEmail();
         this.firstName = userData.getFirstName();

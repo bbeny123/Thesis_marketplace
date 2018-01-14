@@ -1,0 +1,9 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinner_xd"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxLines="1"
+    android:textAppearance="?android:attr/textAppearanceMediumInverse"
+    android:textColor="?android:attr/textColorHint"
+    android:singleLine="true"
+    />

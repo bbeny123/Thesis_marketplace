@@ -64,7 +64,7 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/sign_in_button"
                 style="@android:style/Widget.Material.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/register_button"
+                android:id="@+id/sign_up_button"
                 style="@android:style/Widget.Material.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

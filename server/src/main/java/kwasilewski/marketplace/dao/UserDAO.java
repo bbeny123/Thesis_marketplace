@@ -72,7 +72,7 @@ public class UserDAO {
         try {
             user = query.getSingleResult();
         } catch (NoResultException e) {
-            throw new MKTException(MKTError.USER_INVALID_LOGIN_OR_PASSWORD);
+            throw new MKTException(MKTError.USER_INVALID_CREDENTIALS);
         }
         user.setToken(tokenDAO.create(user.getId()));
         return user;

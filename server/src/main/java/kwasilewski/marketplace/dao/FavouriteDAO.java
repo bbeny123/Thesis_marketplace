@@ -36,7 +36,7 @@ public class FavouriteDAO {
     @Transactional
     public void create(UserContext ctx, Long adId) throws DataAccessException, MKTException {
         if (adId == null || ctx.getUserId() == null || alreadyFavourite(ctx.getUserId(), adId) || adDAO.find(adId, false) == null)
-            throw new MKTException(MKTError.NOT_AUTHORIZED);
+            throw new MKTException(MKTError.FAVOURITE_ALREADY_EXISTS);
         FavouriteData fav = new FavouriteData();
         fav.setUsrId(ctx.getUserId());
         fav.setAdId(adId);

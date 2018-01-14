@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Arrays;
+
 public abstract class AbstractRESTController extends AbstractController {
 
     public AbstractRESTController() {
@@ -23,12 +25,14 @@ public abstract class AbstractRESTController extends AbstractController {
     @ExceptionHandler(MKTException.class)
     @ResponseBody
     public ResponseEntity<?> handleRBCException(MKTException ex) {
-        int ec = ex.getErrorCode();
         logger.warn(ex.getMessage());
-        if (ec == MKTError.USER_INVALID_LOGIN_OR_PASSWORD.getCode() || ec == MKTError.NOT_AUTHORIZED.getCode()) {
+        int ec = ex.getErrorCode();
+        if (Arrays.asList(MKTError.USER_INVALID_CREDENTIALS.getCode(), MKTError.NOT_AUTHORIZED.getCode(), MKTError.WRONG_TOKEN.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } else if (ec == MKTError.USER_ALREADY_EXISTS.getCode()) {
+        } else if (Arrays.asList(MKTError.USER_ALREADY_EXISTS.getCode(), MKTError.AD_ALREADY_EXISTS.getCode(), MKTError.FAVOURITE_ALREADY_EXISTS.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        } else if (Arrays.asList(MKTError.USER_NOT_EXISTS.getCode(), MKTError.AD_NOT_EXISTS.getCode(), MKTError.FAVOURITE_NOT_EXISTS.getCode()).contains(ec)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

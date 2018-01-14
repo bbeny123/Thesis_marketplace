@@ -2,15 +2,15 @@ package kwasilewski.marketplace.errors;
 
 public enum MKTError {
 
-    USER_INVALID_LOGIN_OR_PASSWORD(1, "Invalid login or password"),
-    USER_ALREADY_EXISTS(2, "User already exists"),
-    USER_NOT_EXISTS(3, "User does not exists"),
-    WRONG_TOKEN(4, "Wrong token"),
-    AD_ALREADY_EXISTS(5, "Ad already exists"),
-    AD_NOT_EXISTS(6, "Ad does not exists"),
-    FAVOURITE_ALREADY_EXISTS(7, "Favourite already exists"),
-    FAVOURITE_NOT_EXISTS(8, "Favourite does not exists"),
-    NOT_AUTHORIZED(9, "Not authorized");
+    USER_INVALID_CREDENTIALS(1, "Invalid login or password"),
+    NOT_AUTHORIZED(2, "Not authorized"),
+    WRONG_TOKEN(3, "Wrong token"),
+    USER_ALREADY_EXISTS(4, "User already exists"),
+    USER_NOT_EXISTS(5, "User does not exists"),
+    AD_ALREADY_EXISTS(6, "Ad already exists"),
+    AD_NOT_EXISTS(7, "Ad does not exists"),
+    FAVOURITE_ALREADY_EXISTS(8, "Favourite already exists"),
+    FAVOURITE_NOT_EXISTS(9, "Favourite does not exists");
 
     private final int code;
     private final String message;

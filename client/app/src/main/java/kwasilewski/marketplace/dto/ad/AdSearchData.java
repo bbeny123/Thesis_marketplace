@@ -10,6 +10,9 @@ public class AdSearchData extends ListSearchData {
     private Long priceMax;
     private boolean active = true; // only for user's ads
 
+    public AdSearchData() {
+    }
+
     public int getSortingMethod() {
         return sortingMethod;
     }

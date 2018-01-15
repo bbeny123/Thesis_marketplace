@@ -1,10 +1,10 @@
 package kwasilewski.marketplace.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,19 +29,23 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private boolean loginInProgress = false;
-    private EditText mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
     private UserService userService;
+
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private View progressBar;
+    private View loginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mEmailView = findViewById(R.id.email);
-        mPasswordView = findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+        userService = RetrofitSingleton.getInstance().getUserService();
+
+        emailEditText = findViewById(R.id.email);
+        passwordEditText = findViewById(R.id.password);
+        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -52,17 +56,35 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = findViewById(R.id.sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-        userService = RetrofitSingleton.getInstance().getUserService();
+        Button registerButton = findViewById(R.id.register_button);
+        registerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToRegister();
+            }
+        });
+
+        loginFormView = findViewById(R.id.login_form);
+        progressBar = findViewById(R.id.login_progress);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
+                MRKUtil.toast(this, "Register success. You may login now.", Gravity.TOP);
+        }
+    }
+
+    private void goToRegister() {
+        startActivityForResult(new Intent(this, RegisterActivity.class), 1);
     }
 
     private void attemptLogin() {
@@ -71,31 +93,31 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         loginInProgress = true;
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
+        emailEditText.setError(null);
+        passwordEditText.setError(null);
 
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
         boolean cancel = false;
         View focusView = null;
 
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            passwordEditText.setError(getString(R.string.error_field_required));
+            focusView = passwordEditText;
             cancel = true;
         } else if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            passwordEditText.setError(getString(R.string.error_invalid_password));
+            focusView = passwordEditText;
             cancel = true;
         }
 
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            emailEditText.setError(getString(R.string.error_field_required));
+            focusView = emailEditText;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+            emailEditText.setError(getString(R.string.error_invalid_email));
+            focusView = emailEditText;
             cancel = true;
         }
 
@@ -113,33 +135,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() > 3;
     }
-
 
     private void showProgress(final boolean show) {
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
+        MRKUtil.showProgressBarHideView(this, loginFormView, progressBar, show);
     }
 
-    public void login(LoginData loginData) {
+    private void login(LoginData loginData) {
         Call<UserData> call = userService.login(loginData);
         call.enqueue(new Callback<UserData>() {
             @Override
@@ -149,11 +152,11 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED){
                     showProgress(false);
-                    mPasswordView.setError(getString(R.string.error_invalid_password_email));
-                    mPasswordView.requestFocus();
+                    passwordEditText.setError(getString(R.string.error_invalid_password_email));
+                    passwordEditText.requestFocus();
                 } else {
                     showProgress(false);
-                    MRKUtil.connectionProblem(getApplicationContext());
+                    connectionProblem();
                 }
             }
 
@@ -161,9 +164,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<UserData> call, Throwable t) {
                 loginInProgress = false;
                 showProgress(false);
-                MRKUtil.connectionProblem(getApplicationContext());
+                connectionProblem();
             }
         });
+    }
+
+    private void connectionProblem() {
+        MRKUtil.connectionProblem(this);
     }
 
 }

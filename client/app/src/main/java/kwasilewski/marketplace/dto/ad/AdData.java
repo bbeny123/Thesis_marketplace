@@ -12,6 +12,9 @@ public class AdData extends AdMinimalData {
     private String phone;
     private List<String> photos = new ArrayList<>();
 
+    public AdData() {
+    }
+
     public Long getCatId() {
         return catId;
     }

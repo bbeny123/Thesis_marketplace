@@ -6,6 +6,9 @@ public class CategoryData extends HintData {
 
     private List<HintData> subcategories;
 
+    public CategoryData() {
+    }
+
     public List<HintData> getSubcategories() {
         return subcategories;
     }

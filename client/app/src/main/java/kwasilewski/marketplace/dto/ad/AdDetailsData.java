@@ -9,6 +9,9 @@ public class AdDetailsData extends AdData {
     private Date date;
     private Long views;
 
+    public AdDetailsData() {
+    }
+
     public String getUserName() {
         return userName;
     }

@@ -5,6 +5,9 @@ public class HintData {
     private Long id;
     private String name;
 
+    public HintData() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -20,4 +23,10 @@ public class HintData {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
 }

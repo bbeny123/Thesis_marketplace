@@ -8,28 +8,21 @@ import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListView;
 
 public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
-    //    implements AdapterView.OnItemClickListener
-    private static final int MAX_CLICK_DURATION = 200;
-    private long startClickTime;
+
     private boolean isPopup;
-    private int mPosition = ListView.INVALID_POSITION;
 
     public AutoCompleteDropDown(Context context) {
         super(context);
-//        setOnItemClickListener(this);
     }
 
     public AutoCompleteDropDown(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
-//        setOnItemClickListener(this);
     }
 
     public AutoCompleteDropDown(Context arg0, AttributeSet arg1, int arg2) {
         super(arg0, arg1, arg2);
-//        setOnItemClickListener(this);
     }
 
     @Override
@@ -42,7 +35,6 @@ public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
                                   Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         if (focused) {
-            performFiltering("", 0);
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null) {
                 imm.hideSoftInputFromWindow(getWindowToken(), 0);
@@ -56,7 +48,7 @@ public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        performClick();
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP: {
                 if (isPopup) {
@@ -70,6 +62,11 @@ public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
         }
 
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     @Override
@@ -93,10 +90,6 @@ public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
         }
         super.setCompoundDrawablesRelativeWithIntrinsicBounds(left, top, right, bottom);
 
-    }
-
-    public int getPosition() {
-        return mPosition;
     }
 
 }

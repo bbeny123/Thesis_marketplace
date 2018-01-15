@@ -64,9 +64,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLength="30"
                     android:maxLines="1"
@@ -128,7 +125,6 @@
 
                 <kwasilewski.marketplace.util.AutoCompleteDropDown
                     android:id="@+id/register_province"
-                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -147,13 +143,16 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_phone"
                     android:inputType="phone"
+                    android:imeActionId="6"
+                    android:imeActionLabel="@string/action_sign_up"
+                    android:imeOptions="actionUnspecified"
                     android:maxLength="20"
                     android:maxLines="1"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/register_button"
+                android:id="@+id/sign_up_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

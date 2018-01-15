@@ -9,6 +9,18 @@ public class UserData extends LoginData {
     private String phone;
     private String token; // only for logging in
 
+    public UserData() {
+    }
+
+    public UserData(String email, String password, String firstName, String lastName, String city, Long prvId, String phone) {
+        super(email, password);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.prvId = prvId;
+        this.phone = phone;
+    }
+
     public String getFirstName() {
         return firstName;
     }

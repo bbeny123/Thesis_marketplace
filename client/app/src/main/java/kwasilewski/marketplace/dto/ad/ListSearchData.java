@@ -5,6 +5,9 @@ public class ListSearchData {
     private int offset = 0;
     private int maxResults = 5;
 
+    public ListSearchData() {
+    }
+
     public int getOffset() {
         return offset;
     }

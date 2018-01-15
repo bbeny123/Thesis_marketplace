@@ -13,6 +13,8 @@ public class SharedPref {
     private static SharedPref instance;
     private SharedPreferences sharedPref;
     private Gson gson;
+    private String token;
+    private UserData userData;
 
     private SharedPref(Context context) {
         sharedPref = context.getSharedPreferences(AppConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -41,19 +43,27 @@ public class SharedPref {
     }
 
     public String getToken() {
-        return getString(AppConstants.SHARED_PREF_TOKEN);
+        if (token == null) {
+            token = getString(AppConstants.SHARED_PREF_TOKEN);
+        }
+        return token;
     }
 
     public void saveToken(String token) {
         saveString(AppConstants.SHARED_PREF_TOKEN, token);
+        this.token = token;
     }
 
     public UserData getUserData() {
-        return gson.fromJson(getString(AppConstants.SHARED_PREF_USER), UserData.class);
+        if (userData == null) {
+            userData = gson.fromJson(getString(AppConstants.SHARED_PREF_USER), UserData.class);
+        }
+        return userData;
     }
 
     public void saveUserData(UserData user) {
         saveString(AppConstants.SHARED_PREF_USER, gson.toJson(user));
+        userData = user;
     }
 
 

@@ -1,15 +1,15 @@
 package kwasilewski.marketplace.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.util.AutoCompleteDropDown;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends AppCompatActivity {
 
-    private Spinner province;
+    private AutoCompleteDropDown province;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +17,10 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.activity_register);
 
         String[] arraySpinner = new String[] {
-                "Province"
+                "City"
         };
         province = findViewById(R.id.register_province);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.custom_spinner, arraySpinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, arraySpinner);
         province.setAdapter(adapter);
 
     }

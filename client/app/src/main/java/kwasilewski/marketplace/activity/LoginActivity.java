@@ -21,7 +21,6 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitSingleton;
 import kwasilewski.marketplace.retrofit.service.UserService;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SHAUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             loginInProgress = false;
         } else {
             showProgress(true);
-            login(new LoginData(email, SHAUtil.shaEncode(email, password)));
+            login(new LoginData(email, MRKUtil.encodePassword(email, password)));
         }
     }
 

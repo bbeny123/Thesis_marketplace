@@ -22,9 +22,8 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitSingleton;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.util.AutoCompleteDropDown;
+import kwasilewski.marketplace.util.MRKSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SHAUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText firstNameEditText;
     private EditText lastNameEditText;
     private EditText cityEditText;
-    private AutoCompleteDropDown provinceSpinner;
+    private MRKSpinner provinceSpinner;
     private EditText phoneEditText;
 
     @Override
@@ -175,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
             registerInProgress = false;
         } else {
             showProgress(true);
-            register(new UserData(email, SHAUtil.shaEncode(email, password), firstName, lastName, city, selectedProvince, phone));
+            register(new UserData(email, MRKUtil.encodePassword(email, password), firstName, lastName, city, selectedProvince, phone));
         }
     }
 

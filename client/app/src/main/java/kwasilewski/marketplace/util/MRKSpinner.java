@@ -9,19 +9,19 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 
-public class AutoCompleteDropDown extends AppCompatAutoCompleteTextView {
+public class MRKSpinner extends AppCompatAutoCompleteTextView {
 
     private boolean isPopup;
 
-    public AutoCompleteDropDown(Context context) {
+    public MRKSpinner(Context context) {
         super(context);
     }
 
-    public AutoCompleteDropDown(Context arg0, AttributeSet arg1) {
+    public MRKSpinner(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
     }
 
-    public AutoCompleteDropDown(Context arg0, AttributeSet arg1, int arg2) {
+    public MRKSpinner(Context arg0, AttributeSet arg1, int arg2) {
         super(arg0, arg1, arg2);
     }
 

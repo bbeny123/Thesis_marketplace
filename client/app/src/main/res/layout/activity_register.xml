@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <kwasilewski.marketplace.util.AutoCompleteDropDown
+                <kwasilewski.marketplace.util.MRKSpinner
                     android:id="@+id/register_province"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

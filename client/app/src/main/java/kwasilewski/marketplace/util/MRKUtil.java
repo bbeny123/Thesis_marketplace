@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import kwasilewski.marketplace.R;
 
 public class MRKUtil {
@@ -54,6 +57,22 @@ public class MRKUtil {
                 progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    public static String encodePassword(String email, String password) {
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA1");
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+        String combinedPassword = email + password;
+        byte[] result = messageDigest.digest(combinedPassword.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte aResult : result) {
+            sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
 
 }

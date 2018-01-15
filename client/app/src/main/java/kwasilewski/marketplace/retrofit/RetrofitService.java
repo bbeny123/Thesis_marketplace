@@ -8,14 +8,14 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitSingleton {
+public class RetrofitService {
 
-    private static RetrofitSingleton instance;
+    private static RetrofitService instance;
     private AdService adService;
     private HintService hintService;
     private UserService userService;
 
-    private RetrofitSingleton() {
+    private RetrofitService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(AppConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -26,11 +26,11 @@ public class RetrofitSingleton {
         userService = retrofit.create(UserService.class);
     }
 
-    public static RetrofitSingleton getInstance() {
+    public static RetrofitService getInstance() {
         if (instance == null) {
-            synchronized (RetrofitSingleton.class) {
+            synchronized (RetrofitService.class) {
                 if (instance == null) {
-                    instance = new RetrofitSingleton();
+                    instance = new RetrofitService();
                 }
             }
         }

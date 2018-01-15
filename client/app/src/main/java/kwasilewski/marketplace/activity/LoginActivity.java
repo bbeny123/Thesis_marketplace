@@ -18,9 +18,10 @@ import java.net.HttpURLConnection;
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.LoginData;
 import kwasilewski.marketplace.dto.user.UserData;
-import kwasilewski.marketplace.retrofit.RetrofitSingleton;
+import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.UserService;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SharedPref;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        userService = RetrofitSingleton.getInstance().getUserService();
+        userService = RetrofitService.getInstance().getUserService();
 
         emailEditText = findViewById(R.id.email);
         passwordEditText = findViewById(R.id.password);
@@ -148,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 loginInProgress = false;
                 if(response.isSuccessful()) {
-                    finish();
+                    loginSuccessful(response.body());
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED){
                     showProgress(false);
                     passwordEditText.setError(getString(R.string.error_invalid_password_email));
@@ -166,6 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                 connectionProblem();
             }
         });
+    }
+
+    private void loginSuccessful(UserData user) {
+        SharedPref.getInstance(this).saveUserData(user);
+        SharedPref.getInstance(this).saveToken(user.getToken());
+        finish();
     }
 
     private void connectionProblem() {

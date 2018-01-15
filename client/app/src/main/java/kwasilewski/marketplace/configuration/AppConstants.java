@@ -2,9 +2,7 @@ package kwasilewski.marketplace.configuration;
 
 public final class AppConstants {
 
-    private AppConstants() {
-    }
-
+    //URLs
     public static final String BASE_URL = "http://10.0.2.2:8080/rest/";
     public static final String PROVINCES_PATH = "provinces";
     public static final String CATEGORIES_PATH = "categories";
@@ -19,5 +17,10 @@ public final class AppConstants {
     public static final String ADS_PATH = "ads";
     public static final String AD_PATH = "ads/{id}";
     public static final String FAVOURITE_PATH = "ads/{id}/favourite";
+
+    //SharedPreferences
+    public static final String SHARED_PREF_NAME = "kwasilewski.marketplace.sharedPreferences";
+    public static final String SHARED_PREF_TOKEN = "token";
+    public static final String SHARED_PREF_USER = "user";
 
 }

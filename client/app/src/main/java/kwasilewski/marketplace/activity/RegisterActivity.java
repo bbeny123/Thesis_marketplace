@@ -19,7 +19,7 @@ import java.util.List;
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.HintData;
 import kwasilewski.marketplace.dto.user.UserData;
-import kwasilewski.marketplace.retrofit.RetrofitSingleton;
+import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;
 import kwasilewski.marketplace.util.MRKSpinner;
@@ -51,8 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        userService = RetrofitSingleton.getInstance().getUserService();
-        hintService = RetrofitSingleton.getInstance().getHintService();
+        userService = RetrofitService.getInstance().getUserService();
+        hintService = RetrofitService.getInstance().getHintService();
 
         progressBar = findViewById(R.id.register_progress);
         registerFormView = findViewById(R.id.register_form);

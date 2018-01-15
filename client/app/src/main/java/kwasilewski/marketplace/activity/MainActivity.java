@@ -13,7 +13,7 @@ import java.util.Set;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
-import kwasilewski.marketplace.retrofit.RetrofitSingleton;
+import kwasilewski.marketplace.retrofit.RetrofitService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getAds() {
-        RetrofitSingleton.getInstance().getAdService().getAds(new HashMap<String, String>()).enqueue(new Callback<List<AdMinimalData>>() {
+        RetrofitService.getInstance().getAdService().getAds(new HashMap<String, String>()).enqueue(new Callback<List<AdMinimalData>>() {
             @Override
             public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
                 if(response.isSuccessful() && response.body() != null) {

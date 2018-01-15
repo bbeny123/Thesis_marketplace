@@ -66,7 +66,8 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/token", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDataExt> checkToken(@ServiceContext UserContext ctx) {
+    public ResponseEntity<UserDataExt> checkToken(@ServiceContext UserContext ctx) throws Exception {
+        if (ctx.getUser() == null) throw new MKTException(MKTError.WRONG_TOKEN);
         return new ResponseEntity<>(new UserDataExt(ctx.getUser()), HttpStatus.OK);
     }
 

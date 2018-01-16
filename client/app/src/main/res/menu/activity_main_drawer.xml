@@ -8,10 +8,6 @@
             android:id="@+id/nav_ads"
             android:icon="@drawable/ic_shopping_basket_black_18dp"
             android:title="@string/nav_ads" />
-        <item
-            android:id="@+id/nav_favourites"
-            android:icon="@drawable/ic_favorite_black_18dp"
-            android:title="@string/nav_favourites" />
     </group>
 
     <group
@@ -19,6 +15,10 @@
         <item
             android:title="@string/nav_my_ads">
             <menu>
+                <item
+                    android:id="@+id/nav_favourites"
+                    android:icon="@drawable/ic_favorite_black_18dp"
+                    android:title="@string/nav_favourites" />
                 <item
                     android:id="@+id/nav_new"
                     android:icon="@drawable/ic_add_black_18dp"

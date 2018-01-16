@@ -29,10 +29,10 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String token = SharedPref.getInstance(this).getToken();
-        if (token == null) {
-            goToLoginActivity();
-        } else {
+        if (token != null) {
             checkToken(token);
+        } else {
+            goToMainActivity();
         }
     }
 
@@ -42,11 +42,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 if(response.isSuccessful()) {
-                    tokenAuthorized(response.body());
+                    tokenAuthorized(true);
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    tokenUnauthorized();
+                    tokenAuthorized(false);
                 } else {
-                    goToLoginActivity();
+                    connectionProblem();
                 }
             }
 
@@ -57,19 +57,13 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    private void tokenAuthorized(UserData user) {
-        SharedPref.getInstance(this).saveUserData(user);
+    private void tokenAuthorized(boolean authorized) {
+        if (!authorized) SharedPref.getInstance(this).removeUserData();
+        goToMainActivity();
+    }
+
+    private void goToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
-        finish();
-    }
-
-    private void tokenUnauthorized() {
-        SharedPref.getInstance(this).saveToken(null);
-        goToLoginActivity();
-    }
-
-    private void goToLoginActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 

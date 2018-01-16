@@ -15,6 +15,8 @@ public class SharedPref {
     private Gson gson;
     private String token;
     private UserData userData;
+    private boolean tokenSet = false;
+    private boolean userDataSet = false;
 
     private SharedPref(Context context) {
         sharedPref = context.getSharedPreferences(AppConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -42,29 +44,51 @@ public class SharedPref {
         preferencesEditor.apply();
     }
 
+    private void removePref(String prefName) {
+        SharedPreferences.Editor preferencesEditor = sharedPref.edit();
+        preferencesEditor.remove(prefName);
+        preferencesEditor.apply();
+    }
+
+    private void setToken(String token) {
+        tokenSet = true;
+        this.token = token;
+    }
+
+    private void setUserData(UserData user) {
+        userDataSet = true;
+        userData = user;
+    }
+
     public String getToken() {
-        if (token == null) {
-            token = getString(AppConstants.SHARED_PREF_TOKEN);
+        if (!tokenSet) {
+            setToken(getString(AppConstants.SHARED_PREF_TOKEN));
         }
         return token;
     }
 
     public void saveToken(String token) {
         saveString(AppConstants.SHARED_PREF_TOKEN, token);
-        this.token = token;
+        setToken(token);
     }
 
     public UserData getUserData() {
-        if (userData == null) {
-            userData = gson.fromJson(getString(AppConstants.SHARED_PREF_USER), UserData.class);
+        if (!userDataSet) {
+            setUserData(gson.fromJson(getString(AppConstants.SHARED_PREF_USER), UserData.class));
         }
         return userData;
     }
 
     public void saveUserData(UserData user) {
         saveString(AppConstants.SHARED_PREF_USER, gson.toJson(user));
-        userData = user;
+        setUserData(user);
     }
 
+    public void removeUserData() {
+        removePref(AppConstants.SHARED_PREF_TOKEN);
+        removePref(AppConstants.SHARED_PREF_USER);
+        setToken(null);
+        setUserData(null);
+    }
 
 }

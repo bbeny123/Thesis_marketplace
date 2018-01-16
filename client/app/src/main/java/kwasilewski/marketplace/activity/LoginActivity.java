@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-                MRKUtil.toast(this, "Register success. You may login now.", Gravity.TOP);
+                MRKUtil.toast(this, getResources().getString(R.string.toast_login_successful), Gravity.TOP);
         }
     }
 
@@ -172,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginSuccessful(UserData user) {
         SharedPref.getInstance(this).saveUserData(user);
         SharedPref.getInstance(this).saveToken(user.getToken());
+        setResult(RESULT_OK);
         finish();
     }
 

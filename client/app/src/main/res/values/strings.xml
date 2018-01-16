@@ -23,4 +23,21 @@
     <string name="error_field_required">That field is required.</string>
     <string name="error_connection_problem">Connection problem. Try again later.</string>
     <string name="error_net_connection_problem">Internet connection problem.</string>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Strings related to menu -->
+    <string name="nav_ads">Ads</string>
+    <string name="nav_favourites">Favourites</string>
+    <string name="nav_my_ads">My Ads</string>
+    <string name="nav_new">New Add</string>
+    <string name="nav_active">Active</string>
+    <string name="nav_inactive">Inactive</string>
+    <string name="nav_account">Account</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_logout">Logout</string>
+    <string name="nav_login">Login</string>
+
 </resources>

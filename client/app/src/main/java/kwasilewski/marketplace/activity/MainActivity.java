@@ -1,59 +1,71 @@
 package kwasilewski.marketplace.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.dto.ad.AdMinimalData;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button xdButton;
-    private TextView text;
-    private Set<AdMinimalData> ads = new HashSet<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text = findViewById(R.id.xdText);
-        final Set<AdMinimalData> ads = new HashSet<>();
-        xdButton = findViewById(R.id.xdbutt);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        xdButton.setOnClickListener(new View.OnClickListener() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-            @Override
-            public void onClick(View v) {
-                getAds();
-            }
-        });
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void getAds() {
-        RetrofitService.getInstance().getAdService().getAds(new HashMap<String, String>()).enqueue(new Callback<List<AdMinimalData>>() {
-            @Override
-            public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
-                if(response.isSuccessful() && response.body() != null) {
-                    ads.addAll(response.body());
-                    text.setText(ads.size() + "");
-                }
-            }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-            @Override
-            public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        System.out.println("dupa");
+        menu.findItem(R.id.nav_account_not_logged).setVisible(false);
+        return true;
+    }
 
-            }
-        });
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_ads) {
+
+        } else if (id == R.id.nav_logout) {
+
+        } else if (id == R.id.nav_login) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

@@ -13,6 +13,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Sign up</string>
     <string name="action_register">Register</string>
+    <string name="action_refresh">Refresh</string>
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_invalid_password">Password too short.</string>
     <string name="error_incorrect_password">Invalid password.</string>
@@ -21,4 +22,5 @@
     <string name="error_incorrect_phone">Invalid phone number.</string>
     <string name="error_field_required">That field is required.</string>
     <string name="error_connection_problem">Connection problem. Try again later.</string>
+    <string name="error_net_connection_problem">Internet connection problem.</string>
 </resources>

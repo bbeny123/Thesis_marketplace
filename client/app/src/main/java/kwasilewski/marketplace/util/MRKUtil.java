@@ -3,6 +3,8 @@ package kwasilewski.marketplace.util;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -73,6 +75,13 @@ public class MRKUtil {
             sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
+    }
+
+    public static boolean isNetworkAvailable(final Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) return false;
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

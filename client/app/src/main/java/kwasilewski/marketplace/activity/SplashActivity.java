@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPref;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,14 +23,17 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         this.userService = RetrofitService.getInstance().getUserService();
-        String token = SharedPref.getInstance(this).getToken();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String token = SharedPref.getInstance(this).getToken();
         if (token == null) {
             goToLoginActivity();
         } else {
             checkToken(token);
         }
-
     }
 
     private void checkToken(String token) {
@@ -72,7 +74,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void connectionProblem() {
-        MRKUtil.connectionProblem(this);
+        startActivity(new Intent(this, NetErrorActivity.class));
     }
 
 }

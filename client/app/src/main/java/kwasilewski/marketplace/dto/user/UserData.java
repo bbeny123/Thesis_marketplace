@@ -1,5 +1,7 @@
 package kwasilewski.marketplace.dto.user;
 
+import android.text.TextUtils;
+
 public class UserData extends LoginData {
 
     private String firstName;
@@ -67,6 +69,10 @@ public class UserData extends LoginData {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getName() {
+        return !TextUtils.isEmpty(lastName) ? firstName + " " + lastName : firstName;
     }
 
 }

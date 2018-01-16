@@ -10,8 +10,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.util.SharedPref;
 
 public class MainActivity extends AppCompatActivity
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        hideSomeMenuOptions();
+        prepareActivity();
         super.onResume();
     }
 
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             //go to home
             SharedPref.getInstance(this).removeUserData();
-            hideSomeMenuOptions();
+            prepareActivity();
         } else if (id == R.id.nav_login) {
             startActivityForResult(new Intent(this, LoginActivity.class), 1);
         }
@@ -78,10 +81,28 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void hideSomeMenuOptions() {
+    private void prepareActivity() {
         String token = SharedPref.getInstance(this).getToken();
         navigationView.getMenu().setGroupVisible(R.id.nav_logged, token != null);
         navigationView.getMenu().setGroupVisible(R.id.nav_not_logged, token == null);
+        setUserData(token != null);
+    }
+
+    private void setUserData(boolean logged) {
+        View headerView = navigationView.getHeaderView(0);
+        TextView nameView = headerView.findViewById(R.id.nav_user);
+        TextView emailView = headerView.findViewById(R.id.nav_email);
+        String name = null;
+        String email = null;
+        if(logged) {
+            UserData user = SharedPref.getInstance(this).getUserData();
+            if(user != null) {
+                name = user.getName();
+                email = user.getEmail();
+            }
+        }
+        nameView.setText(name);
+        emailView.setText(email);
     }
 
 }

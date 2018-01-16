@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
+                    android:maxLength="60"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -66,6 +67,7 @@
                     android:imeActionLabel="@string/action_sign_in"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
+                    android:maxLength="30"
                     android:maxLines="1"
                     android:singleLine="true" />
 

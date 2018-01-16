@@ -74,7 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         provinceSpinner = findViewById(R.id.register_province);
-        populateProvinceSpinner();
         provinceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

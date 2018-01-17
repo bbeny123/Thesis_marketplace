@@ -28,8 +28,8 @@
     <string name="toast_logout_successful">Logout success.</string>
 
     <!-- Strings related to drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="nav_ads">Ads</string>
     <string name="nav_favourites">Favourites</string>
     <string name="nav_my_ads">My Ads</string>

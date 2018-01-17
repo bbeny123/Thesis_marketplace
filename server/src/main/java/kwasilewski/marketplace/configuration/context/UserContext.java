@@ -27,10 +27,6 @@ public class UserContext implements Serializable {
         this.admin = user.isAdmin();
     }
 
-    public boolean isUser() {
-        return !admin;
-    }
-
     public UserData getUser() {
         return user;
     }

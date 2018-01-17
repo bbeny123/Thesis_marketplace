@@ -26,6 +26,8 @@
     <string name="error_invalid_password">Password too short.</string>
     <string name="error_invalid_password_email">Invalid password or email.</string>
     <string name="error_email_taken">That email is taken. Try another.</string>
+    <string name="error_passwords_match">Passwords do not match.</string>
+    <string name="error_password_match">Password does not match.</string>
     <string name="error_incorrect_phone">Invalid phone number.</string>
     <string name="error_field_required">That field is required.</string>
     <string name="error_connection_problem">Connection problem. Try again later.</string>
@@ -33,6 +35,7 @@
     <string name="toast_register_successful">Register success. You may login now.</string>
     <string name="toast_logout_successful">Logout success.</string>
     <string name="toast_profile_edited">Profile successfully updated.</string>
+    <string name="toast_password_changed">Password successfully changed.</string>
 
     <!-- Strings related to drawer -->
     <string name="nav_drawer_open">Open navigation drawer</string>

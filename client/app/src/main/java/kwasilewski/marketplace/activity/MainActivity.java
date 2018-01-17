@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             //go to home
             SharedPref.getInstance(this).removeUserData();
             prepareActivity();
-            MRKUtil.toast(this, getResources().getString(R.string.toast_logout_successful));
+            MRKUtil.toast(this, getString(R.string.toast_logout_successful));
         } else if (id == R.id.nav_login) {
             startActivityForResult(new Intent(this, LoginActivity.class), 1);
         }

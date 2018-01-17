@@ -19,7 +19,7 @@ public class PhotoDAO {
     private EntityManager em;
 
     public List<PhotoData> getAll(UserContext ctx) throws DataAccessException {
-        if(ctx.isUser()) return null;
+        if(!ctx.isAdmin()) return null;
         TypedQuery<PhotoData> query = this.em.createQuery("SELECT pht FROM PhotoData pht", PhotoData.class);
         return query.getResultList();
     }
@@ -38,10 +38,10 @@ public class PhotoDAO {
 
     public PhotoData findMiniature(UserContext ctx, Long adId) throws DataAccessException {
         String queryStr = "SELECT pht FROM PhotoData pht WHERE pht.adId = :adId AND pht.miniature = TRUE";
-        queryStr += ctx.isUser() ? " AND pht.ad.usrId = :usrId" : "";
+        queryStr += !ctx.isAdmin() ? " AND pht.ad.usrId = :usrId" : "";
         TypedQuery<PhotoData> query = this.em.createQuery(queryStr, PhotoData.class);
         query.setParameter("adId", adId);
-        if (ctx.isUser()) query.setParameter("usrId", ctx.getUserId());
+        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

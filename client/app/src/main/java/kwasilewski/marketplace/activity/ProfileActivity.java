@@ -124,6 +124,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
+            MRKUtil.toast(this, getString(R.string.toast_password_changed));
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -166,7 +173,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void modifySuccess(UserData user) {
         SharedPref.getInstance(this).saveUserData(user);
         showProgress(false);
-        MRKUtil.toast(this, getResources().getString(R.string.toast_profile_edited));
+        MRKUtil.toast(this, getString(R.string.toast_profile_edited));
     }
 
     private void populateProvinceSpinner() {
@@ -257,9 +264,11 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserData> call, Throwable t) {
-                modifyInProgress = false;
-                showProgress(false);
-                connectionProblem();
+                if (!call.isCanceled()) {
+                    modifyInProgress = false;
+                    showProgress(false);
+                    connectionProblem();
+                }
             }
         });
     }

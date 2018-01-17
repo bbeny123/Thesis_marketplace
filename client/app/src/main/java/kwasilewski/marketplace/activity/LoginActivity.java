@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            MRKUtil.toast(this, getResources().getString(R.string.toast_register_successful));
+            MRKUtil.toast(this, getString(R.string.toast_register_successful));
         }
     }
 
@@ -177,9 +177,11 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserData> call, Throwable t) {
-                loginInProgress = false;
-                showProgress(false);
-                connectionProblem();
+                if (!call.isCanceled()) {
+                    loginInProgress = false;
+                    showProgress(false);
+                    connectionProblem();
+                }
             }
         });
     }

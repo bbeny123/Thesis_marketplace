@@ -228,9 +228,11 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                registerInProgress = false;
-                showProgress(false);
-                connectionProblem();
+                if (!call.isCanceled()) {
+                    registerInProgress = false;
+                    showProgress(false);
+                    connectionProblem();
+                }
             }
         });
     }

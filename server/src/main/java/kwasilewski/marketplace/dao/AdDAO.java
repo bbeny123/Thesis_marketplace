@@ -55,13 +55,13 @@ public class AdDAO {
     }
 
     public List<AdData> getAll(UserContext ctx) throws DataAccessException {
-        if (ctx.isUser()) return null;
+        if (!ctx.isAdmin()) return null;
         TypedQuery<AdData> query = this.em.createQuery("SELECT ad FROM AdData ad", AdData.class);
         return query.getResultList();
     }
 
     public AdData get(UserContext ctx, Long id) throws DataAccessException {
-        if (ctx.isUser()) return null;
+        if (!ctx.isAdmin()) return null;
         TypedQuery<AdData> query = this.em.createQuery("SELECT ad FROM AdData ad WHERE ad.id = :id", AdData.class);
         query.setParameter("id", id);
         try {
@@ -89,10 +89,10 @@ public class AdDAO {
 
     public AdData find(UserContext ctx, Long id) throws DataAccessException {
         String queryStr = "SELECT ad FROM AdData ad WHERE ad.id = :id";
-        queryStr += ctx.isUser() ? " AND ad.usrId = :usrId" : "";
+        queryStr += !ctx.isAdmin() ? " AND ad.usrId = :usrId" : "";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("id", id);
-        if (ctx.isUser()) query.setParameter("usrId", ctx.getUserId());
+        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

@@ -19,7 +19,7 @@ import kwasilewski.marketplace.R;
 public class MRKUtil {
 
     public static void connectionProblem(final AppCompatActivity activity) {
-        toast(activity, activity.getResources().getString(R.string.error_connection_problem));
+        toast(activity, activity.getString(R.string.error_connection_problem));
     }
 
     public static void toast(final AppCompatActivity activity, String msg) {
@@ -35,9 +35,9 @@ public class MRKUtil {
         }
     }
 
-    public static void showProgressBarHideView(final Context context, final View viweToHide, final View progressBar, final boolean show) {
-        int shortAnimTime = context.getResources().getInteger(android.R.integer.config_shortAnimTime);
-
+    public static void showProgressBarHideView(final AppCompatActivity activity, final View viweToHide, final View progressBar, final boolean show) {
+        hideKeyboard(activity);
+        int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
         viweToHide.setVisibility(show ? View.GONE : View.VISIBLE);
         viweToHide.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {

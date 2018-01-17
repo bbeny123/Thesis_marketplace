@@ -23,7 +23,7 @@
     <string name="error_field_required">That field is required.</string>
     <string name="error_connection_problem">Connection problem. Try again later.</string>
     <string name="error_net_connection_problem">Internet connection problem.</string>
-    <string name="toast_login_successful">Register success. You may login now.</string>
+    <string name="toast_register_successful">Register success. You may login now.</string>
     <string name="toast_logout_successful">Logout success.</string>
 
     <string name="title_activity_main">MainActivity</string>

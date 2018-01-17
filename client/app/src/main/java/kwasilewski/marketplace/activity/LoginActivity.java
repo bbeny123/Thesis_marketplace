@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-                MRKUtil.toast(this, getResources().getString(R.string.toast_login_successful), Gravity.TOP);
+                MRKUtil.toast(this, getResources().getString(R.string.toast_register_successful));
         }
     }
 

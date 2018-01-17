@@ -6,7 +6,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -18,21 +17,17 @@ import kwasilewski.marketplace.R;
 
 public class MRKUtil {
 
-    public static void connectionProblem(final Context context) {
-        toast(context, context.getResources().getString(R.string.error_connection_problem), Gravity.TOP);
+    public static void connectionProblem(final AppCompatActivity activity) {
+        toast(activity, activity.getResources().getString(R.string.error_connection_problem));
     }
 
-    public static void toast(final Context context, String msg) {
-        toast(context, msg, Gravity.BOTTOM);
-    }
-
-    public static void toast(final Context context, String msg, int gravity) {
-        Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-        toast.setGravity(gravity, 0, 0);
+    public static void toast(final AppCompatActivity activity, String msg) {
+        hideKeyboard(activity);
+        Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
 
-    public static void hideKeyboard(final AppCompatActivity activity) {
+    private static void hideKeyboard(final AppCompatActivity activity) {
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);

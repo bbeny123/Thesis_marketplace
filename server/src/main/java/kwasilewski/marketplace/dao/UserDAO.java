@@ -6,7 +6,6 @@ import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +22,6 @@ public class UserDAO {
 
     @PersistenceContext
     private EntityManager em;
-
-    private final TokenDAO tokenDAO;
-
-    @Autowired
-    public UserDAO(TokenDAO tokenDAO) {
-        this.tokenDAO = tokenDAO;
-    }
 
     @Transactional
     public void create(UserData user) throws DataAccessException, MKTException {
@@ -86,14 +78,11 @@ public class UserDAO {
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user WHERE user.email = :email AND user.password = :password", UserData.class);
         query.setParameter("email", email);
         query.setParameter("password", password);
-        UserData user;
         try {
-            user = query.getSingleResult();
+            return query.getSingleResult();
         } catch (NoResultException e) {
             throw new MKTException(MKTError.USER_INVALID_CREDENTIALS);
         }
-        user.setToken(tokenDAO.create(user.getId()));
-        return user;
     }
 
     public List<UserData> getAll(UserContext ctx) throws DataAccessException, MKTException {

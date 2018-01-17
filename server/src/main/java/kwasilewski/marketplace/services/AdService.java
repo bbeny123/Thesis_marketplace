@@ -2,6 +2,7 @@ package kwasilewski.marketplace.services;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.AdDAO;
+import kwasilewski.marketplace.dao.PhotoDAO;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dtoext.ad.AdSearchDataExt;
 import kwasilewski.marketplace.errors.MKTException;
@@ -15,10 +16,12 @@ import java.util.List;
 public class AdService {
 
     private final AdDAO adDAO;
+    private final PhotoDAO photoDAO;
 
     @Autowired
-    public AdService(AdDAO adDAO) {
+    public AdService(AdDAO adDAO, PhotoDAO photoDAO) {
         this.adDAO = adDAO;
+        this.photoDAO = photoDAO;
     }
 
     public void createAd(AdData ad) throws DataAccessException, MKTException {
@@ -54,11 +57,15 @@ public class AdService {
     }
 
     public List<AdData> findAds(AdSearchDataExt criteria) throws DataAccessException {
-        return adDAO.find(criteria);
+        List<AdData> ads = adDAO.find(criteria);
+        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ad.getId())));
+        return ads;
     }
 
     public List<AdData> findAds(UserContext ctx, AdSearchDataExt criteria) throws DataAccessException {
-        return adDAO.find(ctx, criteria);
+        List<AdData> ads = adDAO.find(ctx, criteria);
+        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ctx, ad.getId())));
+        return ads;
     }
 
 }

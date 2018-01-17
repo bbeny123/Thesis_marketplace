@@ -7,7 +7,6 @@ import kwasilewski.marketplace.dtoext.ad.ListSearchDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +23,9 @@ public class FavouriteDAO {
     @PersistenceContext
     private EntityManager em;
 
-    private final AdDAO adDAO;
-    private final PhotoDAO photoDAO;
-
-    @Autowired
-    public FavouriteDAO(AdDAO adDAO, PhotoDAO photoDAO) {
-        this.adDAO = adDAO;
-        this.photoDAO = photoDAO;
-    }
-
     @Transactional
     public void create(UserContext ctx, Long adId) throws DataAccessException, MKTException {
-        if (adId == null || ctx.getUserId() == null || alreadyFavourite(ctx.getUserId(), adId) || adDAO.find(adId, false) == null)
+        if (alreadyFavourite(ctx.getUserId(), adId))
             throw new MKTException(MKTError.FAVOURITE_ALREADY_EXISTS);
         FavouriteData fav = new FavouriteData();
         fav.setUsrId(ctx.getUserId());
@@ -57,9 +47,7 @@ public class FavouriteDAO {
         query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
         query.setFirstResult(criteria.getOffset());
         query.setMaxResults(criteria.getMaxResults());
-        List<AdData> ads = query.getResultList();
-        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ad.getId())));
-        return ads;
+        return query.getResultList();
     }
 
     public FavouriteData find(UserContext ctx, Long adId) throws DataAccessException {

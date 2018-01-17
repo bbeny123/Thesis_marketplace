@@ -6,7 +6,6 @@ import kwasilewski.marketplace.dtoext.ad.AdSearchDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import kwasilewski.marketplace.util.DateTimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +18,6 @@ public class AdDAO {
 
     @PersistenceContext
     private EntityManager em;
-
-    private final PhotoDAO photoDAO;
-
-    @Autowired
-    public AdDAO(PhotoDAO photoDAO) {
-        this.photoDAO = photoDAO;
-    }
 
     @Transactional
     public void create(AdData ad) throws DataAccessException, MKTException {
@@ -117,9 +109,7 @@ public class AdDAO {
         if (criteria.getPriceMax() != null) query.setParameter("priceMax", criteria.getPriceMax());
         query.setFirstResult(criteria.getOffset());
         query.setMaxResults(criteria.getMaxResults());
-        List<AdData> ads = query.getResultList();
-        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ad.getId())));
-        return ads;
+        return query.getResultList();
     }
 
     public List<AdData> find(UserContext ctx, AdSearchDataExt criteria) throws DataAccessException {
@@ -130,9 +120,7 @@ public class AdDAO {
         query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
         query.setFirstResult(criteria.getOffset());
         query.setMaxResults(criteria.getMaxResults());
-        List<AdData> ads = query.getResultList();
-        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ctx, ad.getId())));
-        return ads;
+        return query.getResultList();
     }
 
     private void incrementViews(Long id) {

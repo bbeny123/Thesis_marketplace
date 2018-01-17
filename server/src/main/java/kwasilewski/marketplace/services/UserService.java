@@ -1,6 +1,7 @@
 package kwasilewski.marketplace.services;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
+import kwasilewski.marketplace.dao.TokenDAO;
 import kwasilewski.marketplace.dao.UserDAO;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
@@ -15,10 +16,12 @@ import java.util.List;
 public class UserService {
 
     private final UserDAO userDAO;
+    private final TokenDAO tokenDAO;
 
     @Autowired
-    public UserService(UserDAO userDAO) {
+    public UserService(UserDAO userDAO, TokenDAO tokenDAO) {
         this.userDAO = userDAO;
+        this.tokenDAO = tokenDAO;
     }
 
     public void createUser(UserData user) throws DataAccessException, MKTException {
@@ -42,7 +45,9 @@ public class UserService {
     }
 
     public UserData loginUser(String email, String password) throws DataAccessException, MKTException {
-        return userDAO.login(email, password);
+        UserData user = userDAO.login(email, password);
+        user.setToken(tokenDAO.create(user.getId()));
+        return user;
     }
 
     public List<UserData> getAllUsers(UserContext ctx) throws DataAccessException, MKTException {

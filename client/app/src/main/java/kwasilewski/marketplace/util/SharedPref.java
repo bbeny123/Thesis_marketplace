@@ -50,21 +50,16 @@ public class SharedPref {
         preferencesEditor.apply();
     }
 
-    private void setToken(String token) {
-        tokenSet = true;
-        this.token = token;
-    }
-
-    private void setUserData(UserData user) {
-        userDataSet = true;
-        userData = user;
-    }
-
     public String getToken() {
         if (!tokenSet) {
             setToken(getString(AppConstants.SHARED_PREF_TOKEN));
         }
         return token;
+    }
+
+    private void setToken(String token) {
+        tokenSet = true;
+        this.token = token;
     }
 
     public void saveToken(String token) {
@@ -77,6 +72,11 @@ public class SharedPref {
             setUserData(gson.fromJson(getString(AppConstants.SHARED_PREF_USER), UserData.class));
         }
         return userData;
+    }
+
+    private void setUserData(UserData user) {
+        userDataSet = true;
+        userData = user;
     }
 
     public void saveUserData(UserData user) {

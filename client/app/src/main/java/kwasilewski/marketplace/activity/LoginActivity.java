@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-                MRKUtil.toast(this, getResources().getString(R.string.toast_register_successful));
+            MRKUtil.toast(this, getResources().getString(R.string.toast_register_successful));
         }
     }
 
@@ -164,9 +164,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 loginInProgress = false;
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     loginSuccessful(response.body());
-                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED){
+                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     showProgress(false);
                     passwordEditText.setError(getString(R.string.error_invalid_password_email));
                     passwordEditText.requestFocus();

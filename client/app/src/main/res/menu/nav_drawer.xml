@@ -10,10 +10,8 @@
             android:title="@string/nav_ads" />
     </group>
 
-    <group
-        android:id="@+id/nav_logged">
-        <item
-            android:title="@string/nav_my_ads">
+    <group android:id="@+id/nav_logged">
+        <item android:title="@string/nav_my_ads">
             <menu>
                 <item
                     android:id="@+id/nav_favourites"
@@ -34,8 +32,7 @@
             </menu>
         </item>
 
-        <item
-            android:title="@string/nav_account">
+        <item android:title="@string/nav_account">
             <menu>
                 <item
                     android:id="@+id/nav_profile"
@@ -49,10 +46,8 @@
         </item>
     </group>
 
-    <group
-        android:id="@+id/nav_not_logged">
-        <item
-            android:title="@string/nav_account">
+    <group android:id="@+id/nav_not_logged">
+        <item android:title="@string/nav_account">
             <menu>
                 <item
                     android:id="@+id/nav_login"

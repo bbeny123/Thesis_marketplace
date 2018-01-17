@@ -55,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.register_toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
@@ -87,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Object item = adapterView.getItemAtPosition(position);
-                if (item instanceof HintData){
+                if (item instanceof HintData) {
                     selectedProvince = ((HintData) item).getId();
                 }
                 provinceSpinner.setError(null);
@@ -216,9 +216,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 registerInProgress = false;
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     registerSuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE){
+                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
                     showProgress(false);
                     emailEditText.setError(getString(R.string.error_email_taken));
                     emailEditText.requestFocus();
@@ -251,7 +251,7 @@ public class RegisterActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<HintData>>() {
             @Override
             public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     setSpinnerAdapter(response.body());
                 } else {
                     connectionProblem();

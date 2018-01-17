@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         call.enqueue(new Callback<UserData>() {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     tokenAuthorized(true);
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     tokenAuthorized(false);

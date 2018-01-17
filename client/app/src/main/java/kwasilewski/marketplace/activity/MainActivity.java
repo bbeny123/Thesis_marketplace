@@ -98,9 +98,9 @@ public class MainActivity extends AppCompatActivity
         TextView emailView = headerView.findViewById(R.id.nav_email);
         String name = null;
         String email = null;
-        if(logged) {
+        if (logged) {
             UserData user = SharedPref.getInstance(this).getUserData();
-            if(user != null) {
+            if (user != null) {
                 name = user.getName();
                 email = user.getEmail();
             }

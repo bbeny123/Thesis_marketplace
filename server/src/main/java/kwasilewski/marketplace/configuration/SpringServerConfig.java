@@ -2,7 +2,7 @@ package kwasilewski.marketplace.configuration;
 
 import kwasilewski.marketplace.configuration.context.ServiceContextArgumentResolver;
 import kwasilewski.marketplace.interceptor.JwtSecuredInterceptor;
-import kwasilewski.marketplace.services.TokenService;
+import kwasilewski.marketplace.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

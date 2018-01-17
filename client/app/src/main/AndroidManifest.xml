@@ -3,10 +3,11 @@
     package="kwasilewski.marketplace">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -40,6 +41,9 @@
         <activity
             android:name=".activity.PasswordActivity"
             android:label="@string/title_activity_password" />
+        <activity
+            android:name=".activity.NewAddActivity"
+            android:label="@string/title_activity_new_add" />
     </application>
 
 </manifest>

@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ads) {
             finish();
+        } else if (id == R.id.nav_new){
+            startActivity(new Intent(this, NewAddActivity.class));
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_logout) {

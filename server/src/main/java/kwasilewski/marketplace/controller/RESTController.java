@@ -12,7 +12,7 @@ import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.dtoext.user.UserDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
-import kwasilewski.marketplace.services.*;
+import kwasilewski.marketplace.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

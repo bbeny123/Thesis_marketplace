@@ -3,6 +3,7 @@ package kwasilewski.marketplace.dtoext.ad;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.PhotoData;
+import kwasilewski.marketplace.util.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class AdDataExt extends AdMinimalDataExt {
     private List<PhotoData> getPhotosList() {
         List<PhotoData> photos = new ArrayList<>();
         photos.add(getPhotoData(miniature, true));
-        this.photos.forEach(photo -> photos.add(getPhotoData(photo, false)));
+        this.photos.stream().limit(AppConstants.MAX_PHOTOS).forEach(photo -> photos.add(getPhotoData(photo, false)));
         return photos;
     }
 

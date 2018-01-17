@@ -3,7 +3,7 @@ package kwasilewski.marketplace.configuration.context;
 import io.jsonwebtoken.SignatureException;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.errors.MKTException;
-import kwasilewski.marketplace.services.TokenService;
+import kwasilewski.marketplace.service.TokenService;
 import kwasilewski.marketplace.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

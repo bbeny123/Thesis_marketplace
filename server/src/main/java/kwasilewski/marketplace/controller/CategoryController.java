@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.controller;
 
 import kwasilewski.marketplace.dto.CategoryData;
-import kwasilewski.marketplace.services.CategoryService;
+import kwasilewski.marketplace.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

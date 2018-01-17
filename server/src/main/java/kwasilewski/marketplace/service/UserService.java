@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.services;
+package kwasilewski.marketplace.service;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.TokenDAO;

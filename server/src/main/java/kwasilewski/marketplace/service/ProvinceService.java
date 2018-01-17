@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.services;
+package kwasilewski.marketplace.service;
 
 import kwasilewski.marketplace.dao.ProvinceDAO;
 import kwasilewski.marketplace.dto.ProvinceData;

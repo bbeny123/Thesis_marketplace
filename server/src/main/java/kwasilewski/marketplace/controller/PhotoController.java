@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.controller;
 
-import kwasilewski.marketplace.services.PhotoService;
+import kwasilewski.marketplace.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

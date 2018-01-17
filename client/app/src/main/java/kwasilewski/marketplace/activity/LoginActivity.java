@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean loginInProgress = false;
     private UserService userService;
+    private Call<UserData> callUser;
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -85,6 +86,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        if(callUser != null) callUser.cancel();
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -121,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             passwordEditText.setError(getString(R.string.error_field_required));
             focusView = passwordEditText;
             cancel = true;
-        } else if (!isPasswordValid(password)) {
+        } else if (!MRKUtil.isPasswordValid(password)) {
             passwordEditText.setError(getString(R.string.error_invalid_password));
             focusView = passwordEditText;
             cancel = true;
@@ -131,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
             emailEditText.setError(getString(R.string.error_field_required));
             focusView = emailEditText;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!MRKUtil.isEmailValid(email)) {
             emailEditText.setError(getString(R.string.error_invalid_email));
             focusView = emailEditText;
             cancel = true;
@@ -146,21 +153,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 3;
-    }
-
     private void showProgress(final boolean show) {
         MRKUtil.showProgressBarHideView(this, loginFormView, progressBar, show);
     }
 
     private void login(LoginData loginData) {
-        Call<UserData> call = userService.login(loginData);
-        call.enqueue(new Callback<UserData>() {
+        callUser = userService.login(loginData);
+        callUser.enqueue(new Callback<UserData>() {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 loginInProgress = false;

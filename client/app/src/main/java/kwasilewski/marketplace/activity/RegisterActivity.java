@@ -1,9 +1,9 @@
 package kwasilewski.marketplace.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -37,6 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
     private UserService userService;
     private HintService hintService;
     private Long selectedProvince;
+    private Call<ResponseBody> callUser;
+    private Call<List<HintData>> callHint;
 
     private View progressBar;
     private View registerFormView;
@@ -106,7 +108,15 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showProgress(true);
         populateProvinceSpinner();
+    }
+
+    @Override
+    protected void onPause() {
+        if(callUser != null) callUser.cancel();
+        if(callHint != null) callHint.cancel();
+        super.onPause();
     }
 
     @Override
@@ -141,7 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(phone) && !isPhoneValid(phone)) {
+        if (!TextUtils.isEmpty(phone) && !MRKUtil.isPhoneValid(phone)) {
             phoneEditText.setError(getString(R.string.error_incorrect_phone));
             focusView = phoneEditText;
             cancel = true;
@@ -169,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
             passwordEditText.setError(getString(R.string.error_field_required));
             focusView = passwordEditText;
             cancel = true;
-        } else if (!isPasswordValid(password)) {
+        } else if (!MRKUtil.isPasswordValid(password)) {
             passwordEditText.setError(getString(R.string.error_invalid_password));
             focusView = passwordEditText;
             cancel = true;
@@ -179,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
             emailEditText.setError(getString(R.string.error_field_required));
             focusView = emailEditText;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!MRKUtil.isEmailValid(email)) {
             emailEditText.setError(getString(R.string.error_invalid_email));
             focusView = emailEditText;
             cancel = true;
@@ -194,25 +204,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 3;
-    }
-
-    private boolean isPhoneValid(String phone) {
-        return PhoneNumberUtils.isGlobalPhoneNumber(phone);
-    }
-
     private void showProgress(final boolean show) {
         MRKUtil.showProgressBarHideView(this, registerFormView, progressBar, show);
     }
 
     private void register(UserData userData) {
-        Call<ResponseBody> call = userService.register(userData);
-        call.enqueue(new Callback<ResponseBody>() {
+        callUser = userService.register(userData);
+        callUser.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 registerInProgress = false;
@@ -246,28 +244,33 @@ public class RegisterActivity extends AppCompatActivity {
         MRKUtil.connectionProblem(this);
     }
 
-    private void populateProvinceSpinner() {
-        Call<List<HintData>> call = hintService.getProvinces();
-        call.enqueue(new Callback<List<HintData>>() {
-            @Override
-            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
-                if (response.isSuccessful()) {
-                    setSpinnerAdapter(response.body());
-                } else {
-                    connectionProblem();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<HintData>> call, Throwable t) {
-                connectionProblem();
-            }
-        });
+    private void connectionProblemAtStart() {
+        startActivity(new Intent(this, NetErrorActivity.class));
     }
 
     private void setSpinnerAdapter(List<HintData> hintData) {
         ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
         provinceSpinner.setAdapter(adapter);
+        showProgress(false);
+    }
+
+    private void populateProvinceSpinner() {
+        callHint = hintService.getProvinces();
+        callHint.enqueue(new Callback<List<HintData>>() {
+            @Override
+            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
+                if (response.isSuccessful()) {
+                    setSpinnerAdapter(response.body());
+                } else {
+                    connectionProblemAtStart();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HintData>> call, Throwable t) {
+                if (!call.isCanceled()) connectionProblemAtStart();
+            }
+        });
     }
 
 }

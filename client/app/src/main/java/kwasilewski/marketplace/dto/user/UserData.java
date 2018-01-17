@@ -8,10 +8,19 @@ public class UserData extends LoginData {
     private String lastName;
     private String city;
     private Long prvId;
+    private String province;
     private String phone;
     private String token; // only for logging in
 
     public UserData() {
+    }
+
+    public UserData(String firstName, String lastName, String city, Long prvId, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.prvId = prvId;
+        this.phone = phone;
     }
 
     public UserData(String email, String password, String firstName, String lastName, String city, Long prvId, String phone) {
@@ -53,6 +62,14 @@ public class UserData extends LoginData {
 
     public void setPrvId(Long prvId) {
         this.prvId = prvId;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getPhone() {

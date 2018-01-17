@@ -17,6 +17,7 @@ import retrofit2.Response;
 public class SplashActivity extends AppCompatActivity {
 
     private UserService userService;
+    private Call<UserData> callUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,15 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        if(callUser != null) callUser.cancel();
+        super.onPause();
+    }
+
     private void checkToken(String token) {
-        Call<UserData> call = userService.checkToken(token);
-        call.enqueue(new Callback<UserData>() {
+        callUser = userService.checkToken(token);
+        callUser.enqueue(new Callback<UserData>() {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {
                 if (response.isSuccessful()) {
@@ -52,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserData> call, Throwable t) {
+                if (call.isCanceled()) finish();
                 connectionProblem();
             }
         });

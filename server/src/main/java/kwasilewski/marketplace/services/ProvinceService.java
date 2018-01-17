@@ -22,6 +22,10 @@ public class ProvinceService {
         return provinceDAO.getAll();
     }
 
+    public ProvinceData getProvince(Long id) throws DataAccessException {
+        return provinceDAO.get(id);
+    }
+
     public Long getUserNumber(Long id) throws DataAccessException {
         return provinceDAO.getUserNumber(id);
     }

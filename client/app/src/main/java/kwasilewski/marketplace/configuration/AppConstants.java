@@ -9,7 +9,8 @@ public final class AppConstants {
     public static final String REGISTER_PATH = "register";
     public static final String LOGIN_PATH = "login";
     public static final String TOKEN_PATH = "token";
-    public static final String USER_PATH = "user/{id}";
+    public static final String USER_PATH = "user";
+    public static final String USER_PASSWORD_PATH = "user/password";
     public static final String USER_ADS_PATH = "user/ads";
     public static final String USER_AD_PATH = "user/ads/{id}";
     public static final String USER_AD_STATUS_PATH = "user/ads/{id}/status";

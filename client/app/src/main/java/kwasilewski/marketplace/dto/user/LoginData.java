@@ -8,6 +8,10 @@ public class LoginData {
     public LoginData() {
     }
 
+    public LoginData(String email) {
+        this.email = email;
+    }
+
     public LoginData(String email, String password) {
         this.email = email;
         this.password = password;

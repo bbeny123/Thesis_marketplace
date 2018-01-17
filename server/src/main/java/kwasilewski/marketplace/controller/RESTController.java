@@ -74,7 +74,8 @@ public class RESTController extends AbstractRESTController {
 
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDataExt> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserDataExt request) throws Exception {
-        UserData user = userService.modifyUser(ctx, request.getUserData(ctx.getUserId()));
+        UserData user = userService.modifyUser(ctx, request.getUserData(ctx));
+        user.setProvince(provinceService.getProvince(user.getPrvId()));
         return new ResponseEntity<>(new UserDataExt(user), HttpStatus.OK);
     }
 

@@ -2,6 +2,7 @@ package kwasilewski.marketplace.retrofit.service;
 
 import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.user.LoginData;
+import kwasilewski.marketplace.dto.user.PasswordData;
 import kwasilewski.marketplace.dto.user.UserData;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -23,6 +24,9 @@ public interface UserService {
     Call<UserData> checkToken(@Header("token") String token);
 
     @PATCH(AppConstants.USER_PATH)
-    Call<ResponseBody> updateProfile(@Header("token") String token, @Body UserData user);
+    Call<UserData> updateProfile(@Header("token") String token, @Body UserData user);
+
+    @PATCH(AppConstants.USER_PASSWORD_PATH)
+    Call<ResponseBody> changePassword(@Header("token") String token, @Body PasswordData passwordData);
 
 }

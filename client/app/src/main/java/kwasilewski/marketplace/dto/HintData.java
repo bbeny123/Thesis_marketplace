@@ -8,6 +8,10 @@ public class HintData {
     public HintData() {
     }
 
+    public HintData(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
@@ -22,6 +26,16 @@ public class HintData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof HintData && (obj == this || id.equals(((HintData) obj).getId()));
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

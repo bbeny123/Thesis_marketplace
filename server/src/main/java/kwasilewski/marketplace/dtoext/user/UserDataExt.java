@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.dtoext.user;
 
+import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
 
 public class UserDataExt extends LoginDataExt {
@@ -8,6 +9,7 @@ public class UserDataExt extends LoginDataExt {
     private String lastName;
     private String city;
     private Long prvId;
+    private String province;
     private String phone;
     private String token; // only for logging in
 
@@ -20,6 +22,7 @@ public class UserDataExt extends LoginDataExt {
         this.lastName = userData.getLastName();
         this.city = userData.getCity();
         this.prvId = userData.getPrvId();
+        this.province = userData.getProvince().getName();
         this.phone = userData.getPhone();
         this.token = userData.getToken();
     }
@@ -56,6 +59,14 @@ public class UserDataExt extends LoginDataExt {
         this.prvId = prvId;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -84,9 +95,11 @@ public class UserDataExt extends LoginDataExt {
         return user;
     }
 
-    public UserData getUserData(Long id) {
+    public UserData getUserData(UserContext ctx) {
         UserData user = getUserData();
-        user.setId(id);
+        user.setId(ctx.getUserId());
+        user.setEmail(ctx.getUser().getEmail());
+        user.setPassword(ctx.getUser().getPassword());
         return user;
     }
 }

@@ -41,10 +41,11 @@ public class UserDAO {
     public UserData modify(UserContext ctx, UserData user) throws DataAccessException, MKTException {
         UserData usr = user.getId() == null ? null : getUser(user.getId());
         if (usr == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
-        else if ((ctx.isUser() && !usr.getId().equals(ctx.getUserId())) || (!usr.getEmail().equals(user.getEmail()) && getUser(user.getEmail()) != null))
+        else if (ctx.isUser() && !usr.getId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
         return this.em.merge(user);
     }
+
     @Transactional
     public void changePassword(UserContext ctx, Long id, PasswordDataExt passwordData) throws DataAccessException, MKTException {
         UserData user = id == null ? null : getUser(id);

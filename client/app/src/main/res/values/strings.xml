@@ -1,12 +1,16 @@
 <resources>
     <string name="app_name">Marketplace</string>
     <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_register">Register</string>
-    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_register">Sign up</string>
+    <string name="title_activity_profile">Update Profile</string>
+    <string name="title_activity_password">Password change</string>
 
     <!-- Strings related to login and register -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_old_password">Old Password</string>
+    <string name="prompt_new_password">New Password</string>
+    <string name="prompt_confirm_password">Confirm New Password</string>
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
     <string name="prompt_city">City</string>
@@ -16,6 +20,8 @@
     <string name="action_sign_up">Sign up</string>
     <string name="action_register">Register</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_modify">Save changes</string>
+    <string name="action_change_password">Change password</string>
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_invalid_password">Password too short.</string>
     <string name="error_invalid_password_email">Invalid password or email.</string>
@@ -26,6 +32,7 @@
     <string name="error_net_connection_problem">Internet connection problem.</string>
     <string name="toast_register_successful">Register success. You may login now.</string>
     <string name="toast_logout_successful">Logout success.</string>
+    <string name="toast_profile_edited">Profile successfully updated.</string>
 
     <!-- Strings related to drawer -->
     <string name="nav_drawer_open">Open navigation drawer</string>

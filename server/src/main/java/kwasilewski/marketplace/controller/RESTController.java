@@ -8,6 +8,7 @@ import kwasilewski.marketplace.dtoext.CategoryDataExt;
 import kwasilewski.marketplace.dtoext.HintDataExt;
 import kwasilewski.marketplace.dtoext.ad.*;
 import kwasilewski.marketplace.dtoext.user.LoginDataExt;
+import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.dtoext.user.UserDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
@@ -72,8 +73,14 @@ public class RESTController extends AbstractRESTController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserDataExt request) throws Exception {
-        userService.modifyUser(ctx, request.getUserData(ctx.getUserId()));
+    public ResponseEntity<UserDataExt> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserDataExt request) throws Exception {
+        UserData user = userService.modifyUser(ctx, request.getUserData(ctx.getUserId()));
+        return new ResponseEntity<>(new UserDataExt(user), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/user/password", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> changePassword(@ServiceContext UserContext ctx, @RequestBody PasswordDataExt request) throws Exception {
+        userService.changeUserPassword(ctx, ctx.getUserId(), request);
         return ResponseEntity.ok().build();
     }
 

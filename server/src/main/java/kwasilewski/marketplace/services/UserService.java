@@ -3,6 +3,7 @@ package kwasilewski.marketplace.services;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.UserDAO;
 import kwasilewski.marketplace.dto.UserData;
+import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,8 +25,12 @@ public class UserService {
         userDAO.create(user);
     }
 
-    public void modifyUser(UserContext ctx, UserData user) throws DataAccessException, MKTException {
-        userDAO.modify(ctx, user);
+    public UserData modifyUser(UserContext ctx, UserData user) throws DataAccessException, MKTException {
+        return userDAO.modify(ctx, user);
+    }
+
+    public void changeUserPassword(UserContext ctx, Long userId, PasswordDataExt passwordData) throws DataAccessException, MKTException {
+        userDAO.changePassword(ctx, userId, passwordData);
     }
 
     public void promoteUser(UserContext ctx, Long userId) throws DataAccessException, MKTException {
@@ -44,12 +49,12 @@ public class UserService {
         return userDAO.getAll(ctx);
     }
 
-    public UserData findUser(Long id) throws DataAccessException {
-        return userDAO.find(id);
+    public UserData getUser(Long id) throws DataAccessException {
+        return userDAO.getUser(id);
     }
 
-    public UserData findUser(String email) throws DataAccessException {
-        return userDAO.find(email);
+    public UserData getUser(String email) throws DataAccessException {
+        return userDAO.getUser(email);
     }
 
 }

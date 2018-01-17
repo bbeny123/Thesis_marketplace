@@ -3,6 +3,7 @@ package kwasilewski.marketplace.dao;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
+import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +33,33 @@ public class UserDAO {
 
     @Transactional
     public void create(UserData user) throws DataAccessException, MKTException {
-        if (user.getId() != null || find(user.getEmail()) != null) throw new MKTException(MKTError.USER_ALREADY_EXISTS);
+        if (user.getId() != null || getUser(user.getEmail()) != null) throw new MKTException(MKTError.USER_ALREADY_EXISTS);
         this.em.persist(user);
     }
 
     @Transactional
-    public void modify(UserContext ctx, UserData user) throws DataAccessException, MKTException {
-        UserData usr = user.getId() == null ? null : find(user.getId());
+    public UserData modify(UserContext ctx, UserData user) throws DataAccessException, MKTException {
+        UserData usr = user.getId() == null ? null : getUser(user.getId());
         if (usr == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
-        else if ((ctx.isUser() && !usr.getId().equals(ctx.getUserId())) || (!usr.getEmail().equals(user.getEmail()) && find(user.getEmail()) != null))
+        else if ((ctx.isUser() && !usr.getId().equals(ctx.getUserId())) || (!usr.getEmail().equals(user.getEmail()) && getUser(user.getEmail()) != null))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
+        return this.em.merge(user);
+    }
+    @Transactional
+    public void changePassword(UserContext ctx, Long id, PasswordDataExt passwordData) throws DataAccessException, MKTException {
+        UserData user = id == null ? null : getUser(id);
+        if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
+        else if(ctx.isUser() && (!user.getId().equals(ctx.getUserId()) || !user.getPassword().equals(passwordData.getOldPassword()))) {
+            throw new MKTException(MKTError.NOT_AUTHORIZED);
+        }
+        user.setPassword(passwordData.getNewPassword());
         this.em.merge(user);
     }
 
+
     @Transactional
     public void promote(UserContext ctx, Long id) throws DataAccessException, MKTException {
-        UserData user = id != null ? find(id) : null;
+        UserData user = id != null ? getUser(id) : null;
         if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
         else if (ctx.isUser() || user.getId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.NOT_AUTHORIZED);
@@ -58,7 +70,7 @@ public class UserDAO {
     @Transactional
     public void remove(UserContext ctx, Long id) throws DataAccessException, MKTException {
         if (ctx.isUser() || id == null || id.equals(ctx.getUserId())) throw new MKTException(MKTError.NOT_AUTHORIZED);
-        UserData user = find(id);
+        UserData user = getUser(id);
         if (user == null) throw new MKTException(MKTError.USER_NOT_EXISTS);
         this.em.remove(user);
     }
@@ -84,7 +96,7 @@ public class UserDAO {
         return query.getResultList();
     }
 
-    public UserData find(Long id) throws DataAccessException {
+    public UserData getUser(Long id) throws DataAccessException {
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user WHERE user.id = :id", UserData.class);
         query.setParameter("id", id);
         try {
@@ -94,7 +106,7 @@ public class UserDAO {
         }
     }
 
-    public UserData find(String email) throws DataAccessException {
+    public UserData getUser(String email) throws DataAccessException {
         TypedQuery<UserData> query = this.em.createQuery("SELECT user FROM UserData user WHERE user.email = :email", UserData.class);
         query.setParameter("email", email);
         try {

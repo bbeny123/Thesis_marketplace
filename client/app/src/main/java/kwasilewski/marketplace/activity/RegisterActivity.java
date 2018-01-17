@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        Button singUpButton = findViewById(R.id.sign_up_button);
+        Button singUpButton = findViewById(R.id.register_button);
         singUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPref;
 
 public class MainActivity extends AppCompatActivity
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity
             //go to home
             SharedPref.getInstance(this).removeUserData();
             prepareActivity();
+            MRKUtil.toast(this, getResources().getString(R.string.toast_logout_successful));
         } else if (id == R.id.nav_login) {
             startActivityForResult(new Intent(this, LoginActivity.class), 1);
         }

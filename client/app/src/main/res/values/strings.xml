@@ -2,6 +2,8 @@
     <string name="app_name">Marketplace</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_profile">Profile</string>
+
     <!-- Strings related to login and register -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -16,7 +18,6 @@
     <string name="action_refresh">Refresh</string>
     <string name="error_invalid_email">Invalid email.</string>
     <string name="error_invalid_password">Password too short.</string>
-    <string name="error_incorrect_password">Invalid password.</string>
     <string name="error_invalid_password_email">Invalid password or email.</string>
     <string name="error_email_taken">That email is taken. Try another.</string>
     <string name="error_incorrect_phone">Invalid phone number.</string>
@@ -26,12 +27,9 @@
     <string name="toast_register_successful">Register success. You may login now.</string>
     <string name="toast_logout_successful">Logout success.</string>
 
-    <string name="title_activity_main">MainActivity</string>
-
+    <!-- Strings related to drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!-- Strings related to menu -->
     <string name="nav_ads">Ads</string>
     <string name="nav_favourites">Favourites</string>
     <string name="nav_my_ads">My Ads</string>
@@ -42,7 +40,5 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_logout">Logout</string>
     <string name="nav_login">Login</string>
-    <string name="title_activity_profile">Profile</string>
-    <string name="title_activity_main2">XDD</string>
 
 </resources>

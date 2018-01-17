@@ -50,7 +50,7 @@
             android:layout_marginTop="8dp">
 
             <LinearLayout
-                android:id="@+id/email_login_form"
+                android:id="@+id/login_email_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/email"
+                        android:id="@+id/login_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_email"
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/password"
+                        android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
@@ -91,7 +91,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/sign_in_button"
+                    android:id="@+id/login_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/register_button"
+                    android:id="@+id/login_register_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -22,7 +22,7 @@
         tools:text="Internet connection problem." />
 
     <Button
-        android:id="@+id/refresh_button"
+        android:id="@+id/net_error_refresh_button"
         style="?android:textAppearanceSmall"
         android:layout_width="200dp"
         android:layout_height="wrap_content"

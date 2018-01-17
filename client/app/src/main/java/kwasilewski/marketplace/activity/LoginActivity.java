@@ -51,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
 
         userService = RetrofitService.getInstance().getUserService();
 
-        emailEditText = findViewById(R.id.email);
-        passwordEditText = findViewById(R.id.password);
+        emailEditText = findViewById(R.id.login_email);
+        passwordEditText = findViewById(R.id.login_password);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button signInButton = findViewById(R.id.sign_in_button);
+        Button signInButton = findViewById(R.id.login_button);
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button registerButton = findViewById(R.id.register_button);
+        Button registerButton = findViewById(R.id.login_register_button);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

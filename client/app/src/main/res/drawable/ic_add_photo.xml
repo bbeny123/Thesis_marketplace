@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:gravity="center" android:drawable="@android:drawable/ic_menu_camera" />
+    <item android:gravity="bottom|right" android:right="-2dp" android:drawable="@drawable/ic_add_black_18dp" />
+</layer-list>

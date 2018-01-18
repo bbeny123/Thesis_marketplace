@@ -57,83 +57,296 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/new_image1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
+
+                    <ImageView
+                        android:id="@+id/new_image2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
+
+                    <ImageView
+                        android:id="@+id/new_image3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
+
+                    <ImageView
+                        android:id="@+id/new_image4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
+
+                    <ImageView
+                        android:id="@+id/new_image5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="fill_horizontal"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/imageView12"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/new_image6"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="20"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
 
                     <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/new_image7"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="20"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
 
                     <ImageView
-                        android:id="@+id/imageView11"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/new_image8"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="20"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
 
                     <ImageView
-                        android:id="@+id/imageView10"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/new_image9"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="20"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
 
                     <ImageView
-                        android:id="@+id/imageView9"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/new_image10"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:layout_weight="20"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+                        android:background="@drawable/side_nav_bar"
+                        android:contentDescription="@string/new_image_description"
+                        app:srcCompat="@drawable/ic_add_photo" />
 
                 </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
 
                     <EditText
-                        android:id="@+id/new_confirm_password"
+                        android:id="@+id/new_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_confirm_password"
+                        android:hint="@string/prompt_title"
+                        android:inputType="textCapWords"
+                        android:maxLength="60"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/new_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits=",0123456789"
+                        android:hint="@string/prompt_price"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <kwasilewski.marketplace.util.MRKSpinner
+                        android:id="@+id/new_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_category"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <kwasilewski.marketplace.util.MRKSpinner
+                        android:id="@+id/new_subcategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/prompt_subcategory"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/new_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_description"
+                        android:inputType="textMultiLine"
+                        android:maxLength="1000"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/new_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits=" -abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:hint="@string/prompt_city"
+                        android:inputType="textCapWords"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <kwasilewski.marketplace.util.MRKSpinner
+                        android:id="@+id/new_province"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_province"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/new_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_phone"
                         android:imeActionId="6"
-                        android:imeActionLabel="@string/action_modify"
+                        android:imeActionLabel="@string/action_add_add"
                         android:imeOptions="actionUnspecified"
-                        android:inputType="textPassword"
-                        android:maxLength="30"
+                        android:inputType="phone"
+                        android:maxLength="20"
                         android:maxLines="1"
                         android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/new_modify_button"
+                    android:id="@+id/new_add_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/action_modify"
+                    android:text="@string/action_add_add"
                     android:textStyle="bold" />
 
             </LinearLayout>

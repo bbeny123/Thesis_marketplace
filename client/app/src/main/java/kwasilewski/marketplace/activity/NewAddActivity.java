@@ -24,7 +24,7 @@ import kwasilewski.marketplace.R;
 
 public class NewAddActivity extends AppCompatActivity {
 
-    ImageView imageView;
+    ImageView imageView, imageView12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,8 @@ public class NewAddActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.new_image1);
+        imageView12 = findViewById(R.id.new_image6);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +53,24 @@ public class NewAddActivity extends AppCompatActivity {
                             .thumbnailScale(0.85f)
                             .imageEngine(new PicassoEngine())
                             .forResult(1);
+                }
+
+            }
+        });
+        imageView12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(NewAddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(NewAddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                } else {
+                    Matisse.from(NewAddActivity.this)
+                            .choose(MimeType.allOf())
+                            .countable(true)
+                            .maxSelectable(9)
+                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                            .thumbnailScale(0.85f)
+                            .imageEngine(new PicassoEngine())
+                            .forResult(2);
                 }
 
             }
@@ -74,6 +93,10 @@ public class NewAddActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             mSelected = Matisse.obtainResult(data);
             Picasso.with(this).load(mSelected.get(0)).fit().into(imageView);
+        }
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            mSelected = Matisse.obtainResult(data);
+            Picasso.with(this).load(mSelected.get(0)).fit().into(imageView12);
         }
     }
 }

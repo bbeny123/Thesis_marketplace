@@ -125,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             MRKUtil.toast(this, getString(R.string.toast_password_changed));
         }

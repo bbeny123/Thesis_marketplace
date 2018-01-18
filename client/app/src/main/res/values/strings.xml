@@ -59,5 +59,9 @@
     <string name="prompt_subcategory">Subcategory</string>
     <string name="prompt_description">Description</string>
     <string name="action_add_add">Add ad</string>
+    <string name="action_set_thumbnail">Set as a thumbnail</string>
+    <string name="action_remove_photo">Remove photo</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="toast_permissions">Camera and file permissions are required to add photo!</string>
 
 </resources>

@@ -5,10 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.security.MessageDigest;
@@ -90,6 +96,21 @@ public class MRKUtil {
 
     public static boolean isPhoneValid(String phone) {
         return PhoneNumberUtils.isGlobalPhoneNumber(phone);
+    }
+
+    public static ListAdapter getDialogAdapter(final Context context, final MRKDialogItem[] items) {
+        return new ArrayAdapter<MRKDialogItem>(context, android.R.layout.select_dialog_item, android.R.id.text1, items){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View option = super.getView(position, convertView, parent);
+                TextView text = option.findViewById(android.R.id.text1);
+                text.setText(items[position].getName());
+                text.setCompoundDrawablesWithIntrinsicBounds(items[position].getIcon(), 0, 0, 0);
+                text.setCompoundDrawablePadding((int) (10 * context.getResources().getDisplayMetrics().density + 1f));
+                return option;
+            }
+        };
     }
 
 }

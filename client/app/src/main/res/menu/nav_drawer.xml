@@ -51,7 +51,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_login"
-                    android:icon="@drawable/ic_power_settings_new_black_18dp"
+                    android:icon="@drawable/ic_input_black_18dp"
                     android:title="@string/nav_login" />
             </menu>
         </item>

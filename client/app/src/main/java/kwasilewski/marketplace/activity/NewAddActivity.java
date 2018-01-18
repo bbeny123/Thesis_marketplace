@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.util.List;
 
@@ -42,12 +43,15 @@ public class NewAddActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(NewAddActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(NewAddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                if (ActivityCompat.checkSelfPermission(NewAddActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(NewAddActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1);
                 } else {
                     Matisse.from(NewAddActivity.this)
                             .choose(MimeType.allOf())
                             .countable(true)
+                            .capture(true)
+                            .captureStrategy(new CaptureStrategy(true, "kwasilewski.marketplace.fileprovider"))
+                            .theme(R.style.Matisse_Dracula)
                             .maxSelectable(9)
                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
                             .thumbnailScale(0.85f)
@@ -65,6 +69,8 @@ public class NewAddActivity extends AppCompatActivity {
                 } else {
                     Matisse.from(NewAddActivity.this)
                             .choose(MimeType.allOf())
+                            .capture(true)
+                            .theme(R.style.Matisse_Dracula)
                             .countable(true)
                             .maxSelectable(9)
                             .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)

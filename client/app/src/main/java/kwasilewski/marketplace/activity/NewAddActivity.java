@@ -32,7 +32,6 @@ public class NewAddActivity extends AppCompatActivity {
     private final int PERMISSION_CODE = 1;
     private final int MATISSE_CODE = 2;
     private final int MAX_PHOTOS = 10;
-    private AlertDialog.Builder builder;
 
     MRKImageViewList photos = new MRKImageViewList();
 
@@ -122,28 +121,26 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void photoDialog(final int position) {
-        if (builder == null) {
-            MRKDialogItem[] items = {
-                    new MRKDialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery),
-                    new MRKDialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete)
-            };
-            builder = new AlertDialog.Builder(this);
-            builder.setAdapter(MRKUtil.getDialogAdapter(this, items), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0) {
-                        setMiniature(position);
-                    } else if (which == 1) {
-                        removePhoto(position);
-                    }
+        MRKDialogItem[] items = {
+                new MRKDialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery),
+                new MRKDialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete)
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setAdapter(MRKUtil.getDialogAdapter(this, items), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    setMiniature(position);
+                } else if (which == 1) {
+                    removePhoto(position);
                 }
-            });
-            builder.setPositiveButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-        }
+            }
+        });
+        builder.setPositiveButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
         builder.show();
     }
 

@@ -30,9 +30,10 @@ public class FavouriteService {
     }
 
     public void createFavourite(UserContext ctx, Long adId) throws DataAccessException, MKTException {
-        if (adDAO.find(adId, false) == null)
+        AdData ad = adDAO.find(adId, false);
+        if (ad == null)
             throw new MKTException(MKTError.AD_NOT_EXISTS);
-        favouriteDAO.create(ctx, adId);
+        favouriteDAO.create(ctx, ad);
     }
 
     public void removeFavourite(UserContext ctx, Long adId) throws DataAccessException, MKTException {

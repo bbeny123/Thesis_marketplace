@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
@@ -70,7 +71,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_ads) {
-            finish();
+            Intent intent = new Intent(this, AdActivity.class);
+            intent.putExtra(AppConstants.AD_ID_KEY, 9L);
+            startActivity(intent);
         } else if (id == R.id.nav_new){
             startActivity(new Intent(this, NewAddActivity.class));
         } else if (id == R.id.nav_profile) {

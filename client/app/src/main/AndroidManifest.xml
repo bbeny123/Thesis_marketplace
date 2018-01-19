@@ -8,7 +8,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -45,6 +48,7 @@
         <activity
             android:name=".activity.NewAddActivity"
             android:label="@string/title_activity_new_add" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="kwasilewski.marketplace.fileprovider"
@@ -54,6 +58,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity
+            android:name=".activity.AdActivity"
+            android:label="@string/title_activity_ad"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

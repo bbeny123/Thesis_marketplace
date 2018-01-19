@@ -25,5 +25,6 @@ public final class AppConstants {
     public static final String SHARED_PREF_USER = "user";
 
     public static final int MAX_PHOTOS = 10;
+    public static final String AD_ID_KEY = "adId";
 
 }

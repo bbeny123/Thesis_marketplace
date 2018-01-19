@@ -9,6 +9,7 @@ import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class AdService {
         return adDAO.get(ctx, id);
     }
 
+    @Transactional
     public AdData findAd(Long id) throws DataAccessException {
         return adDAO.find(id, true);
     }

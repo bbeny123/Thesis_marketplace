@@ -11,7 +11,8 @@ public enum MKTError {
     AD_ALREADY_EXISTS(7, "Ad already exists"),
     AD_NOT_EXISTS(8, "Ad does not exists"),
     FAVOURITE_ALREADY_EXISTS(9, "Favourite already exists"),
-    FAVOURITE_NOT_EXISTS(10, "Favourite does not exists");
+    FAVOURITE_NOT_EXISTS(10, "Favourite does not exists"),
+    FAVOURITE_OWN_AD(11, "Favourite own ad");
 
     private final int code;
     private final String message;

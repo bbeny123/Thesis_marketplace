@@ -383,10 +383,10 @@ public class NewAddActivity extends AppCompatActivity {
         provinceSpinner.setError(null);
         phoneEditText.setError(null);
 
-        String title = titleEditText.getText().toString();
+        String title = titleEditText.getText().toString().trim();
         String price = priceEditText.getText().toString();
         String description = descriptionEditText.getText().toString();
-        String city = cityEditText.getText().toString();
+        String city = cityEditText.getText().toString().trim();
         String phone = phoneEditText.getText().toString();
 
         boolean cancel = false;

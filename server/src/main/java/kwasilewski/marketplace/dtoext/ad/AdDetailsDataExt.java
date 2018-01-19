@@ -2,21 +2,27 @@ package kwasilewski.marketplace.dtoext.ad;
 
 import kwasilewski.marketplace.dto.AdData;
 
-import java.util.Date;
-
 public class AdDetailsDataExt extends AdDataExt {
 
+    private String email;
     private String userName;
     private String province;
-    private Date date;
     private Long views;
 
     public AdDetailsDataExt(AdData ad) {
         super(ad);
+        this.email = ad.getUser().getEmail();
         this.userName = ad.getUser().getFirstName();
         this.province = ad.getProvince().getName();
-        this.date = ad.getDate();
         this.views = ad.getViews();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserName() {
@@ -33,14 +39,6 @@ public class AdDetailsDataExt extends AdDataExt {
 
     public void setProvince(String province) {
         this.province = province;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public Long getViews() {

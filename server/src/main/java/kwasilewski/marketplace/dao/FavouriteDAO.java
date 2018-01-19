@@ -24,12 +24,14 @@ public class FavouriteDAO {
     private EntityManager em;
 
     @Transactional
-    public void create(UserContext ctx, Long adId) throws DataAccessException, MKTException {
-        if (alreadyFavourite(ctx.getUserId(), adId))
+    public void create(UserContext ctx, AdData ad) throws DataAccessException, MKTException {
+        if (alreadyFavourite(ctx.getUserId(), ad.getId()))
             throw new MKTException(MKTError.FAVOURITE_ALREADY_EXISTS);
+        if (ad.getUsrId().equals(ctx.getUserId()))
+            throw new MKTException(MKTError.FAVOURITE_OWN_AD);
         FavouriteData fav = new FavouriteData();
         fav.setUsrId(ctx.getUserId());
-        fav.setAdId(adId);
+        fav.setAdId(ad.getId());
         this.em.persist(fav);
     }
 

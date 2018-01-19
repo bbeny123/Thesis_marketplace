@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.zhihu.android:matisse:0.5.0-beta3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'jp.wasabeef:picasso-transformations:2.1.2'
+    implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
 }

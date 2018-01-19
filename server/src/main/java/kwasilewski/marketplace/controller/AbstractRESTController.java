@@ -27,7 +27,7 @@ public abstract class AbstractRESTController extends AbstractController {
     public ResponseEntity<?> handleRBCException(MKTException ex) {
         logger.warn(ex.getMessage());
         int ec = ex.getErrorCode();
-        if (Arrays.asList(MKTError.USER_INVALID_CREDENTIALS.getCode(), MKTError.NOT_AUTHORIZED.getCode(), MKTError.WRONG_TOKEN.getCode()).contains(ec)) {
+        if (Arrays.asList(MKTError.USER_INVALID_CREDENTIALS.getCode(), MKTError.NOT_AUTHORIZED.getCode(), MKTError.WRONG_TOKEN.getCode(), MKTError.FAVOURITE_OWN_AD.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else if (Arrays.asList(MKTError.PASSWORDS_NOT_MATCH.getCode(), MKTError.USER_ALREADY_EXISTS.getCode(), MKTError.AD_ALREADY_EXISTS.getCode(), MKTError.FAVOURITE_ALREADY_EXISTS.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

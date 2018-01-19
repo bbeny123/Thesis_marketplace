@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context="kwasilewski.marketplace.activity.AdActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/ad_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/ad_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/ad_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ad_linear_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/ad_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.viewpagerindicator.LinePageIndicator
+                    android:id="@+id/ad_indicator"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    app:strokeWidth="4dp"
+                    app:lineWidth="30dp"
+                    app:unselectedColor="#FF888888"
+                    app:selectedColor="#FF880000"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="24dp"
+                    android:paddingRight="24dp"
+                    android:paddingTop="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:id="@+id/ad_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@android:style/TextAppearance.Material.Headline"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        tools:text="999999 PLN" />
+
+                    <TextView
+                        android:id="@+id/ad_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="8sp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qui" />
+
+                    <LinearLayout
+                        android:id="@+id/ad_description_form"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="6dp"
+                            android:background="#5c5c5c" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="4dp"
+                            android:layout_weight="1"
+                            android:lineSpacingExtra="8sp"
+                            android:text="@string/ad_description"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/ad_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque cursus quam id commodo efficitur. Phasellus dignissim odio pellentesque est blandit, luctus tincidunt purus aliquam. Suspendisse aliquam, orci et placerat tincidunt, tellus nulla vulputate elit, vel condimentum eros quam ac risus. Fusce ac luctus neque. Mauris molestie, purus id feugiat tempus, ante elit porta lectus, vitae mollis diam magna sit amet ante. Sed non elit rhoncus, lobortis est cursus, ultricies est. Donec non magna nunc. Nam mollis neque eros, finibus finibus ligula fringilla vitae. Etiam maximus ultricies lorem, sit amet bibendum lectus rhoncus nec. " />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="6dp"
+                        android:layout_marginTop="6dp"
+                        android:background="#5c5c5c" />
+
+                    <TextView
+                        android:id="@+id/ad_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_account_circle_white_18dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Kamil" />
+
+                    <TextView
+                        android:id="@+id/ad_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_location_city_white_18dp"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Warszawa - łódzkie" />
+
+                    <TextView
+                        android:id="@+id/ad_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_perm_phone_msg_white_18dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="514539012" />
+
+                    <TextView
+                        android:id="@+id/ad_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_mail_outline_white_18dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="bbeny123@gmail.com" />
+
+                    <TextView
+                        android:id="@+id/ad_views"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_remove_red_eye_white_18dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="200" />
+
+                    <Button
+                        android:id="@+id/ad_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_ad_favourite"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</LinearLayout>

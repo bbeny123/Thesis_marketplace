@@ -16,7 +16,7 @@ public class AdDataExt extends AdMinimalDataExt {
     protected String description;
     protected String city;
     protected String phone;
-    protected List<String> photos;
+    protected List<String> photos = new ArrayList<>();
 
     public AdDataExt() {
     }
@@ -89,7 +89,7 @@ public class AdDataExt extends AdMinimalDataExt {
         ad.setPrice(this.price);
         ad.setCity(this.city);
         ad.setPhone(this.phone);
-        ad.setPhotos(getPhotosList());
+        if(miniature !=null) ad.setPhotos(getPhotosList());
         return ad;
     }
 

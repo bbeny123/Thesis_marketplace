@@ -100,7 +100,6 @@ public class RESTController extends AbstractRESTController {
     @RequestMapping(value = "/user/ads/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdDetailsDataExt> getUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws MKTException {
         AdData ad = adService.findAd(ctx, id);
-        if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
         return new ResponseEntity<>(new AdDetailsDataExt(ad), HttpStatus.OK);
     }
 

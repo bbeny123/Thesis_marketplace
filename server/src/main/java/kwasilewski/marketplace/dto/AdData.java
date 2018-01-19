@@ -83,6 +83,9 @@ public class AdData {
     @Transient
     private PhotoData miniature;
 
+    @Transient
+    private boolean favourite;
+
     public Long getId() {
         return id;
     }
@@ -193,6 +196,14 @@ public class AdData {
 
     public void setMiniature(PhotoData miniature) {
         this.miniature = miniature;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 
     public UserData getUser() {

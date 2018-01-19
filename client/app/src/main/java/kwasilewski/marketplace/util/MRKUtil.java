@@ -47,15 +47,15 @@ public class MRKUtil {
         }
     }
 
-    public static void showProgressBarHideView(final AppCompatActivity activity, final View viweToHide, final View progressBar, final boolean show) {
+    public static void showProgressBarHideView(final AppCompatActivity activity, final View viewToHide, final View progressBar, final boolean show) {
         hideKeyboard(activity);
         int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
-        viweToHide.setVisibility(show ? View.GONE : View.VISIBLE);
-        viweToHide.animate().setDuration(shortAnimTime).alpha(
+        viewToHide.setVisibility(show ? View.GONE : View.VISIBLE);
+        viewToHide.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                viweToHide.setVisibility(show ? View.GONE : View.VISIBLE);
+                viewToHide.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
 

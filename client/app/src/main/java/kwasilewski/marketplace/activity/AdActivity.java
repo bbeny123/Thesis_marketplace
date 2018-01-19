@@ -38,6 +38,9 @@ public class AdActivity extends AppCompatActivity {
     private AdService adService;
     private Call<AdDetailsData> callAd;
     private Call<ResponseBody> callFav;
+    private String token;
+    private boolean favourite = false;
+    private boolean favouriteActionInProgress = false;
 
     private View progressBar;
     private View adFormView;
@@ -49,6 +52,7 @@ public class AdActivity extends AppCompatActivity {
     private TextView phoneText;
     private TextView emailText;
     private TextView viewsText;
+    private Button adButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class AdActivity extends AppCompatActivity {
         MRKUtil.setToolbar(this, toolbar);
 
         adService = RetrofitService.getInstance().getAdService();
+        token = SharedPrefUtil.getInstance(this).getToken();
 
         progressBar = findViewById(R.id.ad_progress);
         adFormView = findViewById(R.id.ad_form);
@@ -79,15 +84,14 @@ public class AdActivity extends AppCompatActivity {
         emailText = findViewById(R.id.ad_email);
         viewsText = findViewById(R.id.ad_views);
 
-
-        Button adButton = findViewById(R.id.ad_button);
-        if (SharedPrefUtil.getInstance(this).getToken() == null) {
+        adButton = findViewById(R.id.ad_button);
+        if (token == null) {
             adButton.setVisibility(View.GONE);
         } else {
             adButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addToFavourite();
+                    favouriteAction();
                 }
             });
         }
@@ -124,8 +128,21 @@ public class AdActivity extends AppCompatActivity {
         outState.putLong(AppConstants.AD_ID_KEY, adId);
     }
 
+    private void setButtonText() {
+        if(favourite) {
+            adButton.setText(getString(R.string.action_ad_remove_favourite));
+        } else {
+            adButton.setText(getString(R.string.action_ad_favourite));
+        }
+    }
+
     private void setAdData() {
         setAdapter();
+        favourite = ad.isFavourite();
+        if(adButton.getVisibility() == View.VISIBLE) {
+            setButtonText();
+        }
+
         priceText.setText(String.format(getString(R.string.ad_price_text), ad.getPrice()));
         titleText.setText(ad.getTitle());
         if(TextUtils.isEmpty(ad.getDescription())) {
@@ -158,7 +175,7 @@ public class AdActivity extends AppCompatActivity {
     }
 
     private void initAd() {
-        callAd = adService.getAd(adId);
+        callAd = token != null ? adService.getUserAd(token, adId) : adService.getAd(adId);
         callAd.enqueue(new Callback<AdDetailsData>() {
             @Override
             public void onResponse(Call<AdDetailsData> call, Response<AdDetailsData> response) {
@@ -179,27 +196,33 @@ public class AdActivity extends AppCompatActivity {
         });
     }
 
-    private void addToFavourite() {
-        callFav = adService.addFavourite(SharedPrefUtil.getInstance(this).getToken(), adId);
+    private void favouriteAction() {
+        if(favouriteActionInProgress) {
+            return;
+        }
+        favouriteActionInProgress = true;
+        callFav = favourite ? adService.removeFavourite(token, adId) : adService.addFavourite(token, adId);
         callFav.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    addedToFavourite();
+                    favouriteActionSuccess();
                 } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
                     addNotExists();
                 } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                    alreadyFavourite();
+                    favouriteActionNotAcceptable();
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     ownAd();
                 } else {
                     connectionProblem();
                 }
+                favouriteActionInProgress = false;
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 if (!call.isCanceled()) connectionProblem();
+                favouriteActionInProgress = false;
             }
         });
     }
@@ -214,12 +237,17 @@ public class AdActivity extends AppCompatActivity {
         finish();
     }
 
-    private void addedToFavourite() {
-        MRKUtil.toast(this, getString(R.string.toast_added_favourite));
+    private void favouriteActionSuccess() {
+        if(!favourite) MRKUtil.toast(this, getString(R.string.toast_added_favourite));
+        else MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
+        favourite = !favourite;
+        setButtonText();
     }
 
-    private void alreadyFavourite() {
-        MRKUtil.toast(this, getString(R.string.toast_already_favourite));
+    private void favouriteActionNotAcceptable() {
+        if(favourite) MRKUtil.toast(this, getString(R.string.toast_already_favourite));
+        else MRKUtil.toast(this, getString(R.string.toast_not_favourite));
+
     }
 
     private void ownAd() {

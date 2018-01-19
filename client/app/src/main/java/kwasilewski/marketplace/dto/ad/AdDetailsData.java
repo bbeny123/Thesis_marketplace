@@ -6,6 +6,7 @@ public class AdDetailsData extends AdData {
     private String userName;
     private String province;
     private Long views;
+    private boolean favourite;
 
     public AdDetailsData() {
     }
@@ -42,4 +43,11 @@ public class AdDetailsData extends AdData {
         this.views = views;
     }
 
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
 }

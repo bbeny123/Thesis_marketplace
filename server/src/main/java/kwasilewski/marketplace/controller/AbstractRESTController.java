@@ -29,9 +29,9 @@ public abstract class AbstractRESTController extends AbstractController {
         int ec = ex.getErrorCode();
         if (Arrays.asList(MKTError.USER_INVALID_CREDENTIALS.getCode(), MKTError.NOT_AUTHORIZED.getCode(), MKTError.WRONG_TOKEN.getCode(), MKTError.FAVOURITE_OWN_AD.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } else if (Arrays.asList(MKTError.PASSWORDS_NOT_MATCH.getCode(), MKTError.USER_ALREADY_EXISTS.getCode(), MKTError.AD_ALREADY_EXISTS.getCode(), MKTError.FAVOURITE_ALREADY_EXISTS.getCode()).contains(ec)) {
+        } else if (Arrays.asList(MKTError.PASSWORDS_NOT_MATCH.getCode(), MKTError.USER_ALREADY_EXISTS.getCode(), MKTError.AD_ALREADY_EXISTS.getCode(), MKTError.FAVOURITE_ALREADY_EXISTS.getCode(), MKTError.FAVOURITE_NOT_EXISTS.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        } else if (Arrays.asList(MKTError.USER_NOT_EXISTS.getCode(), MKTError.AD_NOT_EXISTS.getCode(), MKTError.FAVOURITE_NOT_EXISTS.getCode()).contains(ec)) {
+        } else if (Arrays.asList(MKTError.USER_NOT_EXISTS.getCode(), MKTError.AD_NOT_EXISTS.getCode()).contains(ec)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

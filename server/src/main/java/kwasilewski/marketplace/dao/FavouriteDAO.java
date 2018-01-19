@@ -64,7 +64,7 @@ public class FavouriteDAO {
         }
     }
 
-    private boolean alreadyFavourite(Long usrId, Long adId) {
+    public boolean alreadyFavourite(Long usrId, Long adId) {
         String queryStr = "SELECT COUNT(fav) FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.adId = :adId";
         TypedQuery<Long> query = this.em.createQuery(queryStr, Long.class);
         query.setParameter("usrId", usrId);

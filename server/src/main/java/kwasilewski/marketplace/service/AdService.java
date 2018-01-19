@@ -2,9 +2,11 @@ package kwasilewski.marketplace.service;
 
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.AdDAO;
+import kwasilewski.marketplace.dao.FavouriteDAO;
 import kwasilewski.marketplace.dao.PhotoDAO;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dtoext.ad.AdSearchDataExt;
+import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,11 +20,13 @@ public class AdService {
 
     private final AdDAO adDAO;
     private final PhotoDAO photoDAO;
+    private final FavouriteDAO favouriteDAO;
 
     @Autowired
-    public AdService(AdDAO adDAO, PhotoDAO photoDAO) {
+    public AdService(AdDAO adDAO, PhotoDAO photoDAO, FavouriteDAO favouriteDAO) {
         this.adDAO = adDAO;
         this.photoDAO = photoDAO;
+        this.favouriteDAO = favouriteDAO;
     }
 
     public void createAd(AdData ad) throws DataAccessException, MKTException {
@@ -54,8 +58,11 @@ public class AdService {
         return adDAO.find(id, true);
     }
 
-    public AdData findAd(UserContext ctx, Long id) throws DataAccessException {
-        return adDAO.find(ctx, id);
+    public AdData findAd(UserContext ctx, Long id) throws DataAccessException, MKTException {
+        AdData ad = adDAO.find(ctx, id);
+        if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
+        ad.setFavourite(favouriteDAO.alreadyFavourite(ctx.getUserId(), ad.getId()));
+        return ad;
     }
 
     public List<AdData> findAds(AdSearchDataExt criteria) throws DataAccessException {

@@ -45,7 +45,7 @@ public interface AdService {
     @GET(AppConstants.AD_PATH)
     Call<AdDetailsData> getAd(@Path("id") Long id);
 
-    @PATCH(AppConstants.FAVOURITE_PATH)
+    @POST(AppConstants.FAVOURITE_PATH)
     Call<ResponseBody> addFavourite(@Header("token") String token, @Path("id") Long id);
 
     @DELETE(AppConstants.FAVOURITE_PATH)

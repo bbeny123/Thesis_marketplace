@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp"
     android:orientation="horizontal"
     android:background="#55111111"
     xmlns:tools="http://schemas.android.com/tools">

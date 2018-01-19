@@ -1,25 +1,25 @@
-package kwasilewski.marketplace.util;
+package kwasilewski.marketplace.helper;
 
 import android.content.Context;
 import android.net.Uri;
 import android.util.AttributeSet;
 
-public class MRKImageView extends android.support.v7.widget.AppCompatImageView {
+public class PhotoView extends android.support.v7.widget.AppCompatImageView {
 
     private boolean miniature = false;
     private boolean containsPhoto = false;
     private int position = 0;
     private Uri uri;
 
-    public MRKImageView(Context context) {
+    public PhotoView(Context context) {
         super(context);
     }
 
-    public MRKImageView(Context context, AttributeSet attrs) {
+    public PhotoView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MRKImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PhotoView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

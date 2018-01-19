@@ -23,9 +23,9 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.util.MRKSpinner;
+import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText firstNameEditText;
     private EditText lastNameEditText;
     private EditText cityEditText;
-    private MRKSpinner provinceSpinner;
+    private HintSpinner provinceSpinner;
     private EditText phoneEditText;
 
     @Override
@@ -53,11 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        MRKUtil.setToolbar(this, toolbar);
 
         userService = RetrofitService.getInstance().getUserService();
         hintService = RetrofitService.getInstance().getHintService();
@@ -124,14 +120,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            MRKUtil.toast(this, getString(R.string.toast_password_changed));
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
@@ -140,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setUserData() {
-        UserData user = SharedPref.getInstance(this).getUserData();
+        UserData user = SharedPrefUtil.getInstance(this).getUserData();
         firstNameEditText.setText(user.getFirstName());
         lastNameEditText.setText(user.getLastName());
         cityEditText.setText(user.getCity());
@@ -168,11 +156,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void goToPasswordChange() {
-        startActivityForResult(new Intent(this, PasswordActivity.class), 1);
+        startActivity(new Intent(this, PasswordActivity.class));
     }
 
     private void modifySuccess(UserData user) {
-        SharedPref.getInstance(this).saveUserData(user);
+        SharedPrefUtil.getInstance(this).saveUserData(user);
         showProgress(false);
         MRKUtil.toast(this, getString(R.string.toast_profile_edited));
     }
@@ -250,7 +238,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void modify(UserData userData) {
-        callUser = userService.updateProfile(SharedPref.getInstance(this).getToken(), userData);
+        callUser = userService.updateProfile(SharedPrefUtil.getInstance(this).getToken(), userData);
         callUser.enqueue(new Callback<UserData>() {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {

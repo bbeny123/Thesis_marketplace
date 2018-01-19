@@ -111,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <kwasilewski.marketplace.util.MRKSpinner
+                    <kwasilewski.marketplace.helper.HintSpinner
                         android:id="@+id/profile_province"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

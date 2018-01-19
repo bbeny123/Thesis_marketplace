@@ -16,7 +16,7 @@ import android.widget.TextView;
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_logout) {
             //go to home
-            SharedPref.getInstance(this).removeUserData();
+            SharedPrefUtil.getInstance(this).removeUserData();
             prepareActivity();
             MRKUtil.toast(this, getString(R.string.toast_logout_successful));
         } else if (id == R.id.nav_login) {
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void prepareActivity() {
-        String token = SharedPref.getInstance(this).getToken();
+        String token = SharedPrefUtil.getInstance(this).getToken();
         navigationView.getMenu().setGroupVisible(R.id.nav_logged, token != null);
         navigationView.getMenu().setGroupVisible(R.id.nav_not_logged, token == null);
         setUserData(token != null);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         String name = null;
         String email = null;
         if (logged) {
-            UserData user = SharedPref.getInstance(this).getUserData();
+            UserData user = SharedPrefUtil.getInstance(this).getUserData();
             if (user != null) {
                 name = user.getName();
                 email = user.getEmail();

@@ -22,7 +22,7 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.UserService;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,11 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Toolbar toolbar = findViewById(R.id.login_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        MRKUtil.setToolbar(this, toolbar);
 
         userService = RetrofitService.getInstance().getUserService();
 
@@ -68,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         Button signInButton = findViewById(R.id.login_button);
         signInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 attemptLogin();
             }
         });
@@ -99,16 +95,8 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            MRKUtil.toast(this, getString(R.string.toast_register_successful));
-        }
-    }
-
     private void goToRegister() {
-        startActivityForResult(new Intent(this, RegisterActivity.class), 1);
+        startActivity(new Intent(this, RegisterActivity.class));
     }
 
     private void attemptLogin() {
@@ -188,8 +176,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginSuccessful(UserData user) {
-        SharedPref.getInstance(this).saveUserData(user);
-        SharedPref.getInstance(this).saveToken(user.getToken());
+        SharedPrefUtil.getInstance(this).saveUserData(user);
+        SharedPrefUtil.getInstance(this).saveToken(user.getToken());
         setResult(RESULT_OK);
         finish();
     }

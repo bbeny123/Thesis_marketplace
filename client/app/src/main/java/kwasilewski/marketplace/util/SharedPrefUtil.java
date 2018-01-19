@@ -8,9 +8,9 @@ import com.google.gson.Gson;
 import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.user.UserData;
 
-public class SharedPref {
+public class SharedPrefUtil {
 
-    private static SharedPref instance;
+    private static SharedPrefUtil instance;
     private SharedPreferences sharedPref;
     private Gson gson;
     private String token;
@@ -18,16 +18,16 @@ public class SharedPref {
     private boolean tokenSet = false;
     private boolean userDataSet = false;
 
-    private SharedPref(Context context) {
+    private SharedPrefUtil(Context context) {
         sharedPref = context.getSharedPreferences(AppConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         gson = new Gson();
     }
 
-    public static SharedPref getInstance(Context context) {
+    public static SharedPrefUtil getInstance(Context context) {
         if (instance == null) {
-            synchronized (SharedPref.class) {
+            synchronized (SharedPrefUtil.class) {
                 if (instance == null) {
-                    instance = new SharedPref(context);
+                    instance = new SharedPrefUtil(context);
                 }
             }
         }

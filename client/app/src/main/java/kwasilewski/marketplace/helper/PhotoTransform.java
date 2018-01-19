@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.util;
+package kwasilewski.marketplace.helper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -10,15 +10,15 @@ import android.graphics.RectF;
 import com.squareup.picasso.Transformation;
 
 
-public class RoundedCornersTransform implements Transformation {
+public class PhotoTransform implements Transformation {
 
     private boolean border = false;
 
-    public RoundedCornersTransform() {
+    public PhotoTransform() {
 
     }
 
-    public RoundedCornersTransform(boolean border) {
+    public PhotoTransform(boolean border) {
         this.border = border;
     }
 

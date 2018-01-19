@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.util;
+package kwasilewski.marketplace.helper;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -9,19 +9,19 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 
-public class MRKSpinner extends AppCompatAutoCompleteTextView {
+public class HintSpinner extends AppCompatAutoCompleteTextView {
 
     private boolean isPopup;
 
-    public MRKSpinner(Context context) {
+    public HintSpinner(Context context) {
         super(context);
     }
 
-    public MRKSpinner(Context arg0, AttributeSet arg1) {
+    public HintSpinner(Context arg0, AttributeSet arg1) {
         super(arg0, arg1);
     }
 
-    public MRKSpinner(Context arg0, AttributeSet arg1, int arg2) {
+    public HintSpinner(Context arg0, AttributeSet arg1, int arg2) {
         super(arg0, arg1, arg2);
     }
 

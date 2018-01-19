@@ -1,14 +1,14 @@
-package kwasilewski.marketplace.util;
+package kwasilewski.marketplace.helper;
 
-public class MRKDialogItem {
+public class DialogItem {
 
     private String name;
     private Integer icon;
 
-    public MRKDialogItem() {
+    public DialogItem() {
     }
 
-    public MRKDialogItem(String name, Integer icon) {
+    public DialogItem(String name, Integer icon) {
         this.name = name;
         this.icon = icon;
     }

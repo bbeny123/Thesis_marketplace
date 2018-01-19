@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -19,8 +20,10 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.helper.DialogItem;
 
 public class MRKUtil {
 
@@ -98,19 +101,31 @@ public class MRKUtil {
         return PhoneNumberUtils.isGlobalPhoneNumber(phone);
     }
 
-    public static ListAdapter getDialogAdapter(final Context context, final MRKDialogItem[] items) {
-        return new ArrayAdapter<MRKDialogItem>(context, android.R.layout.select_dialog_item, android.R.id.text1, items){
+    public static ListAdapter getDialogAdapter(final Context context, final List<DialogItem> items) {
+        return new ArrayAdapter<DialogItem>(context, android.R.layout.select_dialog_item, android.R.id.text1, items){
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View option = super.getView(position, convertView, parent);
                 TextView text = option.findViewById(android.R.id.text1);
-                text.setText(items[position].getName());
-                text.setCompoundDrawablesWithIntrinsicBounds(items[position].getIcon(), 0, 0, 0);
+                text.setText(items.get(position).getName());
+                text.setCompoundDrawablesWithIntrinsicBounds(items.get(position).getIcon(), 0, 0, 0);
                 text.setCompoundDrawablePadding((int) (10 * context.getResources().getDisplayMetrics().density + 1f));
                 return option;
             }
         };
+    }
+
+    public static void setToolbar(final AppCompatActivity activity, android.support.v7.widget.Toolbar toolbar) {
+        activity.setSupportActionBar(toolbar);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    public static boolean checkIme(int id) {
+        return id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL;
     }
 
 }

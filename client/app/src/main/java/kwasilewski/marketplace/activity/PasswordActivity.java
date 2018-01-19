@@ -16,7 +16,7 @@ import kwasilewski.marketplace.dto.user.PasswordData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.UserService;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,11 +39,7 @@ public class PasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_password);
 
         Toolbar toolbar = findViewById(R.id.password_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        MRKUtil.setToolbar(this, toolbar);
 
         userService = RetrofitService.getInstance().getUserService();
 
@@ -86,7 +82,7 @@ public class PasswordActivity extends AppCompatActivity {
     }
 
     private void modifySuccess() {
-        setResult(AppCompatActivity.RESULT_OK);
+        MRKUtil.toast(this, getString(R.string.toast_password_changed));
         finish();
     }
 
@@ -145,13 +141,13 @@ public class PasswordActivity extends AppCompatActivity {
             modifyInProgress = false;
         } else {
             showProgress(true);
-            String email = SharedPref.getInstance(this).getUserData().getEmail();
+            String email = SharedPrefUtil.getInstance(this).getUserData().getEmail();
             modify(new PasswordData(MRKUtil.encodePassword(email, oldPassword), MRKUtil.encodePassword(email, newPassword)));
         }
     }
 
     private void modify(PasswordData passwordData) {
-        callUser = userService.changePassword(SharedPref.getInstance(this).getToken(), passwordData);
+        callUser = userService.changePassword(SharedPrefUtil.getInstance(this).getToken(), passwordData);
         callUser.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

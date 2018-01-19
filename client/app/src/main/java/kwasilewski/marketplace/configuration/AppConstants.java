@@ -24,4 +24,6 @@ public final class AppConstants {
     public static final String SHARED_PREF_TOKEN = "token";
     public static final String SHARED_PREF_USER = "user";
 
+    public static final int MAX_PHOTOS = 10;
+
 }

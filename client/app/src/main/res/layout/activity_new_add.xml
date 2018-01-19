@@ -62,7 +62,7 @@
                     android:gravity="fill_horizontal"
                     android:orientation="horizontal">
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                     android:gravity="fill_horizontal"
                     android:orientation="horizontal">
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
                         android:contentDescription="@string/new_image_description"
                         app:srcCompat="@drawable/ic_add_photo" />
 
-                    <kwasilewski.marketplace.util.MRKImageView
+                    <kwasilewski.marketplace.helper.PhotoView
                         android:id="@+id/new_image10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <kwasilewski.marketplace.util.MRKSpinner
+                    <kwasilewski.marketplace.helper.HintSpinner
                         android:id="@+id/new_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <kwasilewski.marketplace.util.MRKSpinner
+                    <kwasilewski.marketplace.helper.HintSpinner
                         android:id="@+id/new_subcategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -300,7 +300,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <kwasilewski.marketplace.util.MRKSpinner
+                    <kwasilewski.marketplace.helper.HintSpinner
                         android:id="@+id/new_province"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

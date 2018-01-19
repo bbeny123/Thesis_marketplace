@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String token = SharedPref.getInstance(this).getToken();
+        String token = SharedPrefUtil.getInstance(this).getToken();
         if (token != null) {
             checkToken(token);
         } else {
@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void tokenAuthorized(boolean authorized) {
-        if (!authorized) SharedPref.getInstance(this).removeUserData();
+        if (!authorized) SharedPrefUtil.getInstance(this).removeUserData();
         goToMainActivity();
     }
 

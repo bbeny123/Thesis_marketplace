@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,22 +27,23 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.CategoryData;
 import kwasilewski.marketplace.dto.HintData;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.helper.DialogItem;
+import kwasilewski.marketplace.helper.HintSpinner;
+import kwasilewski.marketplace.helper.PhotoView;
+import kwasilewski.marketplace.helper.PhotoViewList;
 import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.AdService;
 import kwasilewski.marketplace.retrofit.service.HintService;
-import kwasilewski.marketplace.util.MRKDialogItem;
-import kwasilewski.marketplace.util.MRKImageView;
-import kwasilewski.marketplace.util.MRKImageViewList;
-import kwasilewski.marketplace.util.MRKSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
-import kwasilewski.marketplace.util.SharedPref;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,9 +54,7 @@ public class NewAddActivity extends AppCompatActivity {
     private final String[] PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     private final int PERMISSION_CODE = 1;
     private final int MATISSE_CODE = 2;
-    private final int MAX_PHOTOS = 10;
 
-    private AdService adService;
     private HintService hintService;
     private Call<ResponseBody> callAd;
     private Call<List<HintData>> callProvince;
@@ -68,7 +66,7 @@ public class NewAddActivity extends AppCompatActivity {
     private boolean provinceSet = false;
     private boolean categorySet = false;
 
-    private MRKImageViewList photos = new MRKImageViewList();
+    private PhotoViewList photos = new PhotoViewList();
     private View progressBar;
     private View newFormView;
     private EditText titleEditText;
@@ -76,9 +74,9 @@ public class NewAddActivity extends AppCompatActivity {
     private EditText descriptionEditText;
     private EditText cityEditText;
     private EditText phoneEditText;
-    private MRKSpinner categorySpinner;
-    private MRKSpinner subcategorySpinner;
-    private MRKSpinner provinceSpinner;
+    private HintSpinner categorySpinner;
+    private HintSpinner subcategorySpinner;
+    private HintSpinner provinceSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,13 +84,8 @@ public class NewAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_add);
 
         Toolbar toolbar = findViewById(R.id.new_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        MRKUtil.setToolbar(this, toolbar);
 
-        adService = RetrofitService.getInstance().getAdService();
         hintService = RetrofitService.getInstance().getHintService();
 
         progressBar = findViewById(R.id.new_progress);
@@ -103,17 +96,7 @@ public class NewAddActivity extends AppCompatActivity {
         categorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Object item = adapterView.getItemAtPosition(position);
-                if (item instanceof CategoryData) {
-                    Long id = ((CategoryData) item).getId();
-                    if (id.equals(selectedCategory)) return;
-                    selectedCategory = id;
-                    selectedSubcategory = null;
-                    subcategorySpinner.setText(null);
-                    setSubcategoryAdapter(((CategoryData) item).getSubcategories());
-                    enableSubcategorySpinner(true);
-                }
-                categorySpinner.setError(null);
+                selectedCategory = spinnerOnClickListener(categorySpinner, adapterView.getItemAtPosition(position));
             }
         });
         subcategorySpinner = findViewById(R.id.new_subcategory);
@@ -121,11 +104,7 @@ public class NewAddActivity extends AppCompatActivity {
         subcategorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Object item = adapterView.getItemAtPosition(position);
-                if (item instanceof HintData) {
-                    selectedSubcategory = ((HintData) item).getId();
-                }
-                subcategorySpinner.setError(null);
+                selectedSubcategory = spinnerOnClickListener(subcategorySpinner, adapterView.getItemAtPosition(position));
             }
         });
         descriptionEditText = findViewById(R.id.new_description);
@@ -134,22 +113,16 @@ public class NewAddActivity extends AppCompatActivity {
         provinceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Object item = adapterView.getItemAtPosition(position);
-                if (item instanceof HintData) {
-                    selectedProvince = ((HintData) item).getId();
-                }
-                provinceSpinner.setError(null);
+                selectedProvince = spinnerOnClickListener(provinceSpinner, adapterView.getItemAtPosition(position));
             }
         });
+
         phoneEditText = findViewById(R.id.new_phone);
         phoneEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptAdd();
-                    return true;
-                }
-                return false;
+                if (MRKUtil.checkIme(id)) attemptAdd();
+                return MRKUtil.checkIme(id);
             }
         });
 
@@ -161,27 +134,27 @@ public class NewAddActivity extends AppCompatActivity {
             }
         });
 
-        photos.add((MRKImageView)findViewById(R.id.new_image1));
-        photos.add((MRKImageView)findViewById(R.id.new_image2));
-        photos.add((MRKImageView)findViewById(R.id.new_image3));
-        photos.add((MRKImageView)findViewById(R.id.new_image4));
-        photos.add((MRKImageView)findViewById(R.id.new_image5));
-        photos.add((MRKImageView)findViewById(R.id.new_image6));
-        photos.add((MRKImageView)findViewById(R.id.new_image7));
-        photos.add((MRKImageView)findViewById(R.id.new_image8));
-        photos.add((MRKImageView)findViewById(R.id.new_image9));
-        photos.add((MRKImageView)findViewById(R.id.new_image10));
+        photos.add((PhotoView) findViewById(R.id.new_image1));
+        photos.add((PhotoView) findViewById(R.id.new_image2));
+        photos.add((PhotoView) findViewById(R.id.new_image3));
+        photos.add((PhotoView) findViewById(R.id.new_image4));
+        photos.add((PhotoView) findViewById(R.id.new_image5));
+        photos.add((PhotoView) findViewById(R.id.new_image6));
+        photos.add((PhotoView) findViewById(R.id.new_image7));
+        photos.add((PhotoView) findViewById(R.id.new_image8));
+        photos.add((PhotoView) findViewById(R.id.new_image9));
+        photos.add((PhotoView) findViewById(R.id.new_image10));
 
-        for (MRKImageView photo : photos.getPhotos()) {
+        for (PhotoView photo : photos.getPhotos()) {
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    clickPhoto(((MRKImageView)v).getPosition());
+                    clickPhoto(((PhotoView) v).getPosition());
                 }
             });
         }
 
-        setFieldsFromUserData();
+        setUserData();
     }
 
     @Override
@@ -196,9 +169,9 @@ public class NewAddActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if(callAd != null) callAd.cancel();
-        if(callProvince != null) callProvince.cancel();
-        if(callCategory != null) callCategory.cancel();
+        if (callAd != null) callAd.cancel();
+        if (callProvince != null) callProvince.cancel();
+        if (callCategory != null) callCategory.cancel();
         super.onPause();
     }
 
@@ -228,7 +201,7 @@ public class NewAddActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MATISSE_CODE && resultCode == RESULT_OK) {
-            for(Uri uri : Matisse.obtainResult(data)) {
+            for (Uri uri : Matisse.obtainResult(data)) {
                 photos.addPhoto(this, uri);
             }
         }
@@ -249,7 +222,7 @@ public class NewAddActivity extends AppCompatActivity {
                 .capture(true)
                 .captureStrategy(new CaptureStrategy(true, "kwasilewski.marketplace.fileprovider"))
                 .countable(true)
-                .maxSelectable(MAX_PHOTOS - photos.getPhotoContained())
+                .maxSelectable(AppConstants.MAX_PHOTOS - photos.getPhotoContained())
                 .imageEngine(new PicassoEngine())
                 .theme(R.style.Matisse_Dracula)
                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
@@ -270,18 +243,24 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void photoDialog(final int position) {
-        MRKDialogItem[] items = {
-                new MRKDialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery),
-                new MRKDialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete)
-        };
+        List<DialogItem> items = new ArrayList<>();
+        if(position != 0) {
+            items.add(new DialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery));
+            items.add(new DialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete));
+        } else {
+            items.add(new DialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete));
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setAdapter(MRKUtil.getDialogAdapter(this, items), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    setMiniature(position);
-                } else if (which == 1) {
+                if (which == 1) {
                     removePhoto(position);
+                } else if (which == 0 && position == 0) {
+                    removePhoto(position);
+                } else if (which == 0) {
+                    setMiniature(position);
                 }
             }
         });
@@ -301,12 +280,24 @@ public class NewAddActivity extends AppCompatActivity {
         photos.remove(this, position);
     }
 
-    private void setFieldsFromUserData() {
-        UserData user = SharedPref.getInstance(this).getUserData();
+    private void setUserData() {
+        UserData user = SharedPrefUtil.getInstance(this).getUserData();
         cityEditText.setText(user.getCity());
         provinceSpinner.setText(user.getProvince());
         selectedProvince = user.getPrvId();
         phoneEditText.setText(user.getPhone());
+    }
+
+    private Long spinnerOnClickListener(HintSpinner spinner, Object item) {
+        Long id = null;
+        if (item instanceof HintData) {
+            id = ((HintData) item).getId();
+        }
+        if (item instanceof CategoryData && !id.equals(selectedCategory)) {
+            setSubcategoryAdapter(((CategoryData) item).getSubcategories());
+        }
+        spinner.setError(null);
+        return id;
     }
 
     private void enableSubcategorySpinner(boolean enabled) {
@@ -331,8 +322,11 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void setSubcategoryAdapter(List<HintData> hintData) {
+        selectedSubcategory = null;
+        subcategorySpinner.setText(null);
         ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
         subcategorySpinner.setAdapter(adapter);
+        enableSubcategorySpinner(true);
     }
 
     private void populateProvinceSpinner() {
@@ -456,7 +450,7 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void add(AdData adData) {
-        callAd = adService.newAd(SharedPref.getInstance(this).getToken(), adData);
+        callAd = RetrofitService.getInstance().getAdService().newAd(SharedPrefUtil.getInstance(this).getToken(), adData);
         callAd.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -493,7 +487,7 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void addSuccess() {
-        setResult(AppCompatActivity.RESULT_OK);
+        MRKUtil.toast(this, getString(R.string.toast_ad_created));
         finish();
     }
 

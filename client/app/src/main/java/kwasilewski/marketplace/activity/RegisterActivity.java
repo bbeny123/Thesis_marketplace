@@ -24,7 +24,7 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.util.MRKSpinner;
+import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText firstNameEditText;
     private EditText lastNameEditText;
     private EditText cityEditText;
-    private MRKSpinner provinceSpinner;
+    private HintSpinner provinceSpinner;
     private EditText phoneEditText;
 
     @Override
@@ -56,11 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         Toolbar toolbar = findViewById(R.id.register_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        MRKUtil.setToolbar(this, toolbar);
 
         userService = RetrofitService.getInstance().getUserService();
         hintService = RetrofitService.getInstance().getHintService();
@@ -238,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerSuccess() {
-        setResult(AppCompatActivity.RESULT_OK);
+        MRKUtil.toast(this, getString(R.string.toast_register_successful));
         finish();
     }
 

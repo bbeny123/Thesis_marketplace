@@ -18,6 +18,9 @@ public class AdDataExt extends AdMinimalDataExt {
     protected String phone;
     protected List<String> photos;
 
+    public AdDataExt() {
+    }
+
     AdDataExt(AdData ad) {
         super(ad);
         this.catId = ad.getCatId();

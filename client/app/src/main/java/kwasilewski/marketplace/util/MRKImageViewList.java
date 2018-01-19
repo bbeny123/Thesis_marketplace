@@ -1,11 +1,16 @@
 package kwasilewski.marketplace.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Base64;
 
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +26,6 @@ public class MRKImageViewList {
 
     public List<MRKImageView> getPhotos() {
         return photos;
-    }
-
-    public MRKImageView getEmpty(Uri uri) {
-        photos.get(photoContained).setContainsPhoto(true);
-        photos.get(photoContained).setUri(uri);
-        return photos.get(photoContained++);
     }
 
     public void add(MRKImageView photo) {
@@ -67,6 +66,38 @@ public class MRKImageViewList {
         photos.get(photoContained).setContainsPhoto(true);
         photos.get(photoContained).setUri(uri);
         Picasso.with(context).load(uri).transform(new RoundedCornersTransform(photoContained == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(photoContained++));
+    }
+
+    public String getEncodedThumbnail(Context context) {
+        if (photoContained == 0) return null;
+        byte[] encodedPhoto = getByteFromUri(context, photos.get(0).getUri());
+        if(encodedPhoto != null) {
+            return Base64.encodeToString(encodedPhoto, Base64.DEFAULT);
+        }
+        return null;
+    }
+
+    public List<String> getEncodedPhotos(Context context) {
+        if (photoContained < 2) return null;
+        List<String> encodedPhotos = new ArrayList<>();
+        for (int i = 1; i < photoContained; i++) {
+            byte[] encodedPhoto = getByteFromUri(context, photos.get(i).getUri());
+            if(encodedPhoto != null) {
+                encodedPhotos.add(Base64.encodeToString(encodedPhoto, Base64.DEFAULT));
+            }
+        }
+        return encodedPhotos;
+    }
+
+    private byte[] getByteFromUri(Context context, Uri uri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+            return bos.toByteArray();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

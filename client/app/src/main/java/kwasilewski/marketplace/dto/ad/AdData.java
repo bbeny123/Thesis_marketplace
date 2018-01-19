@@ -15,6 +15,16 @@ public class AdData extends AdMinimalData {
     public AdData() {
     }
 
+    public AdData(String title, Long price, Long catId, Long prvId, String description, String city, String phone, String miniature, List<String> photos) {
+        super(title, price, miniature);
+        this.catId = catId;
+        this.prvId = prvId;
+        this.description = description;
+        this.city = city;
+        this.phone = phone;
+        this.photos = photos;
+    }
+
     public Long getCatId() {
         return catId;
     }

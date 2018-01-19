@@ -31,7 +31,7 @@
             <td th:if="${!pht.ad.active}" th:text="Inactive">Ad Status</td>
             <td th:if="${pht.miniature}" th:text="Yes">Miniature</td>
             <td th:if="${!pht.miniature}" th:text="No">Miniature</td>
-            <td><img th:src="@{'data:image/jpeg;base64,' + ${pht.photo}}"/></td>
+            <td><img width="64" height="64" th:src="@{'data:image/jpeg;base64,' + ${pht.photo}}"/></td>
         </tr>
         </tbody>
     </table>

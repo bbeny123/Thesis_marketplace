@@ -12,19 +12,42 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.util.List;
+
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.dto.CategoryData;
+import kwasilewski.marketplace.dto.HintData;
+import kwasilewski.marketplace.dto.ad.AdData;
+import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.retrofit.RetrofitService;
+import kwasilewski.marketplace.retrofit.service.AdService;
+import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.util.MRKDialogItem;
 import kwasilewski.marketplace.util.MRKImageView;
 import kwasilewski.marketplace.util.MRKImageViewList;
+import kwasilewski.marketplace.util.MRKSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SharedPref;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NewAddActivity extends AppCompatActivity {
 
@@ -33,7 +56,29 @@ public class NewAddActivity extends AppCompatActivity {
     private final int MATISSE_CODE = 2;
     private final int MAX_PHOTOS = 10;
 
-    MRKImageViewList photos = new MRKImageViewList();
+    private AdService adService;
+    private HintService hintService;
+    private Call<ResponseBody> callAd;
+    private Call<List<HintData>> callProvince;
+    private Call<List<CategoryData>> callCategory;
+    private Long selectedProvince;
+    private Long selectedCategory;
+    private Long selectedSubcategory;
+    private boolean addInProgress = false;
+    private boolean provinceSet = false;
+    private boolean categorySet = false;
+
+    private MRKImageViewList photos = new MRKImageViewList();
+    private View progressBar;
+    private View newFormView;
+    private EditText titleEditText;
+    private EditText priceEditText;
+    private EditText descriptionEditText;
+    private EditText cityEditText;
+    private EditText phoneEditText;
+    private MRKSpinner categorySpinner;
+    private MRKSpinner subcategorySpinner;
+    private MRKSpinner provinceSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +91,76 @@ public class NewAddActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        adService = RetrofitService.getInstance().getAdService();
+        hintService = RetrofitService.getInstance().getHintService();
+
+        progressBar = findViewById(R.id.new_progress);
+        newFormView = findViewById(R.id.new_form);
+        titleEditText = findViewById(R.id.new_title);
+        priceEditText = findViewById(R.id.new_price);
+        categorySpinner = findViewById(R.id.new_category);
+        categorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Object item = adapterView.getItemAtPosition(position);
+                if (item instanceof CategoryData) {
+                    Long id = ((CategoryData) item).getId();
+                    if (id.equals(selectedCategory)) return;
+                    selectedCategory = id;
+                    selectedSubcategory = null;
+                    subcategorySpinner.setText(null);
+                    setSubcategoryAdapter(((CategoryData) item).getSubcategories());
+                    enableSubcategorySpinner(true);
+                }
+                categorySpinner.setError(null);
+            }
+        });
+        subcategorySpinner = findViewById(R.id.new_subcategory);
+        enableSubcategorySpinner(false);
+        subcategorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Object item = adapterView.getItemAtPosition(position);
+                if (item instanceof HintData) {
+                    selectedSubcategory = ((HintData) item).getId();
+                }
+                subcategorySpinner.setError(null);
+            }
+        });
+        descriptionEditText = findViewById(R.id.new_description);
+        cityEditText = findViewById(R.id.new_city);
+        provinceSpinner = findViewById(R.id.new_province);
+        provinceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Object item = adapterView.getItemAtPosition(position);
+                if (item instanceof HintData) {
+                    selectedProvince = ((HintData) item).getId();
+                }
+                provinceSpinner.setError(null);
+            }
+        });
+        phoneEditText = findViewById(R.id.new_phone);
+        phoneEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                    attemptAdd();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        Button addButton = findViewById(R.id.new_add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptAdd();
+            }
+        });
+
         photos.add((MRKImageView)findViewById(R.id.new_image1));
         photos.add((MRKImageView)findViewById(R.id.new_image2));
         photos.add((MRKImageView)findViewById(R.id.new_image3));
@@ -65,6 +180,26 @@ public class NewAddActivity extends AppCompatActivity {
                 }
             });
         }
+
+        setFieldsFromUserData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (provinceSpinner.getAdapter() == null || categorySpinner.getAdapter() == null) {
+            showProgress(true);
+            populateProvinceSpinner();
+            populateCategorySpinner();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if(callAd != null) callAd.cancel();
+        if(callProvince != null) callProvince.cancel();
+        if(callCategory != null) callCategory.cancel();
+        super.onPause();
     }
 
     @Override
@@ -99,6 +234,29 @@ public class NewAddActivity extends AppCompatActivity {
         }
     }
 
+    private boolean hasPermissions() {
+        for (String permission : PERMISSIONS) {
+            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void callMatisse() {
+        Matisse.from(this)
+                .choose(MimeType.ofImage())
+                .capture(true)
+                .captureStrategy(new CaptureStrategy(true, "kwasilewski.marketplace.fileprovider"))
+                .countable(true)
+                .maxSelectable(MAX_PHOTOS - photos.getPhotoContained())
+                .imageEngine(new PicassoEngine())
+                .theme(R.style.Matisse_Dracula)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.85f)
+                .forResult(MATISSE_CODE);
+    }
+
     private void clickPhoto(int position) {
         if (photos.containsPhoto(position)) {
             photoDialog(position);
@@ -109,15 +267,6 @@ public class NewAddActivity extends AppCompatActivity {
                 callMatisse();
             }
         }
-    }
-
-    private boolean hasPermissions() {
-        for (String permission : PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void photoDialog(final int position) {
@@ -152,17 +301,200 @@ public class NewAddActivity extends AppCompatActivity {
         photos.remove(this, position);
     }
 
-    private void callMatisse() {
-        Matisse.from(this)
-                .choose(MimeType.ofImage())
-                .capture(true)
-                .captureStrategy(new CaptureStrategy(true, "kwasilewski.marketplace.fileprovider"))
-                .countable(true)
-                .maxSelectable(MAX_PHOTOS - photos.getPhotoContained())
-                .imageEngine(new PicassoEngine())
-                .theme(R.style.Matisse_Dracula)
-                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                .thumbnailScale(0.85f)
-                .forResult(MATISSE_CODE);
+    private void setFieldsFromUserData() {
+        UserData user = SharedPref.getInstance(this).getUserData();
+        cityEditText.setText(user.getCity());
+        provinceSpinner.setText(user.getProvince());
+        selectedProvince = user.getPrvId();
+        phoneEditText.setText(user.getPhone());
     }
+
+    private void enableSubcategorySpinner(boolean enabled) {
+        subcategorySpinner.clearFocus();
+        subcategorySpinner.setFocusable(enabled);
+        subcategorySpinner.setEnabled(enabled);
+        subcategorySpinner.setClickable(enabled);
+    }
+
+    private void setProvinceAdapter(List<HintData> hintData) {
+        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
+        provinceSpinner.setAdapter(adapter);
+        provinceSet = true;
+        if (categorySet) showProgress(false);
+    }
+
+    private void setCategoryAdapter(List<CategoryData> categoryData) {
+        ArrayAdapter<CategoryData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, categoryData);
+        categorySpinner.setAdapter(adapter);
+        categorySet = true;
+        if (provinceSet) showProgress(false);
+    }
+
+    private void setSubcategoryAdapter(List<HintData> hintData) {
+        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
+        subcategorySpinner.setAdapter(adapter);
+    }
+
+    private void populateProvinceSpinner() {
+        callProvince = hintService.getProvinces();
+        provinceSet = false;
+        callProvince.enqueue(new Callback<List<HintData>>() {
+            @Override
+            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
+                if (response.isSuccessful()) {
+                    setProvinceAdapter(response.body());
+                } else {
+                    connectionProblemAtStart();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<HintData>> call, Throwable t) {
+                if (!call.isCanceled()) connectionProblemAtStart();
+            }
+        });
+    }
+
+    private void populateCategorySpinner() {
+        callCategory = hintService.getCategories();
+        categorySet = false;
+        callCategory.enqueue(new Callback<List<CategoryData>>() {
+            @Override
+            public void onResponse(Call<List<CategoryData>> call, Response<List<CategoryData>> response) {
+                if (response.isSuccessful()) {
+                    setCategoryAdapter(response.body());
+                } else {
+                    connectionProblemAtStart();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CategoryData>> call, Throwable t) {
+                if (!call.isCanceled()) connectionProblemAtStart();
+            }
+        });
+    }
+
+    private void attemptAdd() {
+        if (addInProgress) {
+            return;
+        }
+
+        addInProgress = true;
+        titleEditText.setError(null);
+        priceEditText.setError(null);
+        categorySpinner.setError(null);
+        subcategorySpinner.setError(null);
+        cityEditText.setError(null);
+        provinceSpinner.setError(null);
+        phoneEditText.setError(null);
+
+        String title = titleEditText.getText().toString();
+        String price = priceEditText.getText().toString();
+        String description = descriptionEditText.getText().toString();
+        String city = cityEditText.getText().toString();
+        String phone = phoneEditText.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (TextUtils.isEmpty(phone)) {
+            phoneEditText.setError(getString(R.string.error_field_required));
+            focusView = phoneEditText;
+            cancel = true;
+        } else if (!MRKUtil.isPhoneValid(phone)) {
+            phoneEditText.setError(getString(R.string.error_incorrect_phone));
+            focusView = phoneEditText;
+            cancel = true;
+        }
+
+        if (selectedProvince == null) {
+            provinceSpinner.setError(getString(R.string.error_field_required));
+            focusView = provinceSpinner;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(city)) {
+            cityEditText.setError(getString(R.string.error_field_required));
+            focusView = cityEditText;
+            cancel = true;
+        }
+
+        if (categorySpinner == null) {
+            categorySpinner.setError(getString(R.string.error_field_required));
+            focusView = categorySpinner;
+            cancel = true;
+        } else if (subcategorySpinner == null) {
+            subcategorySpinner.setError(getString(R.string.error_field_required));
+            focusView = subcategorySpinner;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(price)) {
+            priceEditText.setError(getString(R.string.error_field_required));
+            focusView = priceEditText;
+            cancel = true;
+        } else if (Long.parseLong(price) == 0) {
+            priceEditText.setError(getString(R.string.error_price_invalid));
+            focusView = priceEditText;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(title)) {
+            titleEditText.setError(getString(R.string.error_field_required));
+            focusView = titleEditText;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+            addInProgress = false;
+        } else {
+            showProgress(true);
+            add(new AdData(title, Long.parseLong(price), selectedSubcategory, selectedProvince, description, city, phone, photos.getEncodedThumbnail(this), photos.getEncodedPhotos(this)));
+        }
+    }
+
+    private void add(AdData adData) {
+        callAd = adService.newAd(SharedPref.getInstance(this).getToken(), adData);
+        callAd.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                addInProgress = false;
+                if (response.isSuccessful()) {
+                    addSuccess();
+                } else {
+                    showProgress(false);
+                    connectionProblem();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (!call.isCanceled()) {
+                    addInProgress = false;
+                    showProgress(false);
+                    connectionProblem();
+                }
+            }
+        });
+    }
+
+    private void showProgress(final boolean show) {
+        MRKUtil.showProgressBarHideView(this, newFormView, progressBar, show);
+    }
+
+    private void connectionProblem() {
+        MRKUtil.connectionProblem(this);
+    }
+
+    private void connectionProblemAtStart() {
+        startActivity(new Intent(this, NetErrorActivity.class));
+    }
+
+    private void addSuccess() {
+        setResult(AppCompatActivity.RESULT_OK);
+        finish();
+    }
+
 }

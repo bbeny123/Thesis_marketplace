@@ -48,6 +48,7 @@ public class MRKSpinner extends AppCompatAutoCompleteTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!super.isEnabled()) return false;
         performClick();
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP: {
@@ -66,7 +67,7 @@ public class MRKSpinner extends AppCompatAutoCompleteTextView {
 
     @Override
     public boolean performClick() {
-        return super.performClick();
+        return super.isEnabled() && super.performClick();
     }
 
     @Override

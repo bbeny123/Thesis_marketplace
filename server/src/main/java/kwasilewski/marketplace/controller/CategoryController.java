@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.controller;
 
 import kwasilewski.marketplace.dto.CategoryData;
-import kwasilewski.marketplace.service.CategoryService;
+import kwasilewski.marketplace.service.HintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,18 +13,18 @@ import java.util.List;
 @Controller
 public class CategoryController extends AbstractWebController {
 
-    private final CategoryService categoryService;
+    private final HintService hintService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(HintService hintService) {
         super("categories");
-        this.categoryService = categoryService;
+        this.hintService = hintService;
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET)
     public String getCategoryList(Model model) {
-        List<CategoryData> categories = categoryService.getAllCategories();
-        categories.forEach(cat -> cat.setAdsNumber(categoryService.getAdNumber(cat.getId())));
+        List<CategoryData> categories = hintService.getAllCategories();
+        categories.forEach(cat -> cat.setAdsNumber(hintService.getAdNumber(cat.getId())));
         model.addAttribute("categories", categories);
         return url;
     }

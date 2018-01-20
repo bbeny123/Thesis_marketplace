@@ -14,11 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.CategoryData;
+import kwasilewski.marketplace.dto.ComboHintData;
 import kwasilewski.marketplace.dto.HintData;
 import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.retrofit.RetrofitService;
@@ -30,24 +30,22 @@ import retrofit2.Response;
 
 public class FilterActivity extends AppCompatActivity {
 
-    private static final String TITLE_KEY = "title";
-    private static final String PRICE_FROM_KEY = "priceFrom";
-    private static final String PRICE_TO_KEY = "priceTo";
-    private static final String CATEGORY_KEY = "categoryId";
-    private static final String SUBCATEGORY_KEY = "subcategoryId";
-    private static final String PROVINCE_KEY = "provinceId";
+    public static final String TITLE_KEY = "title";
+    public static final String PRICE_FROM_KEY = "priceFrom";
+    public static final String PRICE_TO_KEY = "priceTo";
+    public static final String CATEGORY_KEY = "categoryId";
+    public static final String SUBCATEGORY_KEY = "subcategoryId";
+    public static final String PROVINCE_KEY = "provinceId";
 
     private HintService hintService;
-    private Call<List<HintData>> callProvince;
-    private Call<List<CategoryData>> callCategory;
+    private Call<ComboHintData> callHint;
     private Long selectedProvince;
     private Long selectedCategory;
     private Long selectedSubcategory;
     private Long selectedProvinceBundle = 0L;
     private Long selectedCategoryBundle = 0L;
     private Long selectedSubcategoryBundle = 0L;
-    private boolean provinceSet = false;
-    private boolean categorySet = false;
+    private boolean spinnersSettingInProgress = false;
 
     private View progressBar;
     private View filterView;
@@ -130,20 +128,25 @@ public class FilterActivity extends AppCompatActivity {
 
     private void searchAds() {
         Intent result = new Intent();
-        String a = title.getText().toString();
-        String b = priceFrom.getText().toString();
-        String c = priceTo.getText().toString();
-        Long l = selectedSubcategory;
-        Long ll = selectedCategory;
-        Long lll = selectedProvince;
+        String priceMin = priceFrom.getText().toString();
+        String priceMax = priceTo.getText().toString();
+        if(swapPrices(priceMin, priceMax)) {
+            String temp = priceMin;
+            priceMin = priceMax;
+            priceMax = temp;
+        }
         result.putExtra(TITLE_KEY, title.getText().toString());
-        result.putExtra(PRICE_FROM_KEY, priceFrom.getText().toString());
-        result.putExtra(PRICE_TO_KEY, priceTo.getText().toString());
+        result.putExtra(PRICE_FROM_KEY, priceMin);
+        result.putExtra(PRICE_TO_KEY, priceMax);
         result.putExtra(SUBCATEGORY_KEY, selectedSubcategory);
         result.putExtra(CATEGORY_KEY, selectedCategory);
         result.putExtra(PROVINCE_KEY, selectedProvince);
         setResult(AppCompatActivity.RESULT_OK, result);
         finish();
+    }
+
+    private boolean swapPrices(String priceMin, String priceMax) {
+        return !priceMin.isEmpty() && !priceMax.isEmpty() && Long.parseLong(priceMin) > Long.parseLong(priceMax);
     }
 
     @Override
@@ -154,8 +157,7 @@ public class FilterActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if (callProvince != null) callProvince.cancel();
-        if (callCategory != null) callCategory.cancel();
+        if (callHint != null) callHint.cancel();
         super.onPause();
     }
 
@@ -172,18 +174,11 @@ public class FilterActivity extends AppCompatActivity {
             return;
         }
         title.setText(extras.getString(TITLE_KEY));
-        Long priceMin = extras.getLong(PRICE_FROM_KEY);
-        if (priceMin > 0L) {
-            priceFrom.setText(String.format(Locale.getDefault(), "%d", priceMin));
-        }
-        Long priceMax = extras.getLong(PRICE_TO_KEY);
-        if (priceMax > 0L) {
-            priceTo.setText(String.format(Locale.getDefault(), "%d", priceMax));
-        }
+        priceFrom.setText(extras.getString(PRICE_FROM_KEY));
+        priceTo.setText(extras.getString(PRICE_TO_KEY));
         selectedCategoryBundle = extras.getLong(CATEGORY_KEY);
         selectedSubcategoryBundle = extras.getLong(SUBCATEGORY_KEY);
         selectedProvinceBundle = extras.getLong(PROVINCE_KEY);
-        setUpSpinners();
     }
 
     private Long spinnerOnClickListener(HintSpinner spinner, Object item) {
@@ -206,16 +201,17 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void setUpSpinners() {
+        if(spinnersSettingInProgress) {
+            return;
+        }
+        spinnersSettingInProgress = true;
         if (provinceSpinner.getAdapter() == null || categorySpinner.getAdapter() == null) {
             showProgress(true);
-            populateProvinceSpinner();
-            populateCategorySpinner();
+            populateSpinners();
         }
     }
 
     private void setProvinceAdapter(List<HintData> hintData) {
-        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
-        provinceSpinner.setAdapter(adapter);
         if(selectedProvinceBundle != 0) {
             for (HintData hint : hintData) {
                 if (hint.getId().equals(selectedProvinceBundle)) {
@@ -225,13 +221,11 @@ public class FilterActivity extends AppCompatActivity {
                 }
             }
         }
-        provinceSet = true;
-        if (categorySet) showProgress(false);
+        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
+        provinceSpinner.setAdapter(adapter);
     }
 
     private void setCategoryAdapter(List<CategoryData> categoryData) {
-        ArrayAdapter<CategoryData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, categoryData);
-        categorySpinner.setAdapter(adapter);
         if(selectedCategoryBundle != 0) {
             for (CategoryData category : categoryData) {
                 if (category.getId().equals(selectedCategoryBundle)) {
@@ -242,15 +236,13 @@ public class FilterActivity extends AppCompatActivity {
                 }
             }
         }
-        categorySet = true;
-        if (provinceSet) showProgress(false);
+        ArrayAdapter<CategoryData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, categoryData);
+        categorySpinner.setAdapter(adapter);
     }
 
     private void setSubcategoryAdapter(List<HintData> hintData) {
         selectedSubcategory = null;
         subcategorySpinner.setText(null);
-        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
-        subcategorySpinner.setAdapter(adapter);
         if(selectedSubcategoryBundle != 0) {
             for (HintData hint : hintData) {
                 if (hint.getId().equals(selectedSubcategoryBundle)) {
@@ -260,44 +252,32 @@ public class FilterActivity extends AppCompatActivity {
                 }
             }
         }
+        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
+        subcategorySpinner.setAdapter(adapter);
         enableSubcategorySpinner(true);
     }
 
-    private void populateProvinceSpinner() {
-        callProvince = hintService.getProvinces();
-        provinceSet = false;
-        callProvince.enqueue(new Callback<List<HintData>>() {
-            @Override
-            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
-                if (response.isSuccessful()) {
-                    setProvinceAdapter(response.body());
-                } else {
-                    connectionProblemAtStart();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<HintData>> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblemAtStart();
-            }
-        });
+    private void setAdapters(ComboHintData hints) {
+        setCategoryAdapter(hints.getCategories());
+        setProvinceAdapter(hints.getProvinces());
+        showProgress(false);
+        spinnersSettingInProgress = false;
     }
 
-    private void populateCategorySpinner() {
-        callCategory = hintService.getCategories();
-        categorySet = false;
-        callCategory.enqueue(new Callback<List<CategoryData>>() {
+    private void populateSpinners() {
+        callHint = hintService.getAllHints();
+        callHint.enqueue(new Callback<ComboHintData>() {
             @Override
-            public void onResponse(Call<List<CategoryData>> call, Response<List<CategoryData>> response) {
+            public void onResponse(Call<ComboHintData> call, Response<ComboHintData> response) {
                 if (response.isSuccessful()) {
-                    setCategoryAdapter(response.body());
+                    setAdapters(response.body());
                 } else {
                     connectionProblemAtStart();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<CategoryData>> call, Throwable t) {
+            public void onFailure(Call<ComboHintData> call, Throwable t) {
                 if (!call.isCanceled()) connectionProblemAtStart();
             }
         });

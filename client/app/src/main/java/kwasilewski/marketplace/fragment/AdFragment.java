@@ -33,8 +33,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 public class AdFragment extends Fragment implements SearchView.OnQueryTextListener {
 
+    private static final int FILTER_ACTIVITY_CODE = 1;
     private static final String LIST_MODE = "mode";
     private int listMode;
 
@@ -42,8 +45,9 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
     private String title = "";
     private Long prvId = 0L;
     private Long catId = 0L;
-    private Long priceMin = 0L;
-    private Long priceMax = 0L;
+    private Long sctId = 0L;
+    private String priceMin;
+    private String priceMax;
 
     private List<AdMinimalData> ads = new ArrayList<>();
 
@@ -95,7 +99,7 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), FilterActivity.class));
+                startFilterActivity();
             }
         });
 
@@ -103,6 +107,37 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
 
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FILTER_ACTIVITY_CODE && resultCode == RESULT_OK) {
+            Bundle filterParams = data.getExtras();
+            if(filterParams != null) {
+                title = filterParams.getString(FilterActivity.TITLE_KEY);
+                priceMin = filterParams.getString(FilterActivity.PRICE_FROM_KEY);
+                priceMax = filterParams.getString(FilterActivity.PRICE_TO_KEY);
+                catId = filterParams.getLong(FilterActivity.CATEGORY_KEY);
+                sctId = filterParams.getLong(FilterActivity.SUBCATEGORY_KEY);
+                prvId = filterParams.getLong(FilterActivity.PROVINCE_KEY);
+                setFilterLabel();
+                resetAdapter();
+            }
+        }
+    }
+
+
+    private void startFilterActivity() {
+        Intent filterIntent = new Intent(getContext(), FilterActivity.class);
+        filterIntent.putExtra(FilterActivity.TITLE_KEY, title);
+        filterIntent.putExtra(FilterActivity.PRICE_FROM_KEY, priceMin);
+        filterIntent.putExtra(FilterActivity.PRICE_TO_KEY, priceMax);
+        filterIntent.putExtra(FilterActivity.CATEGORY_KEY, catId);
+        filterIntent.putExtra(FilterActivity.SUBCATEGORY_KEY, sctId);
+        filterIntent.putExtra(FilterActivity.PROVINCE_KEY, prvId);
+        startActivityForResult(filterIntent, FILTER_ACTIVITY_CODE);
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -158,7 +193,8 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
     }
 
     public Map<String, String> getSearchQuery() {
-        return MRKUtil.getAdSearchQuery(adapter.getItemCount(), sortingMethod, title, null, null, null, null);
+        Long categoryId = sctId != 0L ? sctId : catId;
+        return MRKUtil.getAdSearchQuery(adapter.getItemCount(), sortingMethod, title, prvId, categoryId, priceMin, priceMax);
     }
 
     private void getAds() {
@@ -203,8 +239,8 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
         activeFilters += TextUtils.isEmpty(title) ? 0 : 1;
         activeFilters += prvId == 0 ? 0 : 1;
         activeFilters += catId == 0 ? 0 : 1;
-        activeFilters += priceMin == 0 ? 0 : 1;
-        activeFilters += priceMax == 0 ? 0 : 1;
+        activeFilters += TextUtils.isEmpty(priceMin) ? 0 : 1;
+        activeFilters += TextUtils.isEmpty(priceMax) ? 0 : 1;
 
         if (activeFilters != 0) {
             filterActiveLabel.setText(String.format(getString(R.string.label_filters_active), activeFilters));

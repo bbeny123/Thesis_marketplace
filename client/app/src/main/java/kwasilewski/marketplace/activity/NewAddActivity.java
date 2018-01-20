@@ -33,6 +33,7 @@ import java.util.List;
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.CategoryData;
+import kwasilewski.marketplace.dto.ComboHintData;
 import kwasilewski.marketplace.dto.HintData;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.user.UserData;
@@ -57,14 +58,12 @@ public class NewAddActivity extends AppCompatActivity {
 
     private HintService hintService;
     private Call<ResponseBody> callAd;
-    private Call<List<HintData>> callProvince;
-    private Call<List<CategoryData>> callCategory;
+    private Call<ComboHintData> callHint;
     private Long selectedProvince;
     private Long selectedCategory;
     private Long selectedSubcategory;
     private boolean addInProgress = false;
-    private boolean provinceSet = false;
-    private boolean categorySet = false;
+    private boolean spinnersSettingInProgress = false;
 
     private PhotoViewList photos = new PhotoViewList();
     private View progressBar;
@@ -160,18 +159,13 @@ public class NewAddActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (provinceSpinner.getAdapter() == null || categorySpinner.getAdapter() == null) {
-            showProgress(true);
-            populateProvinceSpinner();
-            populateCategorySpinner();
-        }
+        setUpSpinners();
     }
 
     @Override
     protected void onPause() {
         if (callAd != null) callAd.cancel();
-        if (callProvince != null) callProvince.cancel();
-        if (callCategory != null) callCategory.cancel();
+        if (callHint != null) callHint.cancel();
         super.onPause();
     }
 
@@ -310,15 +304,11 @@ public class NewAddActivity extends AppCompatActivity {
     private void setProvinceAdapter(List<HintData> hintData) {
         ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
         provinceSpinner.setAdapter(adapter);
-        provinceSet = true;
-        if (categorySet) showProgress(false);
     }
 
     private void setCategoryAdapter(List<CategoryData> categoryData) {
         ArrayAdapter<CategoryData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, categoryData);
         categorySpinner.setAdapter(adapter);
-        categorySet = true;
-        if (provinceSet) showProgress(false);
     }
 
     private void setSubcategoryAdapter(List<HintData> hintData) {
@@ -329,41 +319,38 @@ public class NewAddActivity extends AppCompatActivity {
         enableSubcategorySpinner(true);
     }
 
-    private void populateProvinceSpinner() {
-        callProvince = hintService.getProvinces();
-        provinceSet = false;
-        callProvince.enqueue(new Callback<List<HintData>>() {
-            @Override
-            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
-                if (response.isSuccessful()) {
-                    setProvinceAdapter(response.body());
-                } else {
-                    connectionProblemAtStart();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<HintData>> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblemAtStart();
-            }
-        });
+    private void setUpSpinners() {
+        if(spinnersSettingInProgress) {
+            return;
+        }
+        spinnersSettingInProgress = true;
+        if (provinceSpinner.getAdapter() == null || categorySpinner.getAdapter() == null) {
+            showProgress(true);
+            populateSpinners();
+        }
     }
 
-    private void populateCategorySpinner() {
-        callCategory = hintService.getCategories();
-        categorySet = false;
-        callCategory.enqueue(new Callback<List<CategoryData>>() {
+    private void setAdapters(ComboHintData hints) {
+        setCategoryAdapter(hints.getCategories());
+        setProvinceAdapter(hints.getProvinces());
+        showProgress(false);
+        spinnersSettingInProgress = false;
+    }
+
+    private void populateSpinners() {
+        callHint = hintService.getAllHints();
+        callHint.enqueue(new Callback<ComboHintData>() {
             @Override
-            public void onResponse(Call<List<CategoryData>> call, Response<List<CategoryData>> response) {
+            public void onResponse(Call<ComboHintData> call, Response<ComboHintData> response) {
                 if (response.isSuccessful()) {
-                    setCategoryAdapter(response.body());
+                    setAdapters(response.body());
                 } else {
                     connectionProblemAtStart();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<CategoryData>> call, Throwable t) {
+            public void onFailure(Call<ComboHintData> call, Throwable t) {
                 if (!call.isCanceled()) connectionProblemAtStart();
             }
         });

@@ -142,7 +142,7 @@ public class MRKUtil {
         return new LinearLayout.LayoutParams(size.x,size.x);
     }
 
-    public static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, Long priceMin, Long priceMax) {
+    public static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax) {
         Map<String, String> searchQuery = new HashMap<>();
         searchQuery.put("offset", String.valueOf(offset));
         searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
@@ -150,17 +150,17 @@ public class MRKUtil {
         if (!TextUtils.isEmpty(title)) {
             searchQuery.put("title", title);
         }
-        if (prvId != null) {
+        if (prvId != null && prvId != 0) {
             searchQuery.put("prvId", String.valueOf(prvId));
         }
-        if (catId != null) {
+        if (catId != null && catId != 0) {
             searchQuery.put("catId", String.valueOf(catId));
         }
-        if (priceMin != null) {
-            searchQuery.put("priceMin", String.valueOf(priceMin));
+        if (!TextUtils.isEmpty(priceMin)) {
+            searchQuery.put("priceMin", priceMin);
         }
-        if (priceMax != null) {
-            searchQuery.put("priceMax", String.valueOf(priceMax));
+        if (!TextUtils.isEmpty(priceMax)) {
+            searchQuery.put("priceMax", priceMax);
         }
         return searchQuery;
     }

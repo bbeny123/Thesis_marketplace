@@ -5,7 +5,7 @@ public final class AppConstants {
     //URLs
     public static final String BASE_URL = "http://10.0.2.2:8080/rest/";
     public static final String PROVINCES_PATH = "provinces";
-    public static final String CATEGORIES_PATH = "categories";
+    public static final String HINTS_PATH = "hints";
     public static final String REGISTER_PATH = "register";
     public static final String LOGIN_PATH = "login";
     public static final String TOKEN_PATH = "token";

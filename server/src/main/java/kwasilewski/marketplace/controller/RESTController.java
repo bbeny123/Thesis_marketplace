@@ -4,7 +4,6 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
-import kwasilewski.marketplace.dtoext.CategoryDataExt;
 import kwasilewski.marketplace.dtoext.HintDataExt;
 import kwasilewski.marketplace.dtoext.ad.*;
 import kwasilewski.marketplace.dtoext.user.LoginDataExt;
@@ -27,16 +26,16 @@ import java.util.stream.Collectors;
 public class RESTController extends AbstractRESTController {
 
     private final ProvinceService provinceService;
-    private final CategoryService categoryService;
+    private final HintService hintService;
     private final UserService userService;
     private final AdService adService;
     private final FavouriteService favouriteService;
 
     @Autowired
-    public RESTController(ProvinceService provinceService, CategoryService categoryService, UserService userService, AdService adService, FavouriteService favouriteService) {
+    public RESTController(ProvinceService provinceService, HintService hintService, UserService userService, AdService adService, FavouriteService favouriteService) {
         super();
         this.provinceService = provinceService;
-        this.categoryService = categoryService;
+        this.hintService = hintService;
         this.userService = userService;
         this.adService = adService;
         this.favouriteService = favouriteService;
@@ -48,10 +47,9 @@ public class RESTController extends AbstractRESTController {
         return new ResponseEntity<>(provinces, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/categories", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCategories() {
-        List<CategoryDataExt> categories = categoryService.getAllCategories().stream().map(CategoryDataExt::new).collect(Collectors.toList());
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+    @RequestMapping(value = "/hints", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getComboHints() {
+        return new ResponseEntity<>(hintService.getAllHints(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

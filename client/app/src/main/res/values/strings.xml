@@ -67,6 +67,7 @@
     <string name="error_price_invalid">Price must be bigger than 0.</string>
     <string name="toast_ad_created">Ad successfully created.</string>
     <string name="ad_image_description">Photo</string>
+    <string name="ad_thumbnail_description">Thumbnail</string>
     <string name="ad_description">Description:</string>
     <string name="ad_seller">Seller:</string>
     <string name="action_ad_favourite">Add to favourite</string>
@@ -79,5 +80,7 @@
     <string name="toast_already_favourite">Ad is already favourite.</string>
     <string name="toast_not_favourite">Ad is not favourite.</string>
     <string name="toast_own_add_favourite">Cannot add own ad to favourite.</string>
-
+    <string name="action_edit">Edit</string>
+    <string name="action_finish">Finish</string>
+    <string name="action_activate">Activate</string>
 </resources>

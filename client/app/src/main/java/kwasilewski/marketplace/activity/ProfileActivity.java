@@ -95,13 +95,13 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        Button passwordButton = findViewById(R.id.profile_password_button);
-        passwordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToPasswordChange();
-            }
-        });
+//        Button passwordButton = findViewById(R.id.profile_password_button);
+//        passwordButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToPasswordChange();
+//            }
+//        });
     }
 
     @Override

@@ -1,10 +1,15 @@
 package kwasilewski.marketplace.dto.ad;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 public class AdMinimalData {
 
     private Long id;
     private String title;
     private Long price;
+    private Long views;
     private String miniature;
 
     public AdMinimalData() {
@@ -13,6 +18,14 @@ public class AdMinimalData {
     public AdMinimalData(String title, Long price, String miniature) {
         this.title = title;
         this.price = price;
+        this.miniature = miniature;
+    }
+
+    public AdMinimalData(Long id, String title, Long price, Long views, String miniature) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.views = views;
         this.miniature = miniature;
     }
 
@@ -40,12 +53,28 @@ public class AdMinimalData {
         this.price = price;
     }
 
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
+    }
+
     public String getMiniature() {
         return miniature;
     }
 
     public void setMiniature(String miniature) {
         this.miniature = miniature;
+    }
+
+    public Bitmap getDecodedMiniature() {
+        if (miniature == null) {
+            return null;
+        }
+        byte[] decodedMiniature = Base64.decode(miniature, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedMiniature, 0, decodedMiniature.length);
     }
 
     @Override

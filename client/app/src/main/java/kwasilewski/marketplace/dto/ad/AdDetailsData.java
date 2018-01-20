@@ -5,7 +5,6 @@ public class AdDetailsData extends AdData {
     private String email;
     private String userName;
     private String province;
-    private Long views;
     private boolean favourite;
 
     public AdDetailsData() {
@@ -33,14 +32,6 @@ public class AdDetailsData extends AdData {
 
     public void setProvince(String province) {
         this.province = province;
-    }
-
-    public Long getViews() {
-        return views;
-    }
-
-    public void setViews(Long views) {
-        this.views = views;
     }
 
     public boolean isFavourite() {

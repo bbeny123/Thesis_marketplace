@@ -15,9 +15,12 @@ import kwasilewski.marketplace.R;
 
 public class PhotoAdapterItem extends Fragment {
 
-    private final String KEY_CONTENT = "encodedPhoto";
+    private static final String KEY_CONTENT = "encodedPhoto";
     private Bitmap photo;
     private String encodedPhoto;
+
+    public PhotoAdapterItem() {
+    }
 
     public static PhotoAdapterItem newInstance(String photo) {
         PhotoAdapterItem fragment = new PhotoAdapterItem();

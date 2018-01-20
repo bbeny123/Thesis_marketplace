@@ -1,77 +1,99 @@
 package kwasilewski.marketplace.helper;
 
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import kwasilewski.marketplace.helper.AdFragment.OnListFragmentInteractionListener;
-import kwasilewski.marketplace.helper.dummy.DummyContent.DummyItem;
-
 import java.util.List;
+import java.util.Locale;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.fragment.AdFragment;
+import kwasilewski.marketplace.dto.ad.AdMinimalData;
+
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<AdMinimalData> ads;
+    private final FragmentActivity activity;
 
-    public AdListViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public AdListViewAdapter(List<AdMinimalData> ads, FragmentActivity activity) {
+        this.ads = ads;
+        this.activity = activity;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_ad, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_ad, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.setAd(ads.get(holder.getAdapterPosition()));
+        holder.setTitle();
+        holder.setPrice();
+        holder.setViews();
+        holder.setThumbnail();
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
+                activity.startActivity(new Intent(activity, AdFragment.class));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return ads.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private AdMinimalData ad;
+        private final View view;
+        private final TextView title;
+        private final TextView price;
+        private final TextView views;
+        private final ImageView thumbnail;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            this.view = view;
+            title = view.findViewById(R.id.ad_list_title);
+            price = view.findViewById(R.id.ad_list_price);
+            views = view.findViewById(R.id.ad_list_views);
+            thumbnail = view.findViewById(R.id.ad_list_thumbnail);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+        private Long getAdId() {
+            return ad.getId();
+        }
+
+        private void setAd(AdMinimalData ad) {
+            this.ad = ad;
+        }
+
+        private void setTitle() {
+            this.title.setText(ad.getTitle());
+        }
+
+        private void setPrice() {
+            this.price.setText(String.format(activity.getString(R.string.ad_price_text), ad.getPrice()));
+        }
+
+        private void setViews() {
+            this.views.setText(String.format(Locale.getDefault(), "%d", ad.getViews()));
+        }
+
+        private void setThumbnail() {
+            if(ad.getMiniature() != null) {
+                this.thumbnail.setImageBitmap(ad.getDecodedMiniature());
+            }
         }
     }
+
 }

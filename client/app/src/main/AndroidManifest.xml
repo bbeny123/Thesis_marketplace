@@ -48,7 +48,9 @@
         <activity
             android:name=".activity.NewAddActivity"
             android:label="@string/title_activity_new_add" />
-
+        <activity
+            android:name=".activity.AdActivity"
+            android:label="@string/title_activity_ad" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="kwasilewski.marketplace.fileprovider"
@@ -59,10 +61,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".activity.AdActivity"
-            android:label="@string/title_activity_ad"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+
     </application>
 
 </manifest>

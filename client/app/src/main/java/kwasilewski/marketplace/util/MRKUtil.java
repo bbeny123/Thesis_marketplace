@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,12 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.helper.DialogItem;
 
 public class MRKUtil {
@@ -136,6 +140,29 @@ public class MRKUtil {
         Point size = new Point();
         display.getSize(size);
         return new LinearLayout.LayoutParams(size.x,size.x);
+    }
+
+    public static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, Long priceMin, Long priceMax) {
+        Map<String, String> searchQuery = new HashMap<>();
+        searchQuery.put("offset", String.valueOf(offset));
+        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
+        searchQuery.put("sortingMethod", String.valueOf(sortingMethod));
+        if (!TextUtils.isEmpty(title)) {
+            searchQuery.put("title", title);
+        }
+        if (prvId != null) {
+            searchQuery.put("prvId", String.valueOf(prvId));
+        }
+        if (catId != null) {
+            searchQuery.put("catId", String.valueOf(catId));
+        }
+        if (priceMin != null) {
+            searchQuery.put("priceMin", String.valueOf(priceMin));
+        }
+        if (priceMax != null) {
+            searchQuery.put("priceMax", String.valueOf(priceMax));
+        }
+        return searchQuery;
     }
 
 }

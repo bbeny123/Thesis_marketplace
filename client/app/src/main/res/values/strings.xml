@@ -86,7 +86,7 @@
 
     <string name="label_filters">Filters</string>
     <string name="label_search">Search…</string>
-
+    <string name="label_filters_active">%1$d Active</string>
     <string name="label_sort_default">Date (Newest)</string>
     <string name="label_sort_cheapest">Price (Lowest)</string>
     <string name="label_sort_most_expensive">Price (Highest)</string>

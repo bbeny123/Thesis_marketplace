@@ -2,6 +2,12 @@ package kwasilewski.marketplace.dto.ad;
 
 public class AdSearchData extends ListSearchData {
 
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
+    }
+
     private int sortingMethod = 1;
     private String title;
     private Long prvId;
@@ -68,4 +74,5 @@ public class AdSearchData extends ListSearchData {
     public void setActive(boolean active) {
         this.active = active;
     }
+
 }

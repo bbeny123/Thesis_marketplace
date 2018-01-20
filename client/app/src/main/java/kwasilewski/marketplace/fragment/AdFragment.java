@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.activity.FilterActivity;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
 import kwasilewski.marketplace.dto.ad.AdSearchData;
 import kwasilewski.marketplace.helper.AdListViewAdapter;
@@ -37,7 +39,7 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
     private int listMode;
 
     private int sortingMethod = AdSearchData.SortingMethod.NEWEST;
-    private String title = "avs";
+    private String title = "";
     private Long prvId = 0L;
     private Long catId = 0L;
     private Long priceMin = 0L;
@@ -88,6 +90,14 @@ public class AdFragment extends Fragment implements SearchView.OnQueryTextListen
         sortLabel = view.findViewById(R.id.ad_list_sort_label);
         View sortByButton = view.findViewById(R.id.ad_list_sort);
         sortByButton.setOnClickListener(listenerSort);
+
+        View filterButton = view.findViewById(R.id.ad_list_filters);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), FilterActivity.class));
+            }
+        });
 
         getAds();
 

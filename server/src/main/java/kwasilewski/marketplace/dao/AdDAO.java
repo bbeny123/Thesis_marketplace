@@ -27,13 +27,13 @@ public class AdDAO {
 
     @Transactional
     public void modify(UserContext ctx, AdData ad) throws DataAccessException, MKTException {
-        if (ad.getId() == null || find(ctx, ad.getId()) == null) throw new MKTException(MKTError.NOT_AUTHORIZED);
+        if (ad.getId() == null || find(ctx, ad.getId(), false) == null) throw new MKTException(MKTError.NOT_AUTHORIZED);
         this.em.merge(ad);
     }
 
     @Transactional
     public void changeStatus(UserContext ctx, Long id) throws DataAccessException, MKTException {
-        AdData ad = id != null ? find(ctx, id) : null;
+        AdData ad = id != null ? find(ctx, id, false) : null;
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
         ad.setActive(!ad.isActive());
         this.em.merge(ad);
@@ -69,6 +69,19 @@ public class AdDAO {
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("id", id);
         query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
+        return getAdData(incrementViews, query);
+    }
+
+    public AdData find(UserContext ctx, Long id, boolean incrementViews) throws DataAccessException {
+        String queryStr = "SELECT ad FROM AdData ad WHERE ad.id = :id";
+        queryStr += !ctx.isAdmin() ? " AND ad.usrId = :usrId" : "";
+        TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
+        query.setParameter("id", id);
+        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
+        return getAdData(incrementViews, query);
+    }
+
+    private AdData getAdData(boolean incrementViews, TypedQuery<AdData> query) {
         AdData result;
         try {
             result = query.getSingleResult();
@@ -79,18 +92,6 @@ public class AdDAO {
         return result;
     }
 
-    public AdData find(UserContext ctx, Long id) throws DataAccessException {
-        String queryStr = "SELECT ad FROM AdData ad WHERE ad.id = :id";
-        queryStr += !ctx.isAdmin() ? " AND ad.usrId = :usrId" : "";
-        TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
-        query.setParameter("id", id);
-        if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
 
     public List<AdData> find(AdSearchDataExt criteria) throws DataAccessException {
         String queryStr = "SELECT ad FROM AdData ad WHERE ad.active = TRUE AND ad.date >= :date";

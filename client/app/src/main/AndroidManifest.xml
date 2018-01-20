@@ -51,6 +51,7 @@
         <activity
             android:name=".activity.AdActivity"
             android:label="@string/title_activity_ad" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="kwasilewski.marketplace.fileprovider"
@@ -61,7 +62,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
+        <activity
+            android:name=".activity.FilterActivity"
+            android:label="@string/title_activity_filter"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

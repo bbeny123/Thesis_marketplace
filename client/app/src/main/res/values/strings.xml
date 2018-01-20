@@ -90,5 +90,10 @@
     <string name="label_sort_default">Date (Newest)</string>
     <string name="label_sort_cheapest">Price (Lowest)</string>
     <string name="label_sort_most_expensive">Price (Highest)</string>
+    <string name="title_activity_filter">Filters</string>
+
+    <string name="label_price_from">Price from</string>
+    <string name="label_price_to">Price to</string>
+    <string name="label_search_button">Search</string>
 
 </resources>

@@ -7,7 +7,6 @@ public class AdDetailsDataExt extends AdDataExt {
     private String email;
     private String userName;
     private String province;
-    private Long views;
     private boolean favourite;
 
     public AdDetailsDataExt(AdData ad) {
@@ -15,7 +14,6 @@ public class AdDetailsDataExt extends AdDataExt {
         this.email = ad.getUser().getEmail();
         this.userName = ad.getUser().getFirstName();
         this.province = ad.getProvince().getName();
-        this.views = ad.getViews();
         this.favourite = ad.isFavourite();
     }
 
@@ -41,14 +39,6 @@ public class AdDetailsDataExt extends AdDataExt {
 
     public void setProvince(String province) {
         this.province = province;
-    }
-
-    public Long getViews() {
-        return views;
-    }
-
-    public void setViews(Long views) {
-        this.views = views;
     }
 
     public boolean isFavourite() {

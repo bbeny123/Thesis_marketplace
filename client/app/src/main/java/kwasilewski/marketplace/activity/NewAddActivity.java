@@ -414,11 +414,11 @@ public class NewAddActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (categorySpinner == null) {
+        if (selectedCategory == null) {
             categorySpinner.setError(getString(R.string.error_field_required));
             focusView = categorySpinner;
             cancel = true;
-        } else if (subcategorySpinner == null) {
+        } else if (selectedSubcategory == null) {
             subcategorySpinner.setError(getString(R.string.error_field_required));
             focusView = subcategorySpinner;
             cancel = true;

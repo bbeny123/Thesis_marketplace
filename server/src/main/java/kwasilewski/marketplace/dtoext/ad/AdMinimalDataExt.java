@@ -7,6 +7,7 @@ public class AdMinimalDataExt {
     protected Long id;
     protected String title;
     protected Long price;
+    protected Long views;
     protected String miniature;
 
     AdMinimalDataExt() {
@@ -16,6 +17,7 @@ public class AdMinimalDataExt {
         this.id = ad.getId();
         this.title = ad.getTitle();
         this.price = ad.getPrice();
+        this.views = ad.getViews();
         this.miniature = ad.getMiniature() != null ? ad.getMiniature().getPhoto() : null;
     }
 
@@ -41,6 +43,14 @@ public class AdMinimalDataExt {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setViews(Long views) {
+        this.views = views;
     }
 
     public String getMiniature() {

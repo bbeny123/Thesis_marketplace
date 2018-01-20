@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.helper;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +13,19 @@ import java.util.List;
 import java.util.Locale;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.fragment.AdFragment;
+import kwasilewski.marketplace.activity.AdActivity;
+import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
 
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 
     private final List<AdMinimalData> ads;
-    private final FragmentActivity activity;
+    private final Context context;
+    private int lastItemPosition = -1;
 
-    public AdListViewAdapter(List<AdMinimalData> ads, FragmentActivity activity) {
+    public AdListViewAdapter(List<AdMinimalData> ads, Context context) {
         this.ads = ads;
-        this.activity = activity;
+        this.context = context;
     }
 
     @Override
@@ -42,14 +44,22 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.startActivity(new Intent(activity, AdFragment.class));
+                Intent intent = new Intent(context, AdActivity.class);
+                intent.putExtra(AppConstants.AD_ID_KEY, holder.getAdId());
+                context.startActivity(intent);
             }
         });
+
+        lastItemPosition = holder.getAdapterPosition();
     }
 
     @Override
     public int getItemCount() {
         return ads.size();
+    }
+
+    public int getLastItemPosition() {
+        return lastItemPosition;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +92,7 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         }
 
         private void setPrice() {
-            this.price.setText(String.format(activity.getString(R.string.ad_price_text), ad.getPrice()));
+            this.price.setText(String.format(context.getString(R.string.ad_price_text), ad.getPrice()));
         }
 
         private void setViews() {

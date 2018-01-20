@@ -9,7 +9,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity
 
     DrawerLayout drawer;
     NavigationView navigationView;
+    private Menu menu;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+
 
     @Override
     protected void onResume() {
@@ -73,11 +79,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_ads) {
-            Fragment fragment = new AdFragment();
-            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.dupa, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Fragment fragment = AdFragment.newInstance(1);
+            getSupportFragmentManager().beginTransaction()
+            .replace(R.id.dupa, fragment)
+            .commit();
 //            Intent intent = new Intent(this, AdActivity.class);
 //            intent.putExtra(AppConstants.AD_ID_KEY, 9L);
 //            startActivity(intent);

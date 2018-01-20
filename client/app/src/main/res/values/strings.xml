@@ -83,4 +83,12 @@
     <string name="action_edit">Edit</string>
     <string name="action_finish">Finish</string>
     <string name="action_activate">Activate</string>
+
+    <string name="label_filters">Filters</string>
+    <string name="label_search">Search…</string>
+
+    <string name="label_sort_default">Date (Newest)</string>
+    <string name="label_sort_cheapest">Price (Lowest)</string>
+    <string name="label_sort_most_expensive">Price (Highest)</string>
+
 </resources>

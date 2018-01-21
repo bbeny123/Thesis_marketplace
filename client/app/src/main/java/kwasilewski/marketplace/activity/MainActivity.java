@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.UserData;
-import kwasilewski.marketplace.fragment.AdFragment;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 

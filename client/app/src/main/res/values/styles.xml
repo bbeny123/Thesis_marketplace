@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar" />
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/background_splash</item>
+        <item name="android:windowBackground">@drawable/activity_splash_background</item>
     </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

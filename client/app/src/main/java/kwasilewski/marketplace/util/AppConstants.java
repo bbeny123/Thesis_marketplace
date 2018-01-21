@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration;
+package kwasilewski.marketplace.util;
 
 public final class AppConstants {
 

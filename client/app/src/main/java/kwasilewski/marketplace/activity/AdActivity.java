@@ -19,7 +19,7 @@ import java.net.HttpURLConnection;
 import java.util.Locale;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.configuration.AppConstants;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.helper.PhotoAdapter;
 import kwasilewski.marketplace.retrofit.RetrofitService;

@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.fragment;
+package kwasilewski.marketplace.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.activity.FilterActivity;
-import kwasilewski.marketplace.activity.NetErrorActivity;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
-import kwasilewski.marketplace.dto.ad.AdSearchData;
 import kwasilewski.marketplace.helper.AdListViewAdapter;
 import kwasilewski.marketplace.helper.MRKSearchView;
 import kwasilewski.marketplace.retrofit.RetrofitService;
@@ -50,7 +47,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private int listMode = ListModes.NORMAL_MODE;
 
     //filter params
-    private int sortingMethod = AdSearchData.SortingMethod.NEWEST;
+    private int sortingMethod = SortingMethod.NEWEST;
     private String title = "";
     private Long prvId = 0L;
     private Long catId = 0L;
@@ -145,7 +142,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ad_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_ad, container, false);
 
         progressBar = view.findViewById(R.id.ad_list_progress);
         emptyListTextView = view.findViewById(R.id.ad_list_empty);
@@ -178,7 +175,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             return;
         }
         menu.clear();
-        inflater.inflate(R.menu.menu_with_searchbar, menu);
+        inflater.inflate(R.menu.menu_search, menu);
         searchBar = menu.findItem(R.id.action_search);
         searchView = (MRKSearchView) searchBar.getActionView();
         searchView.setOnQueryTextListener(listenerSearchQuery);
@@ -343,7 +340,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
                     return;
                 }
                 PopupMenu popupMenu = new PopupMenu(getContext(), v);
-                popupMenu.inflate(R.menu.ads_sort_menu);
+                popupMenu.inflate(R.menu.menu_sort);
                 popupMenu.setOnMenuItemClickListener(listenerPopupMenu);
                 popupMenu.show();
             }
@@ -353,11 +350,11 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.sort_newest) {
-                    sortingMenuItemClicked(R.string.label_sort_default, AdSearchData.SortingMethod.NEWEST);
+                    sortingMenuItemClicked(R.string.label_sort_default, SortingMethod.NEWEST);
                 } else if (item.getItemId() == R.id.sort_cheapest) {
-                    sortingMenuItemClicked(R.string.label_sort_cheapest, AdSearchData.SortingMethod.CHEAPEST);
+                    sortingMenuItemClicked(R.string.label_sort_cheapest, SortingMethod.CHEAPEST);
                 } else if (item.getItemId() == R.id.sort_most_expensive) {
-                    sortingMenuItemClicked(R.string.label_sort_most_expensive, AdSearchData.SortingMethod.MOSTEXPENSIVE);
+                    sortingMenuItemClicked(R.string.label_sort_most_expensive, SortingMethod.MOSTEXPENSIVE);
                 }
                 return true;
             }
@@ -438,6 +435,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void removeFavourite(final Long id, final int position) {
         changeAd(id, FAVOURITE_ACTION, position, null);
+    }
+
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
     }
 
     public interface ListModes {

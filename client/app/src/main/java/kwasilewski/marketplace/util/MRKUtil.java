@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.helper.DialogItem;
 
 public class MRKUtil {

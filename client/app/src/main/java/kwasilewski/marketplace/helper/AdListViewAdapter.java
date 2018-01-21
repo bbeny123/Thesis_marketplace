@@ -16,9 +16,9 @@ import java.util.Locale;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.activity.AdActivity;
-import kwasilewski.marketplace.configuration.AppConstants;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
-import kwasilewski.marketplace.fragment.AdFragment;
+import kwasilewski.marketplace.activity.AdFragment;
 
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 

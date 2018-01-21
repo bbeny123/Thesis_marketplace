@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit.service;
 
-import kwasilewski.marketplace.configuration.AppConstants;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.user.LoginData;
 import kwasilewski.marketplace.dto.user.PasswordData;
 import kwasilewski.marketplace.dto.user.UserData;

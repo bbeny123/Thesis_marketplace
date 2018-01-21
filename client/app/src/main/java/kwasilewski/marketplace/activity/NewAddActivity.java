@@ -31,10 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.configuration.AppConstants;
-import kwasilewski.marketplace.dto.CategoryData;
-import kwasilewski.marketplace.dto.ComboHintData;
-import kwasilewski.marketplace.dto.HintData;
+import kwasilewski.marketplace.util.AppConstants;
+import kwasilewski.marketplace.dto.hint.CategoryData;
+import kwasilewski.marketplace.dto.hint.ComboHintData;
+import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.helper.DialogItem;

@@ -14,5 +14,5 @@
         </shape>
     </item>
     <item android:gravity="center" android:drawable="@android:drawable/ic_menu_camera" />
-    <item android:gravity="bottom|right" android:right="-2dp" android:drawable="@drawable/ic_add_black_18dp" />
+    <item android:gravity="bottom|right" android:right="-2dp" android:drawable="@drawable/ic_add" />
 </layer-list>

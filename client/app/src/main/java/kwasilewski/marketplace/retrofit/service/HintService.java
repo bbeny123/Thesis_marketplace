@@ -2,9 +2,9 @@ package kwasilewski.marketplace.retrofit.service;
 
 import java.util.List;
 
-import kwasilewski.marketplace.configuration.AppConstants;
-import kwasilewski.marketplace.dto.ComboHintData;
-import kwasilewski.marketplace.dto.HintData;
+import kwasilewski.marketplace.util.AppConstants;
+import kwasilewski.marketplace.dto.hint.ComboHintData;
+import kwasilewski.marketplace.dto.hint.HintData;
 import retrofit2.Call;
 import retrofit2.http.GET;
 

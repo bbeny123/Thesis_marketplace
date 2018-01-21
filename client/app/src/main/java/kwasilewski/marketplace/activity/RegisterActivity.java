@@ -19,7 +19,7 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.dto.HintData;
+import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.retrofit.RetrofitService;

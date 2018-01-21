@@ -8,7 +8,7 @@
     android:layout_marginBottom="5dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="kwasilewski.marketplace.fragment.AdFragment">
+    tools:context="kwasilewski.marketplace.activity.AdFragment">
 
     <LinearLayout
         android:id="@+id/ad_list_filters_bar"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="3dp"
-                android:drawableStart="@drawable/ic_filter_list_white_36dp"
+                android:drawableStart="@drawable/ic_filter"
                 android:gravity="center|start"
                 android:text="@string/label_filters"
                 android:textAllCaps="true"
@@ -44,7 +44,7 @@
                 android:id="@+id/ad_list_filters_active"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/shape_rounded_corner"
                 android:gravity="center|start"
                 android:padding="6dp"
                 android:textAllCaps="true"
@@ -66,7 +66,7 @@
                 android:id="@+id/ad_list_sort_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner"
+                android:background="@drawable/shape_rounded_corner"
                 android:gravity="center|end"
                 android:padding="6dp"
                 android:text="@string/label_sort_default"
@@ -76,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_sort_white_36dp"
+                android:drawableEnd="@drawable/ic_sort"
                 android:drawablePadding="3dp"
                 android:gravity="center|end" />
 

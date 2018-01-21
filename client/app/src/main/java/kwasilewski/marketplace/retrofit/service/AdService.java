@@ -3,7 +3,7 @@ package kwasilewski.marketplace.retrofit.service;
 import java.util.List;
 import java.util.Map;
 
-import kwasilewski.marketplace.configuration.AppConstants;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;

@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.dto;
+package kwasilewski.marketplace.dto.hint;
 
 import java.util.List;
 

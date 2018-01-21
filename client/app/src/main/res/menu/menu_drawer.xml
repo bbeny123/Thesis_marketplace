@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_ads"
-            android:icon="@drawable/ic_shopping_basket_black_18dp"
+            android:icon="@drawable/ic_basket"
             android:title="@string/nav_ads" />
     </group>
 
@@ -15,19 +15,19 @@
             <menu>
                 <item
                     android:id="@+id/nav_favourites"
-                    android:icon="@drawable/ic_favorite_black_18dp"
+                    android:icon="@drawable/ic_favorite"
                     android:title="@string/nav_favourites" />
                 <item
                     android:id="@+id/nav_new"
-                    android:icon="@drawable/ic_add_black_18dp"
+                    android:icon="@drawable/ic_add"
                     android:title="@string/nav_new" />
                 <item
                     android:id="@+id/nav_active"
-                    android:icon="@drawable/ic_check_black_18dp"
+                    android:icon="@drawable/ic_check"
                     android:title="@string/nav_active" />
                 <item
                     android:id="@+id/nav_inactive"
-                    android:icon="@drawable/ic_close_black_18dp"
+                    android:icon="@drawable/ic_close_black"
                     android:title="@string/nav_inactive" />
             </menu>
         </item>
@@ -36,11 +36,11 @@
             <menu>
                 <item
                     android:id="@+id/nav_profile"
-                    android:icon="@drawable/ic_account_box_black_18dp"
+                    android:icon="@drawable/ic_account"
                     android:title="@string/nav_profile" />
                 <item
                     android:id="@+id/nav_logout"
-                    android:icon="@drawable/ic_power_settings_new_black_18dp"
+                    android:icon="@drawable/ic_logout"
                     android:title="@string/nav_logout" />
             </menu>
         </item>
@@ -51,7 +51,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_login"
-                    android:icon="@drawable/ic_input_black_18dp"
+                    android:icon="@drawable/ic_input"
                     android:title="@string/nav_login" />
             </menu>
         </item>

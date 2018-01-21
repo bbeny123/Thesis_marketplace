@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.user.UserData;
 
 public class SharedPrefUtil {

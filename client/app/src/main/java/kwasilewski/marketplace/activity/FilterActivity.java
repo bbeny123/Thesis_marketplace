@@ -15,9 +15,9 @@ import android.widget.Button;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.dto.CategoryData;
-import kwasilewski.marketplace.dto.ComboHintData;
-import kwasilewski.marketplace.dto.HintData;
+import kwasilewski.marketplace.dto.hint.CategoryData;
+import kwasilewski.marketplace.dto.hint.ComboHintData;
+import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
@@ -125,7 +125,7 @@ public class FilterActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.filters_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_filter, menu);
         return true;
     }
 

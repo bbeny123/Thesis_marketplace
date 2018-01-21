@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit;
 
-import kwasilewski.marketplace.configuration.AppConstants;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.retrofit.service.AdService;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;

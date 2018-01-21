@@ -5,6 +5,8 @@ public class AdDetailsData extends AdData {
     private String email;
     private String userName;
     private String province;
+    private String category;
+    private String subcategory;
     private boolean favourite;
 
     public AdDetailsData() {
@@ -32,6 +34,22 @@ public class AdDetailsData extends AdData {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
     }
 
     public boolean isFavourite() {

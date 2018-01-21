@@ -25,7 +25,7 @@ public class FavouriteDAO {
 
     @Transactional
     public void create(UserContext ctx, AdData ad) throws DataAccessException, MKTException {
-        if (alreadyFavourite(ctx.getUserId(), ad.getId()))
+        if (userFavourite(ctx.getUserId(), ad.getId()))
             throw new MKTException(MKTError.FAVOURITE_ALREADY_EXISTS);
         if (ad.getUsrId().equals(ctx.getUserId()))
             throw new MKTException(MKTError.FAVOURITE_OWN_AD);
@@ -64,7 +64,7 @@ public class FavouriteDAO {
         }
     }
 
-    public boolean alreadyFavourite(Long usrId, Long adId) {
+    public boolean userFavourite(Long usrId, Long adId) {
         String queryStr = "SELECT COUNT(fav) FROM FavouriteData fav WHERE fav.usrId = :usrId AND fav.adId = :adId";
         TypedQuery<Long> query = this.em.createQuery(queryStr, Long.class);
         query.setParameter("usrId", usrId);

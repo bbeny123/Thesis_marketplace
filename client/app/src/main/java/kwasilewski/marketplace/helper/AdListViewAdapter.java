@@ -1,7 +1,6 @@
 package kwasilewski.marketplace.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,10 +14,8 @@ import java.util.List;
 import java.util.Locale;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.activity.AdActivity;
-import kwasilewski.marketplace.util.AppConstants;
-import kwasilewski.marketplace.dto.ad.AdMinimalData;
 import kwasilewski.marketplace.activity.AdFragment;
+import kwasilewski.marketplace.dto.ad.AdMinimalData;
 
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 
@@ -52,17 +49,10 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
     }
 
     private void setListeners(final ViewHolder holder, final Long id, final boolean refreshable, int position) {
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, AdActivity.class);
-                intent.putExtra(AppConstants.AD_ID_KEY, id);
-                context.startActivity(intent);
-            }
-        });
+        holder.view.setOnClickListener(getItemClickListener(id, position));
 
         if(holder.editButton != null) {
-            holder.editButton.setOnClickListener(getEditClickListener(id));
+            holder.editButton.setOnClickListener(getEditClickListener(id, position));
         }
         if(holder.refreshButton != null) {
             if (refreshable) {
@@ -143,12 +133,12 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
             this.title.setText(title);
         }
 
-        private void setPrice(Long price) {
+        private void setPrice(String price) {
             this.price.setText(String.format(context.getString(R.string.ad_price_text), price));
         }
 
-        private void setViews(Long views) {
-            this.views.setText(String.format(Locale.getDefault(), "%d", views));
+        private void setViews(String views) {
+            this.views.setText(String.format(Locale.getDefault(), "%s", views));
         }
 
         private void setThumbnail(Bitmap bitmap) {
@@ -158,11 +148,20 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         }
     }
 
-    private View.OnClickListener getEditClickListener(final Long id) {
+    private View.OnClickListener getItemClickListener(final Long id, final int position) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.editAd(id);
+                listener.viewAd(id, position);
+            }
+        };
+    }
+
+    private View.OnClickListener getEditClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.editAd(id, position);
             }
         };
     }
@@ -196,7 +195,9 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
     public interface OnButtonsClickListener {
 
-        void editAd(final Long id);
+        void viewAd(final Long id, final int position);
+
+        void editAd(final Long id, final int position);
 
         void refreshAd(final Long id, final Button button);
 

@@ -18,7 +18,8 @@ public class AdData {
         int MOSTEXPENSIVE = 3;
     }
 
-    @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    //orphanRemoval = true
+    @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PhotoData> photos;
 
     @OneToMany(mappedBy = "ad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

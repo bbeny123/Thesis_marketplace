@@ -91,6 +91,7 @@ public class NewAddActivity extends AppCompatActivity {
         newFormView = findViewById(R.id.new_form);
         titleEditText = findViewById(R.id.new_title);
         priceEditText = findViewById(R.id.new_price);
+        priceEditText.addTextChangedListener(MRKUtil.getTextWatcherPositiveNumber());
         categorySpinner = findViewById(R.id.new_category);
         categorySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -415,10 +416,6 @@ public class NewAddActivity extends AppCompatActivity {
             priceEditText.setError(getString(R.string.error_field_required));
             focusView = priceEditText;
             cancel = true;
-        } else if (Long.parseLong(price) == 0) {
-            priceEditText.setError(getString(R.string.error_price_invalid));
-            focusView = priceEditText;
-            cancel = true;
         }
 
         if (TextUtils.isEmpty(title)) {
@@ -432,7 +429,7 @@ public class NewAddActivity extends AppCompatActivity {
             addInProgress = false;
         } else {
             showProgress(true);
-            add(new AdData(title, Long.parseLong(price), selectedSubcategory, selectedProvince, description, city, phone, photos.getEncodedThumbnail(this), photos.getEncodedPhotos(this)));
+            add(new AdData(title, price, selectedSubcategory, selectedProvince, description, city, phone, photos.getEncodedThumbnail(this), photos.getEncodedPhotos(this)));
         }
     }
 

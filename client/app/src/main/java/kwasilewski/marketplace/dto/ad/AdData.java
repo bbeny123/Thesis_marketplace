@@ -6,23 +6,35 @@ import java.util.List;
 public class AdData extends AdMinimalData {
 
     private Long catId;
+    private Long sctId;
     private Long prvId;
     private String description;
     private String city;
     private String phone;
     private List<String> photos = new ArrayList<>();
+    private boolean active = true;
 
     AdData() {
     }
 
-    public AdData(String title, Long price, Long catId, Long prvId, String description, String city, String phone, String miniature, List<String> photos) {
+    public AdData(String title, String price, Long sctId, Long prvId, String description, String city, String phone, String miniature, List<String> photos) {
         super(title, price, miniature);
-        this.catId = catId;
+        this.sctId = sctId;
         this.prvId = prvId;
         this.description = description;
         this.city = city;
         this.phone = phone;
         this.photos = photos;
+    }
+
+    public AdData(String title, String price, Long sctId, Long prvId, String description, String city, String phone, boolean active) {
+        super(title, price);
+        this.sctId = sctId;
+        this.prvId = prvId;
+        this.description = description;
+        this.city = city;
+        this.phone = phone;
+        this.active = active;
     }
 
     public Long getCatId() {
@@ -31,6 +43,14 @@ public class AdData extends AdMinimalData {
 
     public void setCatId(Long catId) {
         this.catId = catId;
+    }
+
+    public Long getSctId() {
+        return sctId;
+    }
+
+    public void setSctId(Long sctId) {
+        this.sctId = sctId;
     }
 
     public Long getPrvId() {
@@ -73,4 +93,11 @@ public class AdData extends AdMinimalData {
         this.photos = photos;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

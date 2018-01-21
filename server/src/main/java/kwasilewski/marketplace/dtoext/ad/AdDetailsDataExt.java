@@ -7,6 +7,8 @@ public class AdDetailsDataExt extends AdDataExt {
     private String email;
     private String userName;
     private String province;
+    private String category;
+    private String subcategory;
     private boolean favourite;
 
     public AdDetailsDataExt(AdData ad) {
@@ -14,6 +16,8 @@ public class AdDetailsDataExt extends AdDataExt {
         this.email = ad.getUser().getEmail();
         this.userName = ad.getUser().getFirstName();
         this.province = ad.getProvince().getName();
+        this.category = ad.getCategory().getCategory().getName();
+        this.subcategory = ad.getCategory().getName();
         this.favourite = ad.isFavourite();
     }
 
@@ -39,6 +43,22 @@ public class AdDetailsDataExt extends AdDataExt {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
     }
 
     public boolean isFavourite() {

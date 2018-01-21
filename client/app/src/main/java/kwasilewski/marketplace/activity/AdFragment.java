@@ -28,6 +28,7 @@ import kwasilewski.marketplace.helper.AdListViewAdapter;
 import kwasilewski.marketplace.helper.MRKSearchView;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.AdService;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
@@ -40,6 +41,7 @@ import static android.app.Activity.RESULT_OK;
 public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener {
 
     private static final int FILTER_ACTIVITY_CODE = 1;
+    private static final int REMOVABLE_CODE = 2;
     private static final int REFRESH_ACTION = 1;
     private static final int STATUS_ACTION = 2;
     private static final int FAVOURITE_ACTION = 3;
@@ -191,6 +193,11 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             Bundle extras = data.getExtras();
             if (extras != null) {
                 setFilterParams(extras);
+            }
+        } else if (requestCode == REMOVABLE_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                removeAdFromAdapter(extras.getInt(EditActivity.POSITION_KEY));
             }
         }
     }
@@ -413,8 +420,19 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
 
     @Override
-    public void editAd(final Long id) {
-        //go to editActivity
+    public void viewAd(Long id, int position) {
+        Intent viewIntent = new Intent(getActivity(), AdActivity.class);
+        viewIntent.putExtra(AppConstants.AD_ID_KEY, id);
+        viewIntent.putExtra(AdActivity.POSITION_KEY, position);
+        startActivityForResult(viewIntent, REMOVABLE_CODE);
+    }
+
+    @Override
+    public void editAd(final Long id, int position) {
+        Intent editIntent = new Intent(getActivity(), EditActivity.class);
+        editIntent.putExtra(AppConstants.AD_ID_KEY, id);
+        editIntent.putExtra(EditActivity.POSITION_KEY, position);
+        startActivityForResult(editIntent, REMOVABLE_CODE);
     }
 
     @Override

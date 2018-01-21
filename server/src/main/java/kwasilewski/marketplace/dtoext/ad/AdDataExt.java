@@ -12,23 +12,27 @@ import java.util.stream.Collectors;
 public class AdDataExt extends AdMinimalDataExt {
 
     protected Long catId;
+    protected Long sctId;
     protected Long prvId;
     protected String description;
     protected String city;
     protected String phone;
     protected List<String> photos = new ArrayList<>();
+    protected boolean active = true;
 
     public AdDataExt() {
     }
 
     AdDataExt(AdData ad) {
         super(ad);
-        this.catId = ad.getCatId();
+        this.catId = ad.getCategory().getCategory().getId();
+        this.sctId = ad.getCatId();
         this.prvId = ad.getPrvId();
         this.description = ad.getDescription();
         this.city = ad.getCity();
         this.phone = ad.getPhone();
         this.photos = ad.getPhotos().stream().map(PhotoData::getPhoto).collect(Collectors.toList());
+        this.active = ad.isActive();
     }
 
     public Long getCatId() {
@@ -37,6 +41,14 @@ public class AdDataExt extends AdMinimalDataExt {
 
     public void setCatId(Long catId) {
         this.catId = catId;
+    }
+
+    public Long getSctId() {
+        return sctId;
+    }
+
+    public void setSctId(Long sctId) {
+        this.sctId = sctId;
     }
 
     public Long getPrvId() {
@@ -79,23 +91,32 @@ public class AdDataExt extends AdMinimalDataExt {
         this.photos = photos;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public AdData getAdData(UserContext ctx) {
         AdData ad = new AdData();
         ad.setUsrId(ctx.getUserId());
-        ad.setCatId(this.catId);
+        ad.setCatId(this.sctId);
         ad.setPrvId(this.prvId);
         ad.setTitle(this.title);
         ad.setDescription(this.description);
         ad.setPrice(this.price);
         ad.setCity(this.city);
         ad.setPhone(this.phone);
-        if(miniature !=null) ad.setPhotos(getPhotosList());
+        if(miniature != null) ad.setPhotos(getPhotosList());
         return ad;
     }
 
     public AdData getAdData(UserContext ctx, Long id) {
         AdData ad = getAdData(ctx);
         ad.setId(id);
+        ad.setActive(active);
         return ad;
     }
 

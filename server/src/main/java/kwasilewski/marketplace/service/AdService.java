@@ -68,7 +68,7 @@ public class AdService {
     public AdData findAd(UserContext ctx, Long id) throws DataAccessException, MKTException {
         AdData ad = adDAO.find(ctx, id, true);
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
-        ad.setFavourite(favouriteDAO.alreadyFavourite(ctx.getUserId(), ad.getId()));
+        ad.setFavourite(favouriteDAO.userFavourite(ctx.getUserId(), ad.getId()));
         return ad;
     }
 

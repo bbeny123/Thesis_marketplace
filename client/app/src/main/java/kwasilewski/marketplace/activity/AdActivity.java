@@ -16,14 +16,13 @@ import com.viewpagerindicator.LinePageIndicator;
 import com.viewpagerindicator.PageIndicator;
 
 import java.net.HttpURLConnection;
-import java.util.Locale;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.helper.PhotoAdapter;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.AdService;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
@@ -33,6 +32,7 @@ import retrofit2.Response;
 
 public class AdActivity extends AppCompatActivity {
 
+    public final static String POSITION_KEY = "position";
     private Long adId;
     private AdDetailsData ad;
     private AdService adService;
@@ -41,6 +41,7 @@ public class AdActivity extends AppCompatActivity {
     private String token;
     private boolean favourite = false;
     private boolean favouriteActionInProgress = false;
+    private int position;
 
     private View progressBar;
     private View adFormView;
@@ -66,6 +67,7 @@ public class AdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ad);
 
         adId = extras.getLong(AppConstants.AD_ID_KEY);
+        position = extras.getInt(POSITION_KEY);
 
         Toolbar toolbar = findViewById(R.id.ad_toolbar);
         MRKUtil.setToolbar(this, toolbar);
@@ -155,7 +157,7 @@ public class AdActivity extends AppCompatActivity {
         sellerLocationText.setText(String.format(getString(R.string.ad_location_text), ad.getCity(), ad.getProvince()));
         phoneText.setText(ad.getPhone());
         emailText.setText(ad.getEmail());
-        viewsText.setText(String.format(Locale.getDefault(), "%d", ad.getViews()));
+        viewsText.setText(ad.getViews());
         showProgress(false);
     }
 
@@ -233,7 +235,9 @@ public class AdActivity extends AppCompatActivity {
 
     private void addNotExists() {
         MRKUtil.toast(this, getString(R.string.toast_ad_not_available));
-        //TODO: remove add from list
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(POSITION_KEY, position);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 

@@ -8,26 +8,23 @@ public class AdMinimalData {
 
     private Long id;
     private String title;
-    private Long price;
-    private Long views;
+    private String price;
+    private String views;
     private String miniature;
     private boolean refreshable;
 
     AdMinimalData() {
     }
 
-    AdMinimalData(String title, Long price, String miniature) {
+    AdMinimalData(String title, String price, String miniature) {
         this.title = title;
         this.price = price;
         this.miniature = miniature;
     }
 
-    public AdMinimalData(Long id, String title, Long price, Long views, String miniature) {
-        this.id = id;
+    AdMinimalData(String title, String price) {
         this.title = title;
         this.price = price;
-        this.views = views;
-        this.miniature = miniature;
     }
 
     public Long getId() {
@@ -46,19 +43,19 @@ public class AdMinimalData {
         this.title = title;
     }
 
-    public Long getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public Long getViews() {
+    public String getViews() {
         return views;
     }
 
-    public void setViews(Long views) {
+    public void setViews(String views) {
         this.views = views;
     }
 

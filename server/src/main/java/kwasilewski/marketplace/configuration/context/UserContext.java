@@ -24,6 +24,7 @@ public class UserContext implements Serializable {
 
     public void changeUser(UserData user) {
         this.user = user;
+        this.userId = user.getId();
         this.admin = user.isAdmin();
     }
 

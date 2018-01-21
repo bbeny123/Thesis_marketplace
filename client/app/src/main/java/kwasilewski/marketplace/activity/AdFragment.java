@@ -294,12 +294,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
         }
-        if (!ads.isEmpty()) {
-            emptyListTextView.setVisibility(View.GONE);
-        } else {
-            emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
-            emptyListTextView.setVisibility(View.VISIBLE);
-        }
+        setEmptyListTextView();
         endOfCall();
     }
 
@@ -493,6 +488,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void removeAdFromAdapter(int position) {
         ads.remove(position);
         adapter.notifyDataSetChanged();
+        setEmptyListTextView();
         endOfCall();
     }
 
@@ -528,6 +524,15 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void favouriteNotExists(int position) {
         removeAdFromAdapter(position);
         MRKUtil.toast(getActivity(), getString(R.string.toast_not_favourite));
+    }
+
+    private void setEmptyListTextView() {
+        if (!ads.isEmpty()) {
+            emptyListTextView.setVisibility(View.GONE);
+        } else {
+            emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
+            emptyListTextView.setVisibility(View.VISIBLE);
+        }
     }
 
 }

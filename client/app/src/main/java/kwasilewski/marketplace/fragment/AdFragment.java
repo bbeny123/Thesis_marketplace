@@ -115,6 +115,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private View filterButton;
     private RecyclerView recyclerView;
     private AdListViewAdapter adapter;
+    private TextView emptyListTextView;
     private TextView filterLabel;
     private TextView filterActiveLabel;
     private TextView sortLabel;
@@ -147,6 +148,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         View view = inflater.inflate(R.layout.fragment_ad_list, container, false);
 
         progressBar = view.findViewById(R.id.ad_list_progress);
+        emptyListTextView = view.findViewById(R.id.ad_list_empty);
         recyclerView = view.findViewById(R.id.ad_list_recycler);
         adapter = new AdListViewAdapter(ads, getContext(), this, listMode);
         setRecyclerAdapter();
@@ -294,6 +296,11 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         if (!newAds.isEmpty()) {
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
+        } else if (!ads.isEmpty()) {
+            emptyListTextView.setVisibility(View.GONE);
+        } else {
+            emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
+            emptyListTextView.setVisibility(View.VISIBLE);
         }
         endOfCall();
     }

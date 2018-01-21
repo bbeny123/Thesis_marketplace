@@ -1,13 +1,13 @@
 package kwasilewski.marketplace.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import java.net.HttpURLConnection;
 
@@ -30,9 +30,9 @@ public class PasswordActivity extends AppCompatActivity {
 
     private View progressBar;
     private View passwordFormView;
-    private EditText oldPasswordEditText;
-    private EditText newPasswordEditText;
-    private EditText confirmPasswordEditText;
+    private TextInputEditText oldPasswordEditText;
+    private TextInputEditText newPasswordEditText;
+    private TextInputEditText confirmPasswordEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
     private void startAdListFragment(int listMode) {
         Fragment fragment = AdFragment.newInstance(listMode);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.dupa, fragment).addToBackStack(null)
+                .replace(R.id.dupa, fragment)
                 .commit();
     }
 

@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/filter_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/filter_price_from"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <EditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/filter_price_to"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

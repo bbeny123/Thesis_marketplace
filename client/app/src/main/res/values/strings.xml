@@ -102,4 +102,11 @@
     <string name="toast_ad_activated">Ad successfully activated.</string>
     <string name="toast_ad_deactivated">Ad successfully deactivated.</string>
 
+    <string-array name="ad_list_empty">
+        <item>There is no Ads related to your search.</item>
+        <item>You do not have any active Ads!</item>
+        <item>You do not have any inactive Ads!</item>
+        <item>You do not have any favourite Ads!</item>
+    </string-array>
+
 </resources>

@@ -97,6 +97,19 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/ad_list_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:lines="2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="You do not have any ads!" />
+
         <ProgressBar
             android:id="@+id/ad_list_progress"
             style="?android:attr/progressBarStyleLarge"

@@ -2,6 +2,7 @@ package kwasilewski.marketplace.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.net.HttpURLConnection;
@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private UserService userService;
     private Call<UserData> callUser;
 
-    private EditText emailEditText;
-    private EditText passwordEditText;
+    private TextInputEditText emailEditText;
+    private TextInputEditText passwordEditText;
     private View progressBar;
     private View loginFormView;
 

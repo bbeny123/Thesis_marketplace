@@ -2,6 +2,7 @@ package kwasilewski.marketplace.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -12,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import java.util.List;
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.HintData;
 import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
 import kwasilewski.marketplace.retrofit.service.UserService;
-import kwasilewski.marketplace.helper.HintSpinner;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import retrofit2.Call;
@@ -41,11 +41,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     private View progressBar;
     private View modifyFormView;
-    private EditText firstNameEditText;
-    private EditText lastNameEditText;
-    private EditText cityEditText;
+    private TextInputEditText firstNameEditText;
+    private TextInputEditText lastNameEditText;
+    private TextInputEditText cityEditText;
     private HintSpinner provinceSpinner;
-    private EditText phoneEditText;
+    private TextInputEditText phoneEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +95,13 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        Button passwordButton = findViewById(R.id.profile_password_button);
-//        passwordButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToPasswordChange();
-//            }
-//        });
+        Button passwordButton = findViewById(R.id.profile_password_button);
+        passwordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToPasswordChange();
+            }
+        });
     }
 
     @Override

@@ -100,7 +100,7 @@ public class AdDAO {
         queryStr += criteria.getCatId() != null ? " AND (ad.catId = :catId OR ad.category.catId = :catId)" : "";
         queryStr += criteria.getPriceMin() != null ? " AND ad.price >= :priceMin" : "";
         queryStr += criteria.getPriceMax() != null ? " AND ad.price <= :priceMax" : "";
-        queryStr += " ORDER BY ad." + AdData.getSortingMethod(criteria.getSortingMethod());
+        queryStr += " ORDER BY ad." + AdData.getSortingMethod(criteria.getSortingMethod()) +", ad.id";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("date", DateTimeUtil.getMinAdActiveDate());
         if (criteria.getTitle() != null) query.setParameter("title", "%" + criteria.getTitle().toUpperCase() + "%");

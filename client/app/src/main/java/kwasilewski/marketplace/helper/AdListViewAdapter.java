@@ -23,7 +23,6 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
     private final Context context;
     private final OnButtonsClickListener listener;
     private final int listMode;
-    private int lastItemPosition = -1;
 
     public AdListViewAdapter(List<AdMinimalData> ads, Context context, OnButtonsClickListener listener, int listMode) {
         this.ads = ads;
@@ -45,7 +44,6 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         holder.setViews(ad.getViews());
         holder.setThumbnail(ad.getDecodedMiniature());
         setListeners(holder, ad.getId(), ad.isRefreshable(), holder.getAdapterPosition());
-        lastItemPosition = holder.getAdapterPosition();
     }
 
     private void setListeners(final ViewHolder holder, final Long id, final boolean refreshable, int position) {
@@ -75,10 +73,6 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
     @Override
     public int getItemCount() {
         return ads.size();
-    }
-
-    public int getLastItemPosition() {
-        return lastItemPosition;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

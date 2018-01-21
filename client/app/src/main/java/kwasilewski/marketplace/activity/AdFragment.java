@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
@@ -85,12 +87,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     //listeners - init code at the bottom (except recycler)
     private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
-        private final int threshold = 2;
+        private final int threshold = 3;
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && adapter.getLastItemPosition() >= adapter.getItemCount() - threshold) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
                 pullAds();
             }
         }
@@ -98,7 +100,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && adapter.getLastItemPosition() >= adapter.getItemCount() - threshold) {
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
                 pullAds();
             }
         }
@@ -113,6 +115,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private View progressBar;
     private View filterButton;
     private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
     private AdListViewAdapter adapter;
     private TextView emptyListTextView;
     private TextView filterLabel;
@@ -149,6 +152,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         progressBar = view.findViewById(R.id.ad_list_progress);
         emptyListTextView = view.findViewById(R.id.ad_list_empty);
         recyclerView = view.findViewById(R.id.ad_list_recycler);
+        layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         adapter = new AdListViewAdapter(ads, getContext(), this, listMode);
         setRecyclerAdapter();
 
@@ -286,7 +290,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void setAdsCall() {
         if(listMode == ListModes.NORMAL_MODE) {
             Long categoryId = sctId != 0L ? sctId : catId;
-            callAds = adService.getAds(MRKUtil.getAdSearchQuery(adapter.getItemCount(), sortingMethod, title, prvId, categoryId, priceMin, priceMax));
+            callAds = adService.getAds(MRKUtil.getAdSearchQuery(ads.size(), sortingMethod, title, prvId, categoryId, priceMin, priceMax));
         } else if (listMode == ListModes.ACTIVE_MODE) {
             callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), true));
         } else if (listMode == ListModes.INACTIVE_MODE) {
@@ -295,9 +299,11 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             callAds = adService.getUserFavourites(token, MRKUtil.getFavouriteAdSearchQuery(adapter.getItemCount()));
         }
     }
-
     private void addAdsToAdapter(List<AdMinimalData> newAds) {
         if (!newAds.isEmpty()) {
+            LinkedHashSet<AdMinimalData> noDuplicates = new LinkedHashSet<>(ads);
+            noDuplicates.addAll(newAds);
+            ads.clear();
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
         }

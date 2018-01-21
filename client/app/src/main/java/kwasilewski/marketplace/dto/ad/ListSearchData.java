@@ -3,12 +3,12 @@ package kwasilewski.marketplace.dto.ad;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ListSearchData {
+class ListSearchData {
 
     private int offset = 0;
     private int maxResults = 6;
 
-    public ListSearchData() {
+    ListSearchData() {
     }
 
     public int getOffset() {

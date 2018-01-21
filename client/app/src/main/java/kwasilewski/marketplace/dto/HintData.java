@@ -5,7 +5,7 @@ public class HintData {
     private Long id;
     private String name;
 
-    public HintData() {
+    HintData() {
     }
 
     public HintData(Long id) {

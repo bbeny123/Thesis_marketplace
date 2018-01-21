@@ -5,7 +5,7 @@ public class LoginData {
     private String email;
     private String password;
 
-    public LoginData() {
+    LoginData() {
     }
 
     public LoginData(String email) {

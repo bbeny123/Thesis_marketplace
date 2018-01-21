@@ -10,7 +10,7 @@ import android.graphics.RectF;
 import com.squareup.picasso.Transformation;
 
 
-public class PhotoTransform implements Transformation {
+class PhotoTransform implements Transformation {
 
     private boolean border = false;
 

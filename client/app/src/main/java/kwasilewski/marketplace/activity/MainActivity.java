@@ -25,9 +25,9 @@ import kwasilewski.marketplace.util.SharedPrefUtil;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private int LOGIN_CODE = 1;
-    DrawerLayout drawer;
-    NavigationView navigationView;
+    private final int LOGIN_CODE = 1;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
     private Menu menu;
     private SearchView searchView;
 

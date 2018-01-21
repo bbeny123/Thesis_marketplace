@@ -18,7 +18,7 @@ import kwasilewski.marketplace.R;
 
 public class PhotoViewList {
 
-    private List<PhotoView> photos = new ArrayList<>();
+    private final List<PhotoView> photos = new ArrayList<>();
     private int photoContained = 0;
 
     public PhotoViewList() {

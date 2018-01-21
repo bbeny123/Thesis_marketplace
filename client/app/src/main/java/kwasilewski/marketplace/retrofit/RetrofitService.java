@@ -11,9 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitService {
 
     private static RetrofitService instance;
-    private AdService adService;
-    private HintService hintService;
-    private UserService userService;
+    private final AdService adService;
+    private final HintService hintService;
+    private final UserService userService;
 
     private RetrofitService() {
         Retrofit retrofit = new Retrofit.Builder()

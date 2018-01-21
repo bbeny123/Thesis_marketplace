@@ -11,12 +11,12 @@ public class AdMinimalData {
     private Long price;
     private Long views;
     private String miniature;
-    protected boolean refreshable;
+    private boolean refreshable;
 
-    public AdMinimalData() {
+    AdMinimalData() {
     }
 
-    public AdMinimalData(String title, Long price, String miniature) {
+    AdMinimalData(String title, Long price, String miniature) {
         this.title = title;
         this.price = price;
         this.miniature = miniature;

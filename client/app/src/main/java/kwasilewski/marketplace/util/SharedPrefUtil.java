@@ -11,8 +11,8 @@ import kwasilewski.marketplace.dto.user.UserData;
 public class SharedPrefUtil {
 
     private static SharedPrefUtil instance;
-    private SharedPreferences sharedPref;
-    private Gson gson;
+    private final SharedPreferences sharedPref;
+    private final Gson gson;
     private String token;
     private UserData userData;
     private boolean tokenSet = false;

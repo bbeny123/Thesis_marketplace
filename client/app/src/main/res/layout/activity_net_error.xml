@@ -13,7 +13,6 @@
     tools:context="kwasilewski.marketplace.activity.NetErrorActivity">
 
     <TextView
-        android:id="@+id/net_error_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/error_net_connection_problem"

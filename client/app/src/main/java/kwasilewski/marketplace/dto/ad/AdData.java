@@ -12,7 +12,7 @@ public class AdData extends AdMinimalData {
     private String phone;
     private List<String> photos = new ArrayList<>();
 
-    public AdData() {
+    AdData() {
     }
 
     public AdData(String title, Long price, Long catId, Long prvId, String description, String city, String phone, String miniature, List<String> photos) {

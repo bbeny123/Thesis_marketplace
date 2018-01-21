@@ -59,10 +59,10 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private String priceMax;
     private String token;
 
-    private List<AdMinimalData> ads = new ArrayList<>();
-    private AdService adService = RetrofitService.getInstance().getAdService();
+    private final List<AdMinimalData> ads = new ArrayList<>();
+    private final AdService adService = RetrofitService.getInstance().getAdService();
     private Call<List<AdMinimalData>> callAds;
-    private Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
+    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
         @Override
         public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
             if (response.isSuccessful()) {
@@ -85,8 +85,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private boolean callActive = false;
 
     //listeners - init code at the bottom (except recycler)
-    RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
-        private int threshold = 2;
+    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
+        private final int threshold = 2;
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -296,7 +296,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         if (!newAds.isEmpty()) {
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
-        } else if (!ads.isEmpty()) {
+        }
+        if (!ads.isEmpty()) {
             emptyListTextView.setVisibility(View.GONE);
         } else {
             emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
@@ -318,7 +319,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         startActivity(new Intent(getActivity(), NetErrorActivity.class));
     }
 
-    public void setNormalModeListeners() {
+    private void setNormalModeListeners() {
 
         listenerFilter = new View.OnClickListener() {
             @Override

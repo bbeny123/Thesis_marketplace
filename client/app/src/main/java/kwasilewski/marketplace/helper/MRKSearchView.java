@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 public class MRKSearchView extends SearchView {
 
-    SearchView.SearchAutoComplete mSearchSrcTextView;
-    OnQueryTextListener listener;
-
     public MRKSearchView(Context context) {
         super(context);
     }
@@ -27,8 +24,7 @@ public class MRKSearchView extends SearchView {
     public void setOnQueryTextListener(final OnQueryTextListener listener) {
         System.out.println("");
         super.setOnQueryTextListener(listener);
-        this.listener = listener;
-        mSearchSrcTextView = findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        SearchAutoComplete mSearchSrcTextView = findViewById(android.support.v7.appcompat.R.id.search_src_text);
         mSearchSrcTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

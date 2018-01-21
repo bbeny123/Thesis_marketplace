@@ -65,7 +65,7 @@ public class NewAddActivity extends AppCompatActivity {
     private boolean addInProgress = false;
     private boolean spinnersSettingInProgress = false;
 
-    private PhotoViewList photos = new PhotoViewList();
+    private final PhotoViewList photos = new PhotoViewList();
     private View progressBar;
     private View newFormView;
     private TextInputEditText titleEditText;

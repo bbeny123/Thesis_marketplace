@@ -35,9 +35,9 @@ public class FilterActivity extends AppCompatActivity {
     public static final String SUBCATEGORY_KEY = "subcategoryId";
     public static final String PROVINCE_KEY = "provinceId";
 
-    private HintService hintService = RetrofitService.getInstance().getHintService();
+    private final HintService hintService = RetrofitService.getInstance().getHintService();
     private Call<ComboHintData> callHint;
-    private Callback<ComboHintData> callbackHint = new Callback<ComboHintData>() {
+    private final Callback<ComboHintData> callbackHint = new Callback<ComboHintData>() {
         @Override
         public void onResponse(Call<ComboHintData> call, Response<ComboHintData> response) {
             if (response.isSuccessful()) {
@@ -60,25 +60,25 @@ public class FilterActivity extends AppCompatActivity {
     private Long subcategoryBundle = 0L;
     private boolean settingSpinners = false;
 
-    private AdapterView.OnItemClickListener listenerProvince = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener listenerProvince = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectedProvince = spinnerOnClickListener(adapterView.getItemAtPosition(position));
         }
     };
-    private AdapterView.OnItemClickListener listenerCategory = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener listenerCategory = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectedCategory = spinnerOnClickListener(adapterView.getItemAtPosition(position));
         }
     };
-    private AdapterView.OnItemClickListener listenerSubcategory = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener listenerSubcategory = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
             selectedSubcategory = spinnerOnClickListener(adapterView.getItemAtPosition(position));
         }
     };
-    private View.OnClickListener listenerSearch = new View.OnClickListener() {
+    private final View.OnClickListener listenerSearch = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             searchAds();

@@ -421,9 +421,10 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void viewAd(Long id, int position) {
-        Intent viewIntent = new Intent(getActivity(), AdActivity.class);
+        Intent viewIntent = new Intent(getActivity(), ViewActivity.class);
         viewIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        viewIntent.putExtra(AdActivity.POSITION_KEY, position);
+        viewIntent.putExtra(ViewActivity.POSITION_KEY, position);
+        viewIntent.putExtra(ViewActivity.MODE_KEY, listMode == ListModes.FAVOURITE_MODE ? ListModes.NORMAL_MODE : listMode);
         startActivityForResult(viewIntent, REMOVABLE_CODE);
     }
 

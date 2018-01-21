@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="kwasilewski.marketplace.activity.AdActivity">
+    tools:context="kwasilewski.marketplace.activity.ViewActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -184,6 +184,7 @@
                         android:id="@+id/ad_views"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:drawablePadding="6dp"
                         android:drawableStart="@drawable/ic_views"
                         android:gravity="center|start"
@@ -192,14 +193,31 @@
                         tools:text="200" />
 
                     <Button
-                        android:id="@+id/ad_button"
+                        android:id="@+id/view_favourite_button"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="@string/action_ad_favourite"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
+                    <Button
+                        android:id="@+id/view_refresh_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_refresh"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/view_status_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_activate"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
 
             </LinearLayout>

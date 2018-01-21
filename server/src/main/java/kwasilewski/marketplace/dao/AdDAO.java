@@ -88,7 +88,7 @@ public class AdDAO {
 
     public AdData find(UserContext ctx, Long id, boolean incrementViews) throws DataAccessException {
         String queryStr = "SELECT ad FROM AdData ad WHERE ad.id = :id";
-        queryStr += !ctx.isAdmin() ? " AND ad.usrId = :usrId" : "";
+        queryStr += !ctx.isAdmin() ? " AND (ad.usrId = :usrId OR ad.active = TRUE)" : "";
         TypedQuery<AdData> query = this.em.createQuery(queryStr, AdData.class);
         query.setParameter("id", id);
         if (!ctx.isAdmin()) query.setParameter("usrId", ctx.getUserId());

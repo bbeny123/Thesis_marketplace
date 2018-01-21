@@ -99,7 +99,7 @@
     <string name="toast_ad_not_exist">That ad does not exist anymore.</string>
     <string name="toast_ad_refreshed">Ad successfully refreshed.</string>
     <string name="toast_ad_activated">Ad successfully activated.</string>
-    <string name="toast_ad_deactivated">Ad successfully deactivated.</string>
+    <string name="toast_ad_deactivated">Ad successfully finished.</string>
 
     <string name="button_edit_activate">Save and activate</string>
 

@@ -49,7 +49,7 @@
             android:name=".activity.NewAddActivity"
             android:label="@string/title_activity_new_add" />
         <activity
-            android:name=".activity.AdActivity"
+            android:name=".activity.ViewActivity"
             android:label="@string/title_activity_ad" />
         <activity
             android:name=".activity.FilterActivity"

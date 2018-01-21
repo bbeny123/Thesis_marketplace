@@ -69,7 +69,6 @@
     <string name="ad_image_description">Photo</string>
     <string name="ad_thumbnail_description">Thumbnail</string>
     <string name="ad_description">Description:</string>
-    <string name="ad_seller">Seller:</string>
     <string name="action_ad_favourite">Add to favourite</string>
     <string name="action_ad_remove_favourite">Remove from favourite</string>
     <string name="ad_price_text">%1$d PLN</string>

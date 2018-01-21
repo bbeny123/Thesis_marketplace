@@ -25,6 +25,7 @@ import kwasilewski.marketplace.util.SharedPrefUtil;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private int LOGIN_CODE = 1;
     DrawerLayout drawer;
     NavigationView navigationView;
     private Menu menu;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        startAdListFragment(AdFragment.ListModes.NORMAL_MODE);
     }
 
 
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
-            //go to home
+        if (requestCode == LOGIN_CODE && resultCode == AppCompatActivity.RESULT_OK) {
+            startAdListFragment(AdFragment.ListModes.NORMAL_MODE);
         }
     }
 
@@ -79,28 +81,35 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_ads) {
-            Fragment fragment = AdFragment.newInstance(1);
-            getSupportFragmentManager().beginTransaction()
-            .replace(R.id.dupa, fragment)
-            .commit();
-//            Intent intent = new Intent(this, AdActivity.class);
-//            intent.putExtra(AppConstants.AD_ID_KEY, 9L);
-//            startActivity(intent);
-        } else if (id == R.id.nav_new){
+            startAdListFragment(AdFragment.ListModes.NORMAL_MODE);
+        } else if (id == R.id.nav_favourites) {
+            startAdListFragment(AdFragment.ListModes.FAVOURITE_MODE);
+        } else if (id == R.id.nav_new) {
             startActivity(new Intent(this, NewAddActivity.class));
+        } else if (id == R.id.nav_active) {
+            startAdListFragment(AdFragment.ListModes.ACTIVE_MODE);
+        } else if (id == R.id.nav_inactive) {
+            startAdListFragment(AdFragment.ListModes.INACTIVE_MODE);
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_logout) {
-            //go to home
             SharedPrefUtil.getInstance(this).removeUserData();
+            startAdListFragment(AdFragment.ListModes.NORMAL_MODE);
             prepareActivity();
             MRKUtil.toast(this, getString(R.string.toast_logout_successful));
         } else if (id == R.id.nav_login) {
-            startActivityForResult(new Intent(this, LoginActivity.class), 1);
+            startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_CODE);
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startAdListFragment(int listMode) {
+        Fragment fragment = AdFragment.newInstance(listMode);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.dupa, fragment).addToBackStack(null)
+                .commit();
     }
 
     private void prepareActivity() {

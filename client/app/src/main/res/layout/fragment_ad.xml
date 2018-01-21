@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
     android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:background="#55111111"
     android:orientation="vertical">
 
@@ -14,7 +15,6 @@
         android:layout_height="wrap_content"
         android:paddingEnd="@dimen/activity_horizontal_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingBottom="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -81,6 +81,8 @@
         android:id="@+id/ad_list_active_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-6dp"
+        android:layout_marginTop="-2dp"
         android:orientation="horizontal"
         android:paddingEnd="12dp"
         android:paddingStart="12dp"
@@ -116,20 +118,21 @@
         android:orientation="horizontal"
         android:paddingEnd="12dp"
         android:paddingStart="12dp"
+        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="-6dp"
         android:visibility="gone">
 
         <Button
             android:id="@+id/ad_list_inactive_edit"
             android:layout_width="0dp"
-            android:layout_height="36dp"
+            android:layout_height="45dp"
             android:layout_weight="0.5"
             android:text="@string/action_edit" />
 
         <Button
             android:id="@+id/ad_list_inactive_activate"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="36dp"
+            android:layout_height="45dp"
             android:layout_weight="0.5"
             android:text="@string/action_activate" />
 
@@ -142,12 +145,14 @@
         android:orientation="horizontal"
         android:paddingEnd="12dp"
         android:paddingStart="12dp"
+        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="-6dp"
         android:visibility="gone">
 
         <Button
             android:id="@+id/ad_list_favourite_remove"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="45dp"
             android:text="@string/action_ad_remove_favourite" />
 
     </LinearLayout>

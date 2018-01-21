@@ -15,11 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.activity.FilterActivity;
@@ -31,13 +31,14 @@ import kwasilewski.marketplace.helper.MRKSearchView;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.AdService;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SharedPrefUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AdFragment extends Fragment {
+public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener {
 
     private static final int FILTER_ACTIVITY_CODE = 1;
     private static final String LIST_MODE = "mode";
@@ -51,6 +52,7 @@ public class AdFragment extends Fragment {
     private Long sctId = 0L;
     private String priceMin;
     private String priceMax;
+    private String token;
 
     private List<AdMinimalData> ads = new ArrayList<>();
     private AdService adService = RetrofitService.getInstance().getAdService();
@@ -140,7 +142,7 @@ public class AdFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.ad_list_progress);
         recyclerView = view.findViewById(R.id.ad_list_recycler);
-        adapter = new AdListViewAdapter(ads, getContext());
+        adapter = new AdListViewAdapter(ads, getContext(), this, listMode);
         setRecyclerAdapter();
 
         if (listMode == ListModes.NORMAL_MODE) {
@@ -155,6 +157,8 @@ public class AdFragment extends Fragment {
             filterButton.setOnClickListener(listenerFilter);
             View sortByButton = view.findViewById(R.id.ad_list_sort);
             sortByButton.setOnClickListener(listenerSort);
+        } else {
+            token = SharedPrefUtil.getInstance(getContext()).getToken();
         }
 
         return view;
@@ -189,13 +193,19 @@ public class AdFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        filterButton.setEnabled(true);
-        if(ads.size() == 0) pullAds();
+        if (listMode == ListModes.NORMAL_MODE) {
+            filterButton.setEnabled(true);
+        }
+        if(ads.size() == 0) {
+            pullAds();
+        }
     }
 
     @Override
     public void onPause() {
-        if (callAds != null) callAds.cancel();
+        if (callAds != null) {
+            callAds.cancel();
+        }
         super.onPause();
     }
 
@@ -254,13 +264,21 @@ public class AdFragment extends Fragment {
         }
         pullingAds = true;
         showProgress(true);
-        callAds = adService.getAds(getSearchQuery());
+        setAdsCall();
         callAds.enqueue(callbackAds);
     }
 
-    public Map<String, String> getSearchQuery() {
-        Long categoryId = sctId != 0L ? sctId : catId;
-        return MRKUtil.getAdSearchQuery(adapter.getItemCount(), sortingMethod, title, prvId, categoryId, priceMin, priceMax);
+    private void setAdsCall() {
+        if(listMode == ListModes.NORMAL_MODE) {
+            Long categoryId = sctId != 0L ? sctId : catId;
+            callAds = adService.getAds(MRKUtil.getAdSearchQuery(adapter.getItemCount(), sortingMethod, title, prvId, categoryId, priceMin, priceMax));
+        } else if (listMode == ListModes.ACTIVE_MODE) {
+            callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), true));
+        } else if (listMode == ListModes.INACTIVE_MODE) {
+            callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), false));
+        } else if (listMode == ListModes.FAVOURITE_MODE) {
+            callAds = adService.getUserFavourites(token, MRKUtil.getFavouriteAdSearchQuery(adapter.getItemCount()));
+        }
     }
 
     private void addAdsToAdapter(List<AdMinimalData> newAds) {
@@ -385,15 +403,36 @@ public class AdFragment extends Fragment {
         }
     }
 
+    @Override
+    public void editAd(final Long id) {
+        //go to editActivity
+    }
+
+    @Override
+    public void refreshAd(final Long id, final Button button) {
+        button.setEnabled(false);
+        System.out.println("2");
+    }
+
+    @Override
+    public void changeAdStatus(final Long id, final int position) {
+        ads.remove(position);
+        adapter.notifyDataSetChanged();
+        System.out.println("3");
+    }
+
+    @Override
+    public void removeFavourite(final Long id, final int position) {
+        System.out.println("4");
+    }
+
     public interface ListModes {
         int NORMAL_MODE = 1;
-        int ACITVE_MODE = 2;
+        int ACTIVE_MODE = 2;
         int INACTIVE_MODE = 3;
         int FAVOURITE_MODE = 4;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Long id);
-    }
+
 
 }

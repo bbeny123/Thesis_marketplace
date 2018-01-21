@@ -147,9 +147,7 @@ public class MRKUtil {
     }
 
     public static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax) {
-        Map<String, String> searchQuery = new HashMap<>();
-        searchQuery.put("offset", String.valueOf(offset));
-        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
+        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
         searchQuery.put("sortingMethod", String.valueOf(sortingMethod));
         if (!TextUtils.isEmpty(title)) {
             searchQuery.put("title", title);
@@ -168,6 +166,22 @@ public class MRKUtil {
         }
         return searchQuery;
     }
+
+    public static Map<String, String> getUserAdSearchQuery(int offset, boolean active) {
+        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
+        if(!active) {
+            searchQuery.put("active", "false");
+        }
+        return searchQuery;
+    }
+
+    public static Map<String, String> getFavouriteAdSearchQuery(int offset) {
+        Map<String, String> searchQuery = new HashMap<>();
+        searchQuery.put("offset", String.valueOf(offset));
+        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
+        return searchQuery;
+    }
+
 
     public static TextWatcher getTextWatcherPositiveNumber() {
         return new TextWatcher() {

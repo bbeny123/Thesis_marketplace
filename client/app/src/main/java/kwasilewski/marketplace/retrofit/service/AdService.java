@@ -7,7 +7,6 @@ import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
-import kwasilewski.marketplace.dto.ad.ListSearchData;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -37,7 +36,7 @@ public interface AdService {
     Call<ResponseBody> changeUserAdStaus(@Header("token") String token, @Path("id") Long id);
 
     @GET(AppConstants.USER_FAVOURITES_PATH)
-    Call<List<AdMinimalData>> getUserFavourites(@Header("token") String token, @Body ListSearchData search);
+    Call<List<AdMinimalData>> getUserFavourites(@Header("token") String token, @QueryMap Map<String, String> params);
 
     @GET(AppConstants.ADS_PATH)
     Call<List<AdMinimalData>> getAds(@QueryMap Map<String, String> params);

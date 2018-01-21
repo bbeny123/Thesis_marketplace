@@ -2,10 +2,12 @@ package kwasilewski.marketplace.helper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,16 +18,21 @@ import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.activity.AdActivity;
 import kwasilewski.marketplace.configuration.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
+import kwasilewski.marketplace.fragment.AdFragment;
 
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 
     private final List<AdMinimalData> ads;
     private final Context context;
+    private final OnButtonsClickListener listener;
+    private final int listMode;
     private int lastItemPosition = -1;
 
-    public AdListViewAdapter(List<AdMinimalData> ads, Context context) {
+    public AdListViewAdapter(List<AdMinimalData> ads, Context context, OnButtonsClickListener listener, int listMode) {
         this.ads = ads;
         this.context = context;
+        this.listener = listener;
+        this.listMode = listMode;
     }
 
     @Override
@@ -35,22 +42,44 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.setAd(ads.get(position));
-        holder.setTitle();
-        holder.setPrice();
-        holder.setViews();
-        holder.setThumbnail();
+        final AdMinimalData ad = ads.get(position);
+        holder.setTitle(ad.getTitle());
+        holder.setPrice(ad.getPrice());
+        holder.setViews(ad.getViews());
+        holder.setThumbnail(ad.getDecodedMiniature());
+        setListeners(holder, ad.getId(), ad.isRefreshable(), holder.getAdapterPosition());
+        lastItemPosition = holder.getAdapterPosition();
+    }
 
+    private void setListeners(final ViewHolder holder, final Long id, final boolean refreshable, int position) {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AdActivity.class);
-                intent.putExtra(AppConstants.AD_ID_KEY, holder.getAdId());
+                intent.putExtra(AppConstants.AD_ID_KEY, id);
                 context.startActivity(intent);
             }
         });
 
-        lastItemPosition = holder.getAdapterPosition();
+        if(holder.editButton != null) {
+            holder.editButton.setOnClickListener(getEditClickListener(id));
+        }
+        if(holder.refreshButton != null) {
+            if (refreshable) {
+                holder.refreshButton.setOnClickListener(getRefreshClickListener(id, holder.refreshButton));
+            } else {
+                holder.refreshButton.setEnabled(false);
+            }
+        }
+
+        if(holder.statusButton != null) {
+            holder.statusButton.setOnClickListener(getStatusClickListener(id, position));
+        }
+
+        if(holder.favouriteButton != null) {
+            holder.favouriteButton.setOnClickListener(getFavouriteClickListener(id, position));
+        }
+
     }
 
     @Override
@@ -63,12 +92,15 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private AdMinimalData ad;
         private final View view;
         private final TextView title;
         private final TextView price;
         private final TextView views;
         private final ImageView thumbnail;
+        private final Button editButton;
+        private final Button refreshButton;
+        private final Button statusButton;
+        private final Button favouriteButton;
 
         ViewHolder(View view) {
             super(view);
@@ -77,33 +109,101 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
             price = view.findViewById(R.id.ad_list_price);
             views = view.findViewById(R.id.ad_list_views);
             thumbnail = view.findViewById(R.id.ad_list_thumbnail);
-        }
 
-        private Long getAdId() {
-            return ad.getId();
-        }
-
-        private void setAd(AdMinimalData ad) {
-            this.ad = ad;
-        }
-
-        private void setTitle() {
-            this.title.setText(ad.getTitle());
-        }
-
-        private void setPrice() {
-            this.price.setText(String.format(context.getString(R.string.ad_price_text), ad.getPrice()));
-        }
-
-        private void setViews() {
-            this.views.setText(String.format(Locale.getDefault(), "%d", ad.getViews()));
-        }
-
-        private void setThumbnail() {
-            if(ad.getMiniature() != null) {
-                this.thumbnail.setImageBitmap(ad.getDecodedMiniature());
+            if (listMode == AdFragment.ListModes.ACTIVE_MODE) {
+                View buttonsContainer = view.findViewById(R.id.ad_list_active_buttons);
+                buttonsContainer.setVisibility(View.VISIBLE);
+                editButton = view.findViewById(R.id.ad_list_active_edit);
+                refreshButton = view.findViewById(R.id.ad_list_active_refresh);
+                statusButton = view.findViewById(R.id.ad_list_active_finish);
+                favouriteButton = null;
+            } else if (listMode == AdFragment.ListModes.INACTIVE_MODE) {
+                View buttonsContainer = view.findViewById(R.id.ad_list_inactive_buttons);
+                buttonsContainer.setVisibility(View.VISIBLE);
+                editButton = view.findViewById(R.id.ad_list_inactive_edit);
+                refreshButton = null;
+                statusButton = view.findViewById(R.id.ad_list_inactive_activate);
+                favouriteButton = null;
+            } else if (listMode == AdFragment.ListModes.FAVOURITE_MODE) {
+                View buttonsContainer = view.findViewById(R.id.ad_list_favourite_buttons);
+                buttonsContainer.setVisibility(View.VISIBLE);
+                editButton = null;
+                refreshButton = null;
+                statusButton = null;
+                favouriteButton = view.findViewById(R.id.ad_list_favourite_remove);
+            } else {
+                editButton = null;
+                refreshButton = null;
+                statusButton = null;
+                favouriteButton = null;
             }
         }
+
+        private void setTitle(String title) {
+            this.title.setText(title);
+        }
+
+        private void setPrice(Long price) {
+            this.price.setText(String.format(context.getString(R.string.ad_price_text), price));
+        }
+
+        private void setViews(Long views) {
+            this.views.setText(String.format(Locale.getDefault(), "%d", views));
+        }
+
+        private void setThumbnail(Bitmap bitmap) {
+            if(bitmap != null) {
+                this.thumbnail.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    private View.OnClickListener getEditClickListener(final Long id) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.editAd(id);
+            }
+        };
+    }
+
+    private View.OnClickListener getRefreshClickListener(final Long id, final Button button) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.refreshAd(id, button);
+            }
+        };
+    }
+
+    private View.OnClickListener getStatusClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.changeAdStatus(id, position);
+            }
+        };
+    }
+
+    private View.OnClickListener getFavouriteClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.removeFavourite(id, position);
+            }
+        };
+    }
+
+    public interface OnButtonsClickListener {
+
+        void editAd(final Long id);
+
+        void refreshAd(final Long id, final Button button);
+
+        void changeAdStatus(final Long id, final int position);
+
+        void removeFavourite(final Long id, final int position);
+
     }
 
 }

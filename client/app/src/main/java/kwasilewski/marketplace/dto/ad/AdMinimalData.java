@@ -11,6 +11,7 @@ public class AdMinimalData {
     private Long price;
     private Long views;
     private String miniature;
+    protected boolean refreshable;
 
     public AdMinimalData() {
     }
@@ -67,6 +68,14 @@ public class AdMinimalData {
 
     public void setMiniature(String miniature) {
         this.miniature = miniature;
+    }
+
+    public boolean isRefreshable() {
+        return refreshable;
+    }
+
+    public void setRefreshable(boolean refreshable) {
+        this.refreshable = refreshable;
     }
 
     public Bitmap getDecodedMiniature() {

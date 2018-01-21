@@ -4,14 +4,16 @@ import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
-import kwasilewski.marketplace.dtoext.HintDataExt;
 import kwasilewski.marketplace.dtoext.ad.*;
+import kwasilewski.marketplace.dtoext.hint.HintDataExt;
 import kwasilewski.marketplace.dtoext.user.LoginDataExt;
 import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.dtoext.user.UserDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
-import kwasilewski.marketplace.service.*;
+import kwasilewski.marketplace.service.AdService;
+import kwasilewski.marketplace.service.HintService;
+import kwasilewski.marketplace.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,25 +27,21 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/rest")
 public class RESTController extends AbstractRESTController {
 
-    private final ProvinceService provinceService;
     private final HintService hintService;
     private final UserService userService;
     private final AdService adService;
-    private final FavouriteService favouriteService;
 
     @Autowired
-    public RESTController(ProvinceService provinceService, HintService hintService, UserService userService, AdService adService, FavouriteService favouriteService) {
+    public RESTController(HintService hintService, UserService userService, AdService adService) {
         super();
-        this.provinceService = provinceService;
         this.hintService = hintService;
         this.userService = userService;
         this.adService = adService;
-        this.favouriteService = favouriteService;
     }
 
     @RequestMapping(value = "/provinces", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getProvinces() {
-        List<HintDataExt> provinces = provinceService.getAllProvinces().stream().map(HintDataExt::new).collect(Collectors.toList());
+        List<HintDataExt> provinces = hintService.getAllProvinces().stream().map(HintDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(provinces, HttpStatus.OK);
     }
 
@@ -73,7 +71,7 @@ public class RESTController extends AbstractRESTController {
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDataExt> modifyUser(@ServiceContext UserContext ctx, @RequestBody UserDataExt request) throws Exception {
         UserData user = userService.modifyUser(ctx, request.getUserData(ctx));
-        user.setProvince(provinceService.getProvince(user.getPrvId()));
+        user.setProvince(hintService.getProvince(user.getPrvId()));
         return new ResponseEntity<>(new UserDataExt(user), HttpStatus.OK);
     }
 
@@ -121,7 +119,7 @@ public class RESTController extends AbstractRESTController {
 
     @RequestMapping(value = "/user/favourites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findUserFavourites(@ServiceContext UserContext ctx, ListSearchDataExt request) {
-        List<AdMinimalDataExt> ads = favouriteService.findFavourites(ctx, request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());
+        List<AdMinimalDataExt> ads = adService.findFavourites(ctx, request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
@@ -140,13 +138,13 @@ public class RESTController extends AbstractRESTController {
 
     @RequestMapping(value = "/ads/{id}/favourite", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addFavourite(@ServiceContext UserContext ctx, @PathVariable Long id) throws Exception {
-        favouriteService.createFavourite(ctx, id);
+        adService.createFavourite(ctx, id);
         return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value = "/ads/{id}/favourite", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> removeFavourite(@ServiceContext UserContext ctx, @PathVariable Long id) throws Exception {
-        favouriteService.removeFavourite(ctx, id);
+        adService.removeFavourite(ctx, id);
         return ResponseEntity.ok().build();
     }
 

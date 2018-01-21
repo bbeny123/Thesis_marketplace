@@ -52,7 +52,7 @@ public class FavouriteDAO {
         return query.getResultList();
     }
 
-    public FavouriteData find(UserContext ctx, Long adId) throws DataAccessException {
+    private FavouriteData find(UserContext ctx, Long adId) throws DataAccessException {
         String queryStr = "SELECT fav FROM FavouriteData fav WHERE fav.adId = :adId AND fav.usrId = :usrId";
         TypedQuery<FavouriteData> query = this.em.createQuery(queryStr, FavouriteData.class);
         query.setParameter("adId", adId);

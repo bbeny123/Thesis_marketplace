@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.dtoext;
+package kwasilewski.marketplace.dtoext.hint;
 
 import kwasilewski.marketplace.dto.CategoryData;
 

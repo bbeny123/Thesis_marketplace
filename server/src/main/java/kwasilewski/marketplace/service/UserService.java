@@ -50,6 +50,10 @@ public class UserService {
         return user;
     }
 
+    public UserData checkToken(String token) throws DataAccessException, MKTException {
+        return tokenDAO.check(token);
+    }
+
     public List<UserData> getAllUsers(UserContext ctx) throws DataAccessException, MKTException {
         return userDAO.getAll(ctx);
     }

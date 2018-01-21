@@ -3,10 +3,11 @@ package kwasilewski.marketplace.configuration.context;
 import io.jsonwebtoken.SignatureException;
 import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.errors.MKTException;
-import kwasilewski.marketplace.service.TokenService;
+import kwasilewski.marketplace.service.UserService;
 import kwasilewski.marketplace.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -16,11 +17,12 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class ServiceContextArgumentResolver extends AbstractHandlerMethodArgumentResolver {
 
-    private final TokenService tokenService;
+    private final UserService userService;
     private final Logger logger;
 
-    public ServiceContextArgumentResolver(TokenService tokenService) {
-        this.tokenService = tokenService;
+    @Autowired
+    public ServiceContextArgumentResolver(UserService userService) {
+        this.userService = userService;
         this.logger = LogManager.getLogger(ServiceContextArgumentResolver.class);
     }
 
@@ -36,7 +38,7 @@ public class ServiceContextArgumentResolver extends AbstractHandlerMethodArgumen
         if (token != null) {
             try {
                 ctx.setUserId(JwtTokenUtil.getIdFromToken(token));
-                ctx.changeUser(tokenService.checkToken(token));
+                ctx.changeUser(userService.checkToken(token));
             } catch (SignatureException | MKTException e) {
                 logger.warn("resolveArgument", "Invalid JwtToken");
             }

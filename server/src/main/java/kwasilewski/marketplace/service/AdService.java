@@ -5,7 +5,9 @@ import kwasilewski.marketplace.dao.AdDAO;
 import kwasilewski.marketplace.dao.FavouriteDAO;
 import kwasilewski.marketplace.dao.PhotoDAO;
 import kwasilewski.marketplace.dto.AdData;
+import kwasilewski.marketplace.dto.PhotoData;
 import kwasilewski.marketplace.dtoext.ad.AdSearchDataExt;
+import kwasilewski.marketplace.dtoext.ad.ListSearchDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,27 @@ public class AdService {
         List<AdData> ads = adDAO.find(ctx, criteria);
         ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ctx, ad.getId())));
         return ads;
+    }
+
+    public void createFavourite(UserContext ctx, Long adId) throws DataAccessException, MKTException {
+        AdData ad = adDAO.find(adId, false);
+        if (ad == null)
+            throw new MKTException(MKTError.AD_NOT_EXISTS);
+        favouriteDAO.create(ctx, ad);
+    }
+
+    public void removeFavourite(UserContext ctx, Long adId) throws DataAccessException, MKTException {
+        favouriteDAO.remove(ctx, adId);
+    }
+
+    public List<AdData> findFavourites(UserContext ctx, ListSearchDataExt criteria) throws DataAccessException {
+        List<AdData> ads = favouriteDAO.find(ctx, criteria);
+        ads.forEach(ad -> ad.setMiniature(photoDAO.findMiniature(ad.getId())));
+        return ads;
+    }
+
+    public List<PhotoData> getAllPhotos(UserContext ctx) throws DataAccessException {
+        return photoDAO.getAll(ctx);
     }
 
 }

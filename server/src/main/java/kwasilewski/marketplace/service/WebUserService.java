@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CurrentUserService implements UserDetailsService {
+public class WebUserService implements UserDetailsService {
 
     private final UserService userService;
 
     @Autowired
-    public CurrentUserService(UserService userService) {
+    public WebUserService(UserService userService) {
         this.userService = userService;
     }
 
@@ -22,7 +22,7 @@ public class CurrentUserService implements UserDetailsService {
     public CurrentUserData loadUserByUsername(String email) throws UsernameNotFoundException {
         UserData user = userService.getUser(email);
         if (user == null || !user.isAdmin()) {
-            throw new UsernameNotFoundException(String.format("User with email=%s was not found", email));
+            throw new UsernameNotFoundException(String.format("Admin with email=%s was not found", email));
         }
         return new CurrentUserData(user);
     }

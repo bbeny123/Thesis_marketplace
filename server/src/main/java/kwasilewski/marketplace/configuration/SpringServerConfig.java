@@ -1,8 +1,7 @@
 package kwasilewski.marketplace.configuration;
 
 import kwasilewski.marketplace.configuration.context.ServiceContextArgumentResolver;
-import kwasilewski.marketplace.interceptor.JwtSecuredInterceptor;
-import kwasilewski.marketplace.service.TokenService;
+import kwasilewski.marketplace.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,11 @@ import java.util.List;
 @ComponentScan("kwasilewski.marketplace")
 public class SpringServerConfig extends WebMvcConfigurerAdapter {
 
-    private final TokenService tokenService;
+    private final UserService userService;
 
     @Autowired
-    public SpringServerConfig(TokenService tokenService) {
-        this.tokenService = tokenService;
+    public SpringServerConfig(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class SpringServerConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new ServiceContextArgumentResolver(tokenService));
+        argumentResolvers.add(new ServiceContextArgumentResolver(userService));
     }
 
 }

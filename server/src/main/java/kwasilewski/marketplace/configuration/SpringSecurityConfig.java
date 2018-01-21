@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.configuration;
 
-import kwasilewski.marketplace.service.CurrentUserService;
+import kwasilewski.marketplace.service.WebUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +15,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CurrentUserService userService;
+    private final WebUserService webUserService;
 
     @Autowired
-    public SpringSecurityConfig(CurrentUserService userService) {
-        this.userService = userService;
+    public SpringSecurityConfig(WebUserService webUserService) {
+        this.webUserService = webUserService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userService)
+                .userDetailsService(webUserService)
                 .passwordEncoder(new CustomSHA1PasswordEncoder());
     }
 

@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.interceptor;
+package kwasilewski.marketplace.configuration;
 
 
 import kwasilewski.marketplace.util.JwtTokenUtil;

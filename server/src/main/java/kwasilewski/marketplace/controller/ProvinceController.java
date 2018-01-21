@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.controller;
 
 import kwasilewski.marketplace.dto.ProvinceData;
-import kwasilewski.marketplace.service.ProvinceService;
+import kwasilewski.marketplace.service.HintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,20 +13,20 @@ import java.util.List;
 @Controller
 public class ProvinceController extends AbstractWebController {
 
-    private final ProvinceService provinceService;
+    private final HintService hintService;
 
     @Autowired
-    public ProvinceController(ProvinceService provinceService) {
+    public ProvinceController(HintService hintService) {
         super("provinces");
-        this.provinceService = provinceService;
+        this.hintService = hintService;
     }
 
     @RequestMapping(value = "/provinces", method = RequestMethod.GET)
     public String getProvinceList(Model model) {
-        List<ProvinceData> provinces = provinceService.getAllProvinces();
+        List<ProvinceData> provinces = hintService.getAllProvinces();
         provinces.forEach(prv -> {
-            prv.setUsersNumber(provinceService.getUserNumber(prv.getId()));
-            prv.setAdsNumber(provinceService.getAdsNumber(prv.getId()));
+            prv.setUsersNumber(hintService.getUserNumber(prv.getId()));
+            prv.setAdsNumber(hintService.getAdsNumber(prv.getId()));
         });
         model.addAttribute("provinces", provinces);
         return url;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -35,8 +36,21 @@ public class AdDAO {
     public void changeStatus(UserContext ctx, Long id) throws DataAccessException, MKTException {
         AdData ad = id != null ? find(ctx, id, false) : null;
         if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
+        if(!ad.isActive() && ad.isRefreshable()) {
+            ad.setDate(new Date());
+        }
         ad.setActive(!ad.isActive());
         this.em.merge(ad);
+    }
+
+    @Transactional
+    public void refreshAd(UserContext ctx, Long id) throws DataAccessException, MKTException {
+        AdData ad = id != null ? find(ctx, id, false) : null;
+        if (ad == null) throw new MKTException(MKTError.AD_NOT_EXISTS);
+        if (ad.isRefreshable()) {
+            ad.setDate(new Date());
+            this.em.merge(ad);
+        }
     }
 
     @Transactional

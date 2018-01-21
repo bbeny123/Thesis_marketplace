@@ -9,6 +9,7 @@ public class AdMinimalDataExt {
     protected Long price;
     protected Long views;
     protected String miniature;
+    protected boolean refreshable;
 
     AdMinimalDataExt() {
     }
@@ -19,6 +20,7 @@ public class AdMinimalDataExt {
         this.price = ad.getPrice();
         this.views = ad.getViews();
         this.miniature = ad.getMiniature() != null ? ad.getMiniature().getPhoto() : null;
+        this.refreshable = ad.isRefreshable();
     }
 
     public Long getId() {
@@ -61,4 +63,11 @@ public class AdMinimalDataExt {
         this.miniature = miniature;
     }
 
+    public boolean isRefreshable() {
+        return refreshable;
+    }
+
+    public void setRefreshable(boolean refreshable) {
+        this.refreshable = refreshable;
+    }
 }

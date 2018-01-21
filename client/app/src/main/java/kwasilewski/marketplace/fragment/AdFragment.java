@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.AdService;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +43,9 @@ import static android.app.Activity.RESULT_OK;
 public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener {
 
     private static final int FILTER_ACTIVITY_CODE = 1;
+    private static final int REFRESH_ACTION = 1;
+    private static final int STATUS_ACTION = 2;
+    private static final int FAVOURITE_ACTION = 3;
     private static final String LIST_MODE = "mode";
     private int listMode = ListModes.NORMAL_MODE;
 
@@ -76,7 +81,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             }
         }
     };
-    private boolean pullingAds = false;
+    private Call<ResponseBody> callAd;
+    private boolean callActive = false;
 
     //listeners - init code at the bottom (except recycler)
     RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
@@ -206,6 +212,9 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         if (callAds != null) {
             callAds.cancel();
         }
+        if (callAd != null) {
+            callAd.cancel();
+        }
         super.onPause();
     }
 
@@ -259,10 +268,10 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
 
     private void pullAds() {
-        if (pullingAds) {
+        if (callActive) {
             return;
         }
-        pullingAds = true;
+        callActive = true;
         showProgress(true);
         setAdsCall();
         callAds.enqueue(callbackAds);
@@ -286,8 +295,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
         }
-        showProgress(false);
-        pullingAds = false;
+        endOfCall();
     }
 
     private void showProgress(final boolean show) {
@@ -295,6 +303,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
 
     private void connectionProblem() {
+        showProgress(false);
         MRKUtil.connectionProblem(getActivity());
     }
 
@@ -410,20 +419,17 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void refreshAd(final Long id, final Button button) {
-        button.setEnabled(false);
-        System.out.println("2");
+        changeAd(id, REFRESH_ACTION, 0, button);
     }
 
     @Override
     public void changeAdStatus(final Long id, final int position) {
-        ads.remove(position);
-        adapter.notifyDataSetChanged();
-        System.out.println("3");
+        changeAd(id, STATUS_ACTION, position, null);
     }
 
     @Override
     public void removeFavourite(final Long id, final int position) {
-        System.out.println("4");
+        changeAd(id, FAVOURITE_ACTION, position, null);
     }
 
     public interface ListModes {
@@ -433,6 +439,84 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         int FAVOURITE_MODE = 4;
     }
 
+    private void changeAd(Long id, final int action, final int position, final Button button) {
+        if (callActive) {
+            return;
+        }
+        callActive = true;
+        showProgress(true);
+        setAdCall(action, id);
+        callAd.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    changeSuccess(action, position, button);
+                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                    connectionProblem();
+                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+                    adNotFound(position);
+                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
+                    favouriteNotExists(position);
+                } else {
+                    connectionProblem();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (!call.isCanceled()) connectionProblem();
+            }
+        });
+    }
+
+    private void setAdCall(int action, Long id) {
+        if (action == REFRESH_ACTION) {
+            callAd = adService.refreshAd(token, id);
+        } else if (action == STATUS_ACTION) {
+            callAd = adService.changeUserAdStatus(token, id);
+        } else if (action == FAVOURITE_ACTION) {
+            callAd = adService.removeFavourite(token, id);
+        }
+    }
+
+    private void removeAdFromAdapter(int position) {
+        ads.remove(position);
+        adapter.notifyDataSetChanged();
+        endOfCall();
+    }
+
+    private void changeSuccess(int action, int position, Button button) {
+        if (action == REFRESH_ACTION) {
+            MRKUtil.toast(getActivity(), getString(R.string.toast_ad_refreshed));
+            button.setEnabled(false);
+            endOfCall();
+        } else {
+            if (action == STATUS_ACTION) {
+                if (listMode == ListModes.ACTIVE_MODE) {
+                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_deactivated));
+                } else {
+                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_activated));
+                }
+            } else if (action == FAVOURITE_ACTION) {
+                MRKUtil.toast(getActivity(), getString(R.string.toast_removed_favourite));
+            }
+            removeAdFromAdapter(position);
+        }
+    }
+
+    private void endOfCall() {
+        showProgress(false);
+        callActive = false;
+    }
+
+    private void adNotFound(int position) {
+        removeAdFromAdapter(position);
+        MRKUtil.toast(getActivity(), getString(R.string.toast_ad_not_exist));
+    }
+
+    private void favouriteNotExists(int position) {
+        removeAdFromAdapter(position);
+        MRKUtil.toast(getActivity(), getString(R.string.toast_not_favourite));
+    }
 
 }

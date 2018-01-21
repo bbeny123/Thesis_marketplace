@@ -41,6 +41,10 @@ public class AdService {
         adDAO.changeStatus(ctx, id);
     }
 
+    public void refreshAd(UserContext ctx, Long id) throws DataAccessException, MKTException {
+        adDAO.refreshAd(ctx, id);
+    }
+
     public void removeAd(UserContext ctx, Long id) throws DataAccessException, MKTException {
         adDAO.remove(ctx, id);
     }

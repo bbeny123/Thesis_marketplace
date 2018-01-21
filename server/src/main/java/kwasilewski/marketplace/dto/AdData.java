@@ -1,5 +1,7 @@
 package kwasilewski.marketplace.dto;
 
+import kwasilewski.marketplace.util.AppConstants;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -253,6 +255,10 @@ public class AdData {
 
     public void setFavourites(List<FavouriteData> favourites) {
         this.favourites = favourites;
+    }
+
+    public boolean isRefreshable() {
+        return System.currentTimeMillis() - date.getTime() > AppConstants.DAYS_AFTER_REFRESH_POSSIBLE;
     }
 
     public static String getSortingMethod(int sortingMethod) {

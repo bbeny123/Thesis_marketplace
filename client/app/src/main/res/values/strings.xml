@@ -75,8 +75,8 @@
     <string name="ad_price_text">%1$d PLN</string>
     <string name="ad_location_text">%1$s - %2$s</string>
     <string name="toast_ad_not_available">That ad is no longer available.</string>
-    <string name="toast_added_favourite">Ad added to favourite.</string>
-    <string name="toast_removed_favourite">Ad removed from favourite.</string>
+    <string name="toast_added_favourite">Ad successfully added to favourite.</string>
+    <string name="toast_removed_favourite">Ad successfully removed from favourite.</string>
     <string name="toast_already_favourite">Ad is already favourite.</string>
     <string name="toast_not_favourite">Ad is not favourite.</string>
     <string name="toast_own_add_favourite">Cannot add own ad to favourite.</string>
@@ -96,5 +96,10 @@
     <string name="label_price_from">Price from</string>
     <string name="label_price_to">Price to</string>
     <string name="label_search_button">Search</string>
+
+    <string name="toast_ad_not_exist">That ad does not exist anymore.</string>
+    <string name="toast_ad_refreshed">Ad successfully refreshed.</string>
+    <string name="toast_ad_activated">Ad successfully activated.</string>
+    <string name="toast_ad_deactivated">Ad successfully deactivated.</string>
 
 </resources>

@@ -33,7 +33,10 @@ public interface AdService {
     Call<ResponseBody> modifyUserAd(@Header("token") String token, @Path("id") Long id, @Body AdData ad);
 
     @PATCH(AppConstants.USER_AD_STATUS_PATH)
-    Call<ResponseBody> changeUserAdStaus(@Header("token") String token, @Path("id") Long id);
+    Call<ResponseBody> changeUserAdStatus(@Header("token") String token, @Path("id") Long id);
+
+    @PATCH(AppConstants.USER_AD_REFRESH_PATH)
+    Call<ResponseBody> refreshAd(@Header("token") String token, @Path("id") Long id);
 
     @GET(AppConstants.USER_FAVOURITES_PATH)
     Call<List<AdMinimalData>> getUserFavourites(@Header("token") String token, @QueryMap Map<String, String> params);

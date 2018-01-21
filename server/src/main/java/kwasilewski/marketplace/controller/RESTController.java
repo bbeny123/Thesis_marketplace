@@ -113,6 +113,12 @@ public class RESTController extends AbstractRESTController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/user/ads/{id}/refresh", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> refreshUserAd(@ServiceContext UserContext ctx, @PathVariable Long id) throws Exception {
+        adService.refreshAd(ctx, id);
+        return ResponseEntity.ok().build();
+    }
+
     @RequestMapping(value = "/user/favourites", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findUserFavourites(@ServiceContext UserContext ctx, ListSearchDataExt request) {
         List<AdMinimalDataExt> ads = favouriteService.findFavourites(ctx, request).stream().map(AdMinimalDataExt::new).collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration.context;
+package kwasilewski.marketplace.security.context;
 
 
 import kwasilewski.marketplace.dto.CurrentUserData;

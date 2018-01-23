@@ -1,8 +1,8 @@
 package kwasilewski.marketplace.dtoext.ad;
 
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.PhotoData;
+import kwasilewski.marketplace.security.context.UserContext;
 import kwasilewski.marketplace.util.AppConstants;
 
 import java.util.ArrayList;

@@ -1,10 +1,9 @@
-package kwasilewski.marketplace.configuration.context;
+package kwasilewski.marketplace.security.context;
 
 import io.jsonwebtoken.SignatureException;
-import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.errors.MKTException;
+import kwasilewski.marketplace.security.context.annotation.ServiceContext;
 import kwasilewski.marketplace.service.UserService;
-import kwasilewski.marketplace.util.JwtTokenUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

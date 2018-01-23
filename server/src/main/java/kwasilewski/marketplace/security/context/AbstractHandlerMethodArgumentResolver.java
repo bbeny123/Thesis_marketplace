@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration.context;
+package kwasilewski.marketplace.security.context;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;

@@ -1,8 +1,8 @@
 package kwasilewski.marketplace.dtoext.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
+import kwasilewski.marketplace.security.context.UserContext;
 
 public class UserDataExt extends LoginDataExt {
 

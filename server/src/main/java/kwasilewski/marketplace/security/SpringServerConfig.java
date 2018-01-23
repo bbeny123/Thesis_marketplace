@@ -1,6 +1,6 @@
-package kwasilewski.marketplace.configuration;
+package kwasilewski.marketplace.security;
 
-import kwasilewski.marketplace.configuration.context.ServiceContextArgumentResolver;
+import kwasilewski.marketplace.security.context.ServiceContextArgumentResolver;
 import kwasilewski.marketplace.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;

@@ -1,8 +1,8 @@
 package kwasilewski.marketplace.controller;
 
 
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.CurrentUserData;
+import kwasilewski.marketplace.security.context.UserContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

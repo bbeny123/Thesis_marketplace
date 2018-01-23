@@ -1,6 +1,5 @@
 package kwasilewski.marketplace.service;
 
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dao.AdDAO;
 import kwasilewski.marketplace.dao.FavouriteDAO;
 import kwasilewski.marketplace.dao.PhotoDAO;
@@ -10,6 +9,7 @@ import kwasilewski.marketplace.dtoext.ad.AdSearchDataExt;
 import kwasilewski.marketplace.dtoext.ad.ListSearchDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
+import kwasilewski.marketplace.security.context.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;

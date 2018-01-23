@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration;
+package kwasilewski.marketplace.security;
 
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

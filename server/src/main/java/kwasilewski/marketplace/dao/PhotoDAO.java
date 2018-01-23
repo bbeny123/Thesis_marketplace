@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.dao;
 
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.PhotoData;
+import kwasilewski.marketplace.security.context.UserContext;
 import kwasilewski.marketplace.util.DateTimeUtil;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;

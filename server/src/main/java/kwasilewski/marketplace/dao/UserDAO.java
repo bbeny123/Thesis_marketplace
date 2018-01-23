@@ -1,11 +1,11 @@
 package kwasilewski.marketplace.dao;
 
 
-import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
+import kwasilewski.marketplace.security.context.UserContext;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

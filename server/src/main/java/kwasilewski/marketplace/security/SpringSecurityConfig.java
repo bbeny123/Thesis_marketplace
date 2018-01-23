@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration;
+package kwasilewski.marketplace.security;
 
 import kwasilewski.marketplace.service.WebUserService;
 import org.springframework.beans.factory.annotation.Autowired;

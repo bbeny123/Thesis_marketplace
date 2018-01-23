@@ -1,4 +1,4 @@
-package kwasilewski.marketplace.configuration.context.annotation;
+package kwasilewski.marketplace.security.context.annotation;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

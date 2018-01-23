@@ -1,7 +1,5 @@
 package kwasilewski.marketplace.controller;
 
-import kwasilewski.marketplace.configuration.context.UserContext;
-import kwasilewski.marketplace.configuration.context.annotation.ServiceContext;
 import kwasilewski.marketplace.dto.AdData;
 import kwasilewski.marketplace.dto.UserData;
 import kwasilewski.marketplace.dtoext.ad.*;
@@ -11,6 +9,8 @@ import kwasilewski.marketplace.dtoext.user.PasswordDataExt;
 import kwasilewski.marketplace.dtoext.user.UserDataExt;
 import kwasilewski.marketplace.errors.MKTError;
 import kwasilewski.marketplace.errors.MKTException;
+import kwasilewski.marketplace.security.context.UserContext;
+import kwasilewski.marketplace.security.context.annotation.ServiceContext;
 import kwasilewski.marketplace.service.AdService;
 import kwasilewski.marketplace.service.HintService;
 import kwasilewski.marketplace.service.UserService;

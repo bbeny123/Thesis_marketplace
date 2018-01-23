@@ -39,6 +39,21 @@ public class AdManager {
         this.token = SharedPrefUtil.getInstance(context).getToken();
     }
 
+    private static Map<String, String> getFavouriteAdSearchQuery(int offset) {
+        Map<String, String> searchQuery = new HashMap<>();
+        searchQuery.put("offset", String.valueOf(offset));
+        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
+        return searchQuery;
+    }
+
+    private static Map<String, String> getUserAdSearchQuery(int offset, boolean active) {
+        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
+        if (!active) {
+            searchQuery.put("active", "false");
+        }
+        return searchQuery;
+    }
+
     private static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax) {
         Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
         searchQuery.put("sortingMethod", String.valueOf(sortingMethod));
@@ -57,21 +72,6 @@ public class AdManager {
         if (!TextUtils.isEmpty(priceMax)) {
             searchQuery.put("priceMax", priceMax);
         }
-        return searchQuery;
-    }
-
-    private static Map<String, String> getUserAdSearchQuery(int offset, boolean active) {
-        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
-        if (!active) {
-            searchQuery.put("active", "false");
-        }
-        return searchQuery;
-    }
-
-    private static Map<String, String> getFavouriteAdSearchQuery(int offset) {
-        Map<String, String> searchQuery = new HashMap<>();
-        searchQuery.put("offset", String.valueOf(offset));
-        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
         return searchQuery;
     }
 

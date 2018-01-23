@@ -52,5 +52,5 @@ public interface AdService {
 
     @DELETE(AppConstants.FAVOURITE_PATH)
     Call<ResponseBody> removeFavourite(@Header("token") String token, @Path("id") Long id);
-
+    
 }

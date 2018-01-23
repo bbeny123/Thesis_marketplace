@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.dtoext.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kwasilewski.marketplace.configuration.context.UserContext;
 import kwasilewski.marketplace.dto.UserData;
 
@@ -83,6 +84,7 @@ public class UserDataExt extends LoginDataExt {
         this.token = token;
     }
 
+    @JsonIgnore
     public UserData getUserData() {
         UserData user = new UserData();
         user.setEmail(this.email);

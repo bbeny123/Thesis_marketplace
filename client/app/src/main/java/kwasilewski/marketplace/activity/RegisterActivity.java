@@ -132,7 +132,6 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditText.setError(null);
         passwordEditText.setError(null);
         firstNameEditText.setError(null);
-        lastNameEditText.setError(null);
         cityEditText.setError(null);
         provinceSpinner.setError(null);
         phoneEditText.setError(null);
@@ -166,8 +165,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(firstName)) {
-            lastNameEditText.setError(getString(R.string.error_field_required));
-            focusView = lastNameEditText;
+            firstNameEditText.setError(getString(R.string.error_field_required));
+            focusView = firstNameEditText;
             cancel = true;
         }
 

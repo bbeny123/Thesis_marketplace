@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void checkToken(String token) {
-        callUser = userService.checkToken(token);
+        callUser = userService.validateToken(token);
         callUser.enqueue(new Callback<UserData>() {
             @Override
             public void onResponse(Call<UserData> call, Response<UserData> response) {

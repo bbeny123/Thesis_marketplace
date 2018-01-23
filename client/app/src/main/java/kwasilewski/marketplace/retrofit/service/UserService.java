@@ -1,9 +1,9 @@
 package kwasilewski.marketplace.retrofit.service;
 
-import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.user.LoginData;
 import kwasilewski.marketplace.dto.user.PasswordData;
 import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.util.AppConstants;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

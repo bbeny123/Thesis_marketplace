@@ -1,43 +1,46 @@
 package kwasilewski.marketplace.retrofit;
 
-import java.lang.reflect.Method;
+import android.content.Context;
 
-import okhttp3.ResponseBody;
+import java.net.HttpURLConnection;
+import java.util.function.Consumer;
+
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RetrofitCallback<T> implements Callback<T> {
 
-    private Object object;
-    private Method method;
+    private Consumer<T> function;
+    private Context context;
+    private ErrorListener errorListener;
 
-    public RetrofitCallback(Object object, Method method) {
-        this.object = object;
-        this.method = method;
+    public RetrofitCallback(Consumer<T> function, Context context, ErrorListener errorListener) {
+        this.function = function;
+        this.context = context;
+        this.errorListener = errorListener;
     }
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        if(response.isSuccessful()) {
-            T body = null;
-            if (!(response.body() instanceof ResponseBody)) {
-                body = response.body();
-            }
-            try {
-                method.invoke(object, body);
-            } catch (Exception e) {
-
-                e.printStackTrace();
-            }
+        if (response.isSuccessful()) {
+            function.accept(response.body());
+        } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            errorListener.unauthorized(context);
+        } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
+            errorListener.notAcceptable(context);
+        } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+            errorListener.notFound(context);
+        } else {
+            errorListener.serverError(context);
         }
-
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         if (!call.isCanceled()) {
-
+            errorListener.failure(context);
         }
     }
 

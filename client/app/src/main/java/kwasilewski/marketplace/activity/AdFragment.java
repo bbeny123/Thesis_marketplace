@@ -48,8 +48,9 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private static final int STATUS_ACTION = 2;
     private static final int FAVOURITE_ACTION = 3;
     private static final String LIST_MODE = "mode";
+    private final List<AdMinimalData> ads = new ArrayList<>();
+    private final AdService adService = RetrofitService.getInstance().getAdService();
     private int listMode = ListModes.NORMAL_MODE;
-
     //filter params
     private int sortingMethod = SortingMethod.NEWEST;
     private String title = "";
@@ -59,32 +60,20 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private String priceMin;
     private String priceMax;
     private String token;
-
-    private final List<AdMinimalData> ads = new ArrayList<>();
-    private final AdService adService = RetrofitService.getInstance().getAdService();
     private Call<List<AdMinimalData>> callAds;
-    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
-        @Override
-        public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
-            if (response.isSuccessful()) {
-                addAdsToAdapter(response.body());
-            } else {
-                connectionProblem();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
-            if (!call.isCanceled() && ads.size() == 0) {
-                connectionProblemAtStart();
-            } else {
-                connectionProblem();
-            }
-        }
-    };
     private Call<ResponseBody> callAd;
     private boolean callActive = false;
-
+    private View.OnClickListener listenerFilter;
+    private View.OnClickListener listenerSort;
+    private PopupMenu.OnMenuItemClickListener listenerPopupMenu;
+    private SearchView.OnQueryTextListener listenerSearchQuery;
+    private View.OnClickListener listenerSearchClear;
+    private MenuItemCompat.OnActionExpandListener listenerSearchClose;
+    private View progressBar;
+    private View filterButton;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private AdListViewAdapter adapter;
     //listeners - init code at the bottom (except recycler)
     private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
         private final int threshold = 3;
@@ -105,19 +94,26 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             }
         }
     };
-    private View.OnClickListener listenerFilter;
-    private View.OnClickListener listenerSort;
-    private PopupMenu.OnMenuItemClickListener listenerPopupMenu;
-    private SearchView.OnQueryTextListener listenerSearchQuery;
-    private View.OnClickListener listenerSearchClear;
-    private MenuItemCompat.OnActionExpandListener listenerSearchClose;
-
-    private View progressBar;
-    private View filterButton;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager layoutManager;
-    private AdListViewAdapter adapter;
     private TextView emptyListTextView;
+    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
+        @Override
+        public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
+            if (response.isSuccessful()) {
+                addAdsToAdapter(response.body());
+            } else {
+                connectionProblem();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
+            if (!call.isCanceled() && ads.size() == 0) {
+                connectionProblemAtStart();
+            } else {
+                connectionProblem();
+            }
+        }
+    };
     private TextView filterLabel;
     private TextView filterActiveLabel;
     private TextView sortLabel;
@@ -296,7 +292,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else if (listMode == ListModes.INACTIVE_MODE) {
             callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), false));
         } else if (listMode == ListModes.FAVOURITE_MODE) {
-            callAds = adService.getUserFavourites(token, MRKUtil.getFavouriteAdSearchQuery(adapter.getItemCount()));
+            callAds = adService.getFavourites(token, MRKUtil.getFavouriteAdSearchQuery(adapter.getItemCount()));
         }
     }
     private void addAdsToAdapter(List<AdMinimalData> newAds) {
@@ -457,19 +453,6 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         changeAd(id, FAVOURITE_ACTION, position, null);
     }
 
-    public interface SortingMethod {
-        int NEWEST = 1;
-        int CHEAPEST = 2;
-        int MOSTEXPENSIVE = 3;
-    }
-
-    public interface ListModes {
-        int NORMAL_MODE = 1;
-        int ACTIVE_MODE = 2;
-        int INACTIVE_MODE = 3;
-        int FAVOURITE_MODE = 4;
-    }
-
     private void changeAd(Long id, final int action, final int position, final Button button) {
         if (callActive) {
             return;
@@ -504,7 +487,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         if (action == REFRESH_ACTION) {
             callAd = adService.refreshAd(token, id);
         } else if (action == STATUS_ACTION) {
-            callAd = adService.changeUserAdStatus(token, id);
+            callAd = adService.changeAdStatus(token, id);
         } else if (action == FAVOURITE_ACTION) {
             callAd = adService.removeFavourite(token, id);
         }
@@ -558,6 +541,19 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
             emptyListTextView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
+    }
+
+    public interface ListModes {
+        int NORMAL_MODE = 1;
+        int ACTIVE_MODE = 2;
+        int INACTIVE_MODE = 3;
+        int FAVOURITE_MODE = 4;
     }
 
 }

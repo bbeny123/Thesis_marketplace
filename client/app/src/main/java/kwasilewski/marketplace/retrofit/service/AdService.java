@@ -3,10 +3,10 @@ package kwasilewski.marketplace.retrofit.service;
 import java.util.List;
 import java.util.Map;
 
-import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
+import kwasilewski.marketplace.util.AppConstants;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

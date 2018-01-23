@@ -32,11 +32,11 @@ import retrofit2.Response;
 
 public class ViewActivity extends AppCompatActivity {
 
+    public final static String MODE_KEY = "mode";
+    public final static String POSITION_KEY = "position";
     private final static int NORMAL_MODE = AdFragment.ListModes.NORMAL_MODE;
     private final static int ACTIVE_MODE = AdFragment.ListModes.ACTIVE_MODE;
     private final static int INACTIVE_MODE = AdFragment.ListModes.INACTIVE_MODE;
-    public final static String MODE_KEY = "mode";
-    public final static String POSITION_KEY = "position";
     private Long adId;
     private int mode;
     private AdDetailsData ad;
@@ -325,7 +325,7 @@ public class ViewActivity extends AppCompatActivity {
             return;
         }
         favouriteActionInProgress = true;
-        callFav = adService.changeUserAdStatus(token, adId);
+        callFav = adService.changeAdStatus(token, adId);
         callFav.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -31,11 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.util.AppConstants;
+import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.hint.CategoryData;
 import kwasilewski.marketplace.dto.hint.ComboHintData;
 import kwasilewski.marketplace.dto.hint.HintData;
-import kwasilewski.marketplace.dto.ad.AdData;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.helper.DialogItem;
 import kwasilewski.marketplace.helper.HintSpinner;
@@ -43,6 +42,7 @@ import kwasilewski.marketplace.helper.PhotoView;
 import kwasilewski.marketplace.helper.PhotoViewList;
 import kwasilewski.marketplace.retrofit.RetrofitService;
 import kwasilewski.marketplace.retrofit.service.HintService;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
@@ -55,7 +55,7 @@ public class NewAddActivity extends AppCompatActivity {
     private final String[] PERMISSIONS = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
     private final int PERMISSION_CODE = 1;
     private final int MATISSE_CODE = 2;
-
+    private final PhotoViewList photos = new PhotoViewList();
     private HintService hintService;
     private Call<ResponseBody> callAd;
     private Call<ComboHintData> callHint;
@@ -64,8 +64,6 @@ public class NewAddActivity extends AppCompatActivity {
     private Long selectedSubcategory;
     private boolean addInProgress = false;
     private boolean spinnersSettingInProgress = false;
-
-    private final PhotoViewList photos = new PhotoViewList();
     private View progressBar;
     private View newFormView;
     private TextInputEditText titleEditText;
@@ -434,7 +432,7 @@ public class NewAddActivity extends AppCompatActivity {
     }
 
     private void add(AdData adData) {
-        callAd = RetrofitService.getInstance().getAdService().newAd(SharedPrefUtil.getInstance(this).getToken(), adData);
+        callAd = RetrofitService.getInstance().getAdService().createAd(SharedPrefUtil.getInstance(this).getToken(), adData);
         callAd.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

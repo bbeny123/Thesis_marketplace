@@ -36,12 +36,32 @@ import retrofit2.Response;
 
 public class EditActivity extends AppCompatActivity {
 
-    private final int LOGIN_CODE = 1;
     public final static String POSITION_KEY = "position";
-    private int position;
-
+    private final int LOGIN_CODE = 1;
     private final HintService hintService = RetrofitService.getInstance().getHintService();
+    private int position;
     private Call<ComboHintData> callHint;
+    private Long adId;
+    private AdDetailsData ad;
+    private AdService adService;
+    private Call<AdDetailsData> callAd;
+    private Call<ResponseBody> callModifyAd;
+    private String token;
+    private Long selectedProvince;
+    private Long selectedCategory;
+    private Long selectedSubcategory;
+    private boolean init = false;
+    private boolean addInProgress = false;
+    private View progressBar;
+    private View editForm;
+    private TextInputEditText title;
+    private TextInputEditText price;
+    private TextInputEditText description;
+    private TextInputEditText city;
+    private TextInputEditText phone;
+    private HintSpinner provinceSpinner;
+    private HintSpinner categorySpinner;
+    private HintSpinner subcategorySpinner;
     private final Callback<ComboHintData> callbackHint = new Callback<ComboHintData>() {
         @Override
         public void onResponse(Call<ComboHintData> call, Response<ComboHintData> response) {
@@ -57,18 +77,6 @@ public class EditActivity extends AppCompatActivity {
             if (!call.isCanceled()) connectionProblemAtStart();
         }
     };
-    private Long adId;
-    private AdDetailsData ad;
-    private AdService adService;
-    private Call<AdDetailsData> callAd;
-    private Call<ResponseBody> callModifyAd;
-    private String token;
-    private Long selectedProvince;
-    private Long selectedCategory;
-    private Long selectedSubcategory;
-    private boolean init = false;
-    private boolean addInProgress = false;
-
     private final AdapterView.OnItemClickListener listenerProvince = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -87,16 +95,6 @@ public class EditActivity extends AppCompatActivity {
             selectedSubcategory = spinnerOnClickListener(subcategorySpinner, adapterView.getItemAtPosition(position));
         }
     };
-    private View progressBar;
-    private View editForm;
-    private TextInputEditText title;
-    private TextInputEditText price;
-    private TextInputEditText description;
-    private TextInputEditText city;
-    private TextInputEditText phone;
-    private HintSpinner provinceSpinner;
-    private HintSpinner categorySpinner;
-    private HintSpinner subcategorySpinner;
     private Button saveButton;
 
     @Override
@@ -335,7 +333,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void modifyAd(final AdData adData) {
-        callModifyAd = adService.modifyUserAd(token, adId, adData);
+        callModifyAd = adService.modifyAd(token, adId, adData);
         callModifyAd.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

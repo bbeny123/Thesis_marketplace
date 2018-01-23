@@ -1,43 +1,57 @@
 package kwasilewski.marketplace.retrofit.listener;
 
+import android.util.Log;
+
 import java.util.List;
 
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
+import okhttp3.ResponseBody;
 
 public interface AdListener {
 
-    default void adCreated() {
+    default void adCreated(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled adCreated");
     }
 
-    default void getUserAds(List<AdMinimalData> ads) {
+    default void adModified(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled adModified");
     }
 
-    default void getUserAd(AdDetailsData ad) {
+    default void adStatusChanged(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled adStatusChanged");
     }
 
-    default void modifyUserAd() {
+    default void adRefreshed(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled adRefreshed");
     }
 
-    default void changeUserAdStatus() {
+    default void favouriteAdded(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled favouriteAdded");
     }
 
-    default void refreshAd() {
+    default void favouriteRemoved(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled favouriteRemoved");
     }
 
-    default void getUserFavourites(List<AdMinimalData> ads) {
+    default void adReceived(AdDetailsData ad) {
+        Log.d("RetrofitListener", "Unhandled adReceived");
     }
 
-    default void getAds(List<AdMinimalData> ads) {
+    default void userAdReceived(AdDetailsData ad) {
+        Log.d("RetrofitListener", "Unhandled userAdReceived");
     }
 
-    default void getAd(AdDetailsData ad) {
+    default void adsReceived(List<AdMinimalData> ads) {
+        Log.d("RetrofitListener", "Unhandled adsReceived");
     }
 
-    default void addFavourite() {
+    default void userAdsReceived(List<AdMinimalData> ads) {
+        Log.d("RetrofitListener", "Unhandled userAdsReceived");
     }
 
-    default void removeFavourite() {
+    default void favouritesReceived(List<AdMinimalData> ads) {
+        Log.d("RetrofitListener", "Unhandled favouritesReceived");
     }
 
 }

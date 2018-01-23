@@ -20,37 +20,37 @@ import retrofit2.http.QueryMap;
 
 public interface AdService {
 
-    @POST(AppConstants.USER_ADS_PATH)
-    Call<ResponseBody> newAd(@Header("token") String token, @Body AdData user);
+    @POST(AppConstants.ADS_USER_PATH)
+    Call<ResponseBody> createAd(@Header("token") String token, @Body AdData user);
 
-    @GET(AppConstants.USER_ADS_PATH)
-    Call<List<AdMinimalData>> getUserAds(@Header("token") String token, @QueryMap Map<String, String> params);
+    @PATCH(AppConstants.AD_USER_PATH)
+    Call<ResponseBody> modifyAd(@Header("token") String token, @Path("id") Long id, @Body AdData ad);
 
-    @GET(AppConstants.USER_AD_PATH)
-    Call<AdDetailsData> getUserAd(@Header("token") String token, @Path("id") Long id);
+    @PATCH(AppConstants.AD_STATUS_PATH)
+    Call<ResponseBody> changeAdStatus(@Header("token") String token, @Path("id") Long id);
 
-    @PATCH(AppConstants.USER_AD_PATH)
-    Call<ResponseBody> modifyUserAd(@Header("token") String token, @Path("id") Long id, @Body AdData ad);
-
-    @PATCH(AppConstants.USER_AD_STATUS_PATH)
-    Call<ResponseBody> changeUserAdStatus(@Header("token") String token, @Path("id") Long id);
-
-    @PATCH(AppConstants.USER_AD_REFRESH_PATH)
+    @PATCH(AppConstants.AD_REFRESH_PATH)
     Call<ResponseBody> refreshAd(@Header("token") String token, @Path("id") Long id);
-
-    @GET(AppConstants.USER_FAVOURITES_PATH)
-    Call<List<AdMinimalData>> getUserFavourites(@Header("token") String token, @QueryMap Map<String, String> params);
-
-    @GET(AppConstants.ADS_PATH)
-    Call<List<AdMinimalData>> getAds(@QueryMap Map<String, String> params);
-
-    @GET(AppConstants.AD_PATH)
-    Call<AdDetailsData> getAd(@Path("id") Long id);
 
     @POST(AppConstants.FAVOURITE_PATH)
     Call<ResponseBody> addFavourite(@Header("token") String token, @Path("id") Long id);
 
     @DELETE(AppConstants.FAVOURITE_PATH)
     Call<ResponseBody> removeFavourite(@Header("token") String token, @Path("id") Long id);
-    
+
+    @GET(AppConstants.AD_PATH)
+    Call<AdDetailsData> getAd(@Path("id") Long id);
+
+    @GET(AppConstants.AD_USER_PATH)
+    Call<AdDetailsData> getUserAd(@Header("token") String token, @Path("id") Long id);
+
+    @GET(AppConstants.ADS_PATH)
+    Call<List<AdMinimalData>> getAds(@QueryMap Map<String, String> params);
+
+    @GET(AppConstants.ADS_USER_PATH)
+    Call<List<AdMinimalData>> getUserAds(@Header("token") String token, @QueryMap Map<String, String> params);
+
+    @GET(AppConstants.FAVOURITES_PATH)
+    Call<List<AdMinimalData>> getFavourites(@Header("token") String token, @QueryMap Map<String, String> params);
+
 }

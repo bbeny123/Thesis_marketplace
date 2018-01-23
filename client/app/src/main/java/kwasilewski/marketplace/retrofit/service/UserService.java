@@ -21,7 +21,7 @@ public interface UserService {
     Call<UserData> login(@Body LoginData loginData);
 
     @GET(AppConstants.TOKEN_PATH)
-    Call<UserData> checkToken(@Header("token") String token);
+    Call<UserData> validateToken(@Header("token") String token);
 
     @PATCH(AppConstants.USER_PATH)
     Call<UserData> updateProfile(@Header("token") String token, @Body UserData user);

@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit.manager;
 
-import android.content.Context;
+import android.app.Activity;
 
 import java.util.function.Consumer;
 
@@ -19,17 +19,17 @@ import retrofit2.Call;
 public class UserManager {
 
     private final static UserService userService = RetrofitService.getInstance().getUserService();
-    private Context context;
+    private Activity activity;
     private Call<ResponseBody> call;
     private Call<UserData> callUser;
     private UserListener userListener;
     private String token;
     private ErrorListener errorListener;
 
-    public UserManager(Context context, UserListener userListener, ErrorListener errorListener) {
-        this.context = context;
+    public UserManager(Activity activity, UserListener userListener, ErrorListener errorListener) {
+        this.activity = activity;
         this.userListener = userListener;
-        this.token = SharedPrefUtil.getInstance(context).getToken();
+        this.token = SharedPrefUtil.getInstance(activity).getToken();
         this.errorListener = errorListener;
     }
 
@@ -68,7 +68,7 @@ public class UserManager {
     }
 
     private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function) {
-        return new RetrofitCallback<>(function, context, errorListener);
+        return new RetrofitCallback<>(function, activity, errorListener);
     }
 
 }

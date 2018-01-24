@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit.manager;
 
-import android.content.Context;
+import android.app.Activity;
 import android.text.TextUtils;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import retrofit2.Call;
 public class AdManager {
 
     private final static AdService adService = RetrofitService.getInstance().getAdService();
-    private Context context;
+    private Activity activity;
     private Call<ResponseBody> call;
     private Call<AdDetailsData> callAd;
     private Call<List<AdMinimalData>> callList;
@@ -32,11 +32,11 @@ public class AdManager {
     private ErrorListener errorListener;
     private String token;
 
-    public AdManager(Context context, AdListener adListener, ErrorListener errorListener) {
-        this.context = context;
+    public AdManager(Activity activity, AdListener adListener, ErrorListener errorListener) {
+        this.activity = activity;
         this.adListener = adListener;
         this.errorListener = errorListener;
-        this.token = SharedPrefUtil.getInstance(context).getToken();
+        this.token = SharedPrefUtil.getInstance(activity).getToken();
     }
 
     private static Map<String, String> getFavouriteAdSearchQuery(int offset) {
@@ -143,7 +143,7 @@ public class AdManager {
     }
 
     private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function) {
-        return new RetrofitCallback<>(function, context, errorListener);
+        return new RetrofitCallback<>(function, activity, errorListener);
     }
 
 }

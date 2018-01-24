@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit;
 
-import android.content.Context;
+import android.app.Activity;
 
 import java.net.HttpURLConnection;
 import java.util.function.Consumer;
@@ -13,12 +13,12 @@ import retrofit2.Response;
 public class RetrofitCallback<T> implements Callback<T> {
 
     private Consumer<T> function;
-    private Context context;
+    private Activity activity;
     private ErrorListener errorListener;
 
-    public RetrofitCallback(Consumer<T> function, Context context, ErrorListener errorListener) {
+    public RetrofitCallback(Consumer<T> function, Activity activity, ErrorListener errorListener) {
         this.function = function;
-        this.context = context;
+        this.activity = activity;
         this.errorListener = errorListener;
     }
 
@@ -27,20 +27,20 @@ public class RetrofitCallback<T> implements Callback<T> {
         if (response.isSuccessful()) {
             function.accept(response.body());
         } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            errorListener.unauthorized(context);
+            errorListener.unauthorized(activity);
         } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-            errorListener.notAcceptable(context);
+            errorListener.notAcceptable(activity);
         } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-            errorListener.notFound(context);
+            errorListener.notFound(activity);
         } else {
-            errorListener.serverError(context);
+            errorListener.serverError(activity);
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         if (!call.isCanceled()) {
-            errorListener.failure(context);
+            errorListener.failure(activity);
         }
     }
 

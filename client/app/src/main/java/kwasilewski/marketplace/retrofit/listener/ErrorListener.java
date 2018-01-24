@@ -1,28 +1,35 @@
 package kwasilewski.marketplace.retrofit.listener;
 
-import android.content.Context;
+import android.app.Activity;
 import android.util.Log;
+
+import kwasilewski.marketplace.util.MRKUtil;
 
 public interface ErrorListener {
 
-    default void unauthorized(Context context) {
-        Log.d("RetrofitListener", "Unhandled hintsReceived");
+    default void unauthorized(Activity activity) {
+        MRKUtil.connectionProblem(activity);
+        Log.d("RetrofitListener", "Unhandled unauthorized");
     }
 
-    default void notAcceptable(Context context) {
-        Log.d("RetrofitListener", "Unhandled provincesReceived");
+    default void notAcceptable(Activity activity) {
+        MRKUtil.connectionProblem(activity);
+        Log.d("RetrofitListener", "Unhandled notAcceptable");
     }
 
-    default void notFound(Context context) {
-        Log.d("RetrofitListener", "Unhandled provincesReceived");
+    default void notFound(Activity activity) {
+        MRKUtil.connectionProblem(activity);
+        Log.d("RetrofitListener", "Unhandled notFound");
     }
 
-    default void serverError(Context context) {
-        Log.d("RetrofitListener", "Unhandled provincesReceived");
+    default void serverError(Activity activity) {
+        MRKUtil.connectionProblem(activity);
+        Log.d("RetrofitListener", "Unhandled serverError");
     }
 
-    default void failure(Context context) {
-        Log.d("RetrofitListener", "Unhandled provincesReceived");
+    default void failure(Activity activity) {
+        MRKUtil.connectionProblem(activity);
+        Log.d("RetrofitListener", "Unhandled failure");
     }
 
 }

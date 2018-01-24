@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.retrofit.manager;
 
-import android.content.Context;
+import android.app.Activity;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -17,14 +17,14 @@ import retrofit2.Call;
 public class HintManager {
 
     private final static HintService hintService = RetrofitService.getInstance().getHintService();
-    private Context context;
+    private Activity activity;
     private Call<ComboHintData> callCombo;
     private Call<List<HintData>> callProvince;
     private HintListener hintListener;
     private ErrorListener errorListener;
 
-    public HintManager(Context context, HintListener hintListener, ErrorListener errorListener) {
-        this.context = context;
+    public HintManager(Activity activity, HintListener hintListener, ErrorListener errorListener) {
+        this.activity = activity;
         this.hintListener = hintListener;
         this.errorListener = errorListener;
     }
@@ -49,7 +49,7 @@ public class HintManager {
     }
 
     private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function) {
-        return new RetrofitCallback<>(function, context, errorListener);
+        return new RetrofitCallback<>(function, activity, errorListener);
     }
 
 }

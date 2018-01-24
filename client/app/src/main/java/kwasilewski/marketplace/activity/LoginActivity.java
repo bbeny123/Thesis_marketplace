@@ -1,37 +1,29 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.net.HttpURLConnection;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.LoginData;
 import kwasilewski.marketplace.dto.user.UserData;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.UserService;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.listener.UserListener;
+import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
+    private UserManager userManager;
     private boolean loginInProgress = false;
-    private UserService userService;
-    private Call<UserData> callUser;
 
     private TextInputEditText emailEditText;
     private TextInputEditText passwordEditText;
@@ -46,36 +38,23 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.login_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        userService = RetrofitService.getInstance().getUserService();
+        userManager = new UserManager(this, this, this);
 
         emailEditText = findViewById(R.id.login_email);
         passwordEditText = findViewById(R.id.login_password);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+        passwordEditText.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (MRKUtil.checkIme(id)) {
+                attemptLogin();
+                return true;
             }
+            return false;
         });
 
         Button signInButton = findViewById(R.id.login_button);
-        signInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptLogin();
-            }
-        });
+        signInButton.setOnClickListener(v -> attemptLogin());
 
         Button registerButton = findViewById(R.id.login_register_button);
-        registerButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToRegister();
-            }
-        });
+        registerButton.setOnClickListener(view -> goToRegister());
 
         loginFormView = findViewById(R.id.login_form);
         progressBar = findViewById(R.id.login_progress);
@@ -83,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if(callUser != null) callUser.cancel();
+        userManager.cancelCalls();
         super.onPause();
     }
 
@@ -147,43 +126,34 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(LoginData loginData) {
-        callUser = userService.login(loginData);
-        callUser.enqueue(new Callback<UserData>() {
-            @Override
-            public void onResponse(Call<UserData> call, Response<UserData> response) {
-                loginInProgress = false;
-                if (response.isSuccessful()) {
-                    loginSuccessful(response.body());
-                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    showProgress(false);
-                    passwordEditText.setError(getString(R.string.error_invalid_password_email));
-                    passwordEditText.requestFocus();
-                } else {
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
+        userManager.login(loginData);
+    }
 
-            @Override
-            public void onFailure(Call<UserData> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    loginInProgress = false;
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
-        });
+    @Override
+    public void logged(UserData user) {
+        loginSuccessful(user);
+        loginInProgress = false;
+    }
+
+    @Override
+    public void unauthorized(Activity activity) {
+        passwordEditText.setError(getString(R.string.error_invalid_password_email));
+        passwordEditText.requestFocus();
+        loginInProgress = false;
+        showProgress(false);
+    }
+
+    @Override
+    public void unhandledError(Activity activity) {
+        loginInProgress = false;
+        showProgress(false);
+        MRKUtil.connectionProblem(this);
     }
 
     private void loginSuccessful(UserData user) {
-        SharedPrefUtil.getInstance(this).saveUserData(user);
-        SharedPrefUtil.getInstance(this).saveToken(user.getToken());
+        SharedPrefUtil.getInstance(this).saveLoginData(user);
         setResult(RESULT_OK);
         finish();
-    }
-
-    private void connectionProblem() {
-        MRKUtil.connectionProblem(this);
     }
 
 }

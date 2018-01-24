@@ -64,6 +64,11 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
         MRKUtil.startNetErrorActivity(activity);
     }
 
+    @Override
+    public void unhandledError(Activity activity) {
+        MRKUtil.startNetErrorActivity(activity);
+    }
+
     private void tokenAuthorized(boolean authorized) {
         if (!authorized) {
             SharedPrefUtil.getInstance(this).removeUserData();

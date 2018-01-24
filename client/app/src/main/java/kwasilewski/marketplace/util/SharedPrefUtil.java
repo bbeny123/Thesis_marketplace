@@ -83,6 +83,11 @@ public class SharedPrefUtil {
         setUserData(user);
     }
 
+    public void saveLoginData(UserData user) {
+        saveUserData(user);
+        saveToken(user.getToken());
+    }
+
     public void removeUserData() {
         removePref(AppConstants.SHARED_PREF_TOKEN);
         removePref(AppConstants.SHARED_PREF_USER);

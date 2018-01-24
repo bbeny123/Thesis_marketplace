@@ -1,29 +1,26 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.net.HttpURLConnection;
-
 import kwasilewski.marketplace.dto.user.UserData;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.UserService;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.listener.UserListener;
+import kwasilewski.marketplace.retrofit.manager.UserManager;
+import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
-    private UserService userService;
-    private Call<UserData> callUser;
+    private UserManager userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.userService = RetrofitService.getInstance().getUserService();
+        userManager = new UserManager(this, this, this);
     }
 
     @Override
@@ -31,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onResume();
         String token = SharedPrefUtil.getInstance(this).getToken();
         if (token != null) {
-            checkToken(token);
+            validateToken();
         } else {
             goToMainActivity();
         }
@@ -39,44 +36,44 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if(callUser != null) callUser.cancel();
+        userManager.cancelCalls();
         super.onPause();
     }
 
-    private void checkToken(String token) {
-        callUser = userService.validateToken(token);
-        callUser.enqueue(new Callback<UserData>() {
-            @Override
-            public void onResponse(Call<UserData> call, Response<UserData> response) {
-                if (response.isSuccessful()) {
-                    tokenAuthorized(true);
-                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    tokenAuthorized(false);
-                } else {
-                    connectionProblem();
-                }
-            }
+    private void validateToken() {
+        userManager.validateToken();
+    }
 
-            @Override
-            public void onFailure(Call<UserData> call, Throwable t) {
-                if (call.isCanceled()) finish();
-                connectionProblem();
-            }
-        });
+    @Override
+    public void tokenValidated(UserData user) {
+        tokenAuthorized(true);
+    }
+
+    @Override
+    public void unauthorized(Activity activity) {
+        tokenAuthorized(false);
+    }
+
+    @Override
+    public void serverError(Activity activity) {
+        MRKUtil.startNetErrorActivity(activity);
+    }
+
+    @Override
+    public void failure(Activity activity) {
+        MRKUtil.startNetErrorActivity(activity);
     }
 
     private void tokenAuthorized(boolean authorized) {
-        if (!authorized) SharedPrefUtil.getInstance(this).removeUserData();
+        if (!authorized) {
+            SharedPrefUtil.getInstance(this).removeUserData();
+        }
         goToMainActivity();
     }
 
     private void goToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
-    }
-
-    private void connectionProblem() {
-        startActivity(new Intent(this, NetErrorActivity.class));
     }
 
 }

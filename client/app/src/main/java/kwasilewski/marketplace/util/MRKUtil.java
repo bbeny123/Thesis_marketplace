@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,12 +34,17 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.activity.NetErrorActivity;
 import kwasilewski.marketplace.helper.DialogItem;
 
 public class MRKUtil {
 
     public static void connectionProblem(final Activity activity) {
         toast(activity, activity.getString(R.string.error_connection_problem));
+    }
+
+    public static void startNetErrorActivity(Context context) {
+        context.startActivity(new Intent(context, NetErrorActivity.class));
     }
 
     public static void toast(final Activity activity, String msg) {

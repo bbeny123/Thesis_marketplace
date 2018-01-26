@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         });
 
         provinceField = findViewById(R.id.register_province);
-        provinceField.setOnItemClickListener((adapter, view, position, l) -> province = MRKUtil.getClickedItemId(adapter, position, provinceField, province));
+        provinceField.setOnItemClickListener((adapter, view, position, l) -> MRKUtil.getClickedItemId(adapter, position, provinceField));
 
         Button singUpButton = findViewById(R.id.register_button);
         singUpButton.setOnClickListener(view -> attemptRegister());

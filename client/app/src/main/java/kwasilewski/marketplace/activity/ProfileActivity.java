@@ -74,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         });
 
         provinceField = findViewById(R.id.profile_province);
-        provinceField.setOnItemClickListener((adapterView, view, position, l) -> province = MRKUtil.getClickedItemId(adapterView, position, provinceField, province));
+        provinceField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, provinceField));
 
         Button modifyButton = findViewById(R.id.profile_modify_button);
         modifyButton.setOnClickListener(view -> attemptModify());

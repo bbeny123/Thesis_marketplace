@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 public class HintSpinner extends AppCompatAutoCompleteTextView {
 
     private boolean isPopup;
+    private Long itemId;
 
     public HintSpinner(Context context) {
         super(context);
@@ -93,4 +94,11 @@ public class HintSpinner extends AppCompatAutoCompleteTextView {
 
     }
 
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
 }

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             prepareActivity();
             MRKUtil.toast(this, getString(R.string.toast_logout_successful));
         } else if (id == R.id.nav_login) {
-            startActivityForResult(new Intent(this, LoginActivity.class), LOGIN_CODE);
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         drawer.closeDrawer(GravityCompat.START);

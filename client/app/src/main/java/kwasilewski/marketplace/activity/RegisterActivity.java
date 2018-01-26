@@ -1,54 +1,46 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 
-import java.net.HttpURLConnection;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.helper.HintSpinner;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.HintService;
-import kwasilewski.marketplace.retrofit.service.UserService;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.listener.HintListener;
+import kwasilewski.marketplace.retrofit.listener.UserListener;
+import kwasilewski.marketplace.retrofit.manager.HintManager;
+import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements UserListener, HintListener, ErrorListener {
 
-    private boolean registerInProgress = false;
-    private UserService userService;
-    private HintService hintService;
-    private Long selectedProvince;
-    private Call<ResponseBody> callUser;
-    private Call<List<HintData>> callHint;
+    private boolean registerOn = false;
+    private HintManager hintManager;
+    private UserManager userManager;
+    private Long province;
 
     private View progressBar;
-    private View registerFormView;
-    private TextInputEditText emailEditText;
-    private TextInputEditText passwordEditText;
-    private TextInputEditText firstNameEditText;
-    private TextInputEditText lastNameEditText;
-    private TextInputEditText cityEditText;
-    private HintSpinner provinceSpinner;
-    private TextInputEditText phoneEditText;
+    private View registerForm;
+    private TextInputEditText emailField;
+    private TextInputEditText passwordField;
+    private TextInputEditText firstNameField;
+    private TextInputEditText lastNameField;
+    private TextInputEditText cityField;
+    private TextInputEditText phoneField;
+    private HintSpinner provinceField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,216 +50,151 @@ public class RegisterActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.register_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        userService = RetrofitService.getInstance().getUserService();
-        hintService = RetrofitService.getInstance().getHintService();
+        hintManager = new HintManager(this, this, new ErrorListener() {
+            @Override
+            public void unhandledError(Activity activity, String error) {
+                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
+            }
+        });
+
+        userManager = new UserManager(this, this, this);
 
         progressBar = findViewById(R.id.register_progress);
-        registerFormView = findViewById(R.id.register_form);
-        emailEditText = findViewById(R.id.register_email);
-        passwordEditText = findViewById(R.id.register_password);
-        firstNameEditText = findViewById(R.id.register_first_name);
-        lastNameEditText = findViewById(R.id.register_last_name);
-        cityEditText = findViewById(R.id.register_city);
-        phoneEditText = findViewById(R.id.register_phone);
-        phoneEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptRegister();
-                    return true;
-                }
-                return false;
+        registerForm = findViewById(R.id.register_form);
+
+        emailField = findViewById(R.id.register_email);
+        passwordField = findViewById(R.id.register_password);
+        firstNameField = findViewById(R.id.register_first_name);
+        lastNameField = findViewById(R.id.register_last_name);
+        cityField = findViewById(R.id.register_city);
+        phoneField = findViewById(R.id.register_phone);
+        phoneField.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (MRKUtil.checkIme(id)) {
+                attemptRegister();
+                return true;
             }
+            return false;
         });
 
-        provinceSpinner = findViewById(R.id.register_province);
-        provinceSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Object item = adapterView.getItemAtPosition(position);
-                if (item instanceof HintData) {
-                    selectedProvince = ((HintData) item).getId();
-                }
-                provinceSpinner.setError(null);
-            }
-        });
+        provinceField = findViewById(R.id.register_province);
+        provinceField.setOnItemClickListener((adapter, view, position, l) -> province = MRKUtil.getClickedItemId(adapter, position, provinceField, province));
 
         Button singUpButton = findViewById(R.id.register_button);
-        singUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptRegister();
-            }
-        });
+        singUpButton.setOnClickListener(view -> attemptRegister());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         showProgress(true);
-        populateProvinceSpinner();
+        hintManager.getProvinces();
     }
 
     @Override
     protected void onPause() {
-        if(callUser != null) callUser.cancel();
-        if(callHint != null) callHint.cancel();
+        hintManager.cancelCalls();
+        userManager.cancelCalls();
         super.onPause();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
+        MRKUtil.backButtonClicked(this, item);
         return super.onOptionsItemSelected(item);
     }
 
     private void attemptRegister() {
-        if (registerInProgress) {
+        if (registerOn) {
             return;
         }
 
-        registerInProgress = true;
-        emailEditText.setError(null);
-        passwordEditText.setError(null);
-        firstNameEditText.setError(null);
-        cityEditText.setError(null);
-        provinceSpinner.setError(null);
-        phoneEditText.setError(null);
+        registerOn = true;
 
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String firstName = firstNameEditText.getText().toString();
-        String lastName = lastNameEditText.getText().toString();
-        String city = cityEditText.getText().toString();
-        String phone = phoneEditText.getText().toString();
+        emailField.setError(null);
+        passwordField.setError(null);
+        firstNameField.setError(null);
+        cityField.setError(null);
+        provinceField.setError(null);
+        phoneField.setError(null);
+
+        String emailText = emailField.getText().toString();
+        String passwordText = passwordField.getText().toString();
+        String firstNameText = firstNameField.getText().toString();
+        String lastNameText = lastNameField.getText().toString();
+        String cityText = cityField.getText().toString();
+        String phoneText = phoneField.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(phone) && !MRKUtil.isPhoneValid(phone)) {
-            phoneEditText.setError(getString(R.string.error_incorrect_phone));
-            focusView = phoneEditText;
+        if (!MRKUtil.isPhoneValid(this, phoneText, phoneField, true)) {
+            focusView = phoneField;
             cancel = true;
         }
 
-        if (selectedProvince == null) {
-            provinceSpinner.setError(getString(R.string.error_field_required));
-            focusView = provinceSpinner;
+        if (MRKUtil.spinnerEmpty(this, province, provinceField)) {
+            focusView = provinceField;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(city)) {
-            cityEditText.setError(getString(R.string.error_field_required));
-            focusView = cityEditText;
+        if (MRKUtil.fieldEmpty(this, cityText, cityField)) {
+            focusView = cityField;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(firstName)) {
-            firstNameEditText.setError(getString(R.string.error_field_required));
-            focusView = firstNameEditText;
+        if (MRKUtil.fieldEmpty(this, firstNameText, firstNameField)) {
+            focusView = firstNameField;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
-            cancel = true;
-        } else if (!MRKUtil.isPasswordValid(password)) {
-            passwordEditText.setError(getString(R.string.error_invalid_password));
-            focusView = passwordEditText;
+        if (!MRKUtil.isPasswordValid(this, passwordText, passwordField)) {
+            focusView = passwordField;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            emailEditText.setError(getString(R.string.error_field_required));
-            focusView = emailEditText;
-            cancel = true;
-        } else if (!MRKUtil.isEmailValid(email)) {
-            emailEditText.setError(getString(R.string.error_invalid_email));
-            focusView = emailEditText;
+        if (!MRKUtil.isEmailValid(this, emailText, emailField)) {
+            focusView = emailField;
             cancel = true;
         }
 
         if (cancel) {
             focusView.requestFocus();
-            registerInProgress = false;
+            registerOn = false;
         } else {
             showProgress(true);
-            register(new UserData(email, MRKUtil.encodePassword(email, password), firstName, lastName, city, selectedProvince, phone));
+            userManager.register(new UserData(emailText, passwordText, firstNameText, lastNameText, cityText, province, phoneText));
         }
     }
 
     private void showProgress(final boolean show) {
-        MRKUtil.showProgressBarHideView(this, registerFormView, progressBar, show);
+        registerOn = show;
+        MRKUtil.showProgressBarHideView(this, registerForm, progressBar, show);
     }
 
-    private void register(UserData userData) {
-        callUser = userService.register(userData);
-        callUser.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                registerInProgress = false;
-                if (response.isSuccessful()) {
-                    registerSuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                    showProgress(false);
-                    emailEditText.setError(getString(R.string.error_email_taken));
-                    emailEditText.requestFocus();
-                } else {
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    registerInProgress = false;
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
-        });
+    @Override
+    public void provincesReceived(List<HintData> provinces) {
+        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, provinces);
+        provinceField.setAdapter(adapter);
+        showProgress(false);
     }
 
-    private void registerSuccess() {
+    @Override
+    public void registered(ResponseBody response) {
         MRKUtil.toast(this, getString(R.string.toast_register_successful));
         finish();
     }
 
-    private void connectionProblem() {
-        MRKUtil.connectionProblem(this);
-    }
-
-    private void connectionProblemAtStart() {
-        startActivity(new Intent(this, NetErrorActivity.class));
-    }
-
-    private void setSpinnerAdapter(List<HintData> hintData) {
-        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, hintData);
-        provinceSpinner.setAdapter(adapter);
+    @Override
+    public void notAcceptable(Activity activity) {
         showProgress(false);
+        emailField.setError(getString(R.string.error_email_taken));
+        emailField.requestFocus();
     }
 
-    private void populateProvinceSpinner() {
-        callHint = hintService.getProvinces();
-        callHint.enqueue(new Callback<List<HintData>>() {
-            @Override
-            public void onResponse(Call<List<HintData>> call, Response<List<HintData>> response) {
-                if (response.isSuccessful()) {
-                    setSpinnerAdapter(response.body());
-                } else {
-                    connectionProblemAtStart();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<HintData>> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblemAtStart();
-            }
-        });
+    @Override
+    public void unhandledError(Activity activity, String error) {
+        showProgress(false);
+        MRKUtil.connectionProblem(this);
     }
 
 }

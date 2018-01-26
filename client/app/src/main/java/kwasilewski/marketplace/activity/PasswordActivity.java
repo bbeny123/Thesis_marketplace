@@ -103,35 +103,24 @@ public class PasswordActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(newPassword)) {
-            newPasswordEditText.setError(getString(R.string.error_field_required));
-            focusView = newPasswordEditText;
-            cancel = true;
-        } else if (!MRKUtil.isPasswordValid(newPassword)) {
-            newPasswordEditText.setError(getString(R.string.error_invalid_password));
+        if (!MRKUtil.isPasswordValid(this, newPassword, newPasswordEditText)) {
             focusView = newPasswordEditText;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(confirmPassword)) {
+        if (MRKUtil.fieldEmpty(this, confirmPassword, confirmPasswordEditText)) {
             confirmPasswordEditText.setError(getString(R.string.error_field_required));
             focusView = confirmPasswordEditText;
             cancel = true;
         }
 
         if (!cancel && !TextUtils.equals(newPassword, confirmPassword)) {
-            newPasswordEditText.setError(getString(R.string.error_passwords_match));
             confirmPasswordEditText.setError(getString(R.string.error_passwords_match));
             focusView = confirmPasswordEditText;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(oldPassword)) {
-            oldPasswordEditText.setError(getString(R.string.error_field_required));
-            focusView = oldPasswordEditText;
-            cancel = true;
-        } else if (!MRKUtil.isPasswordValid(oldPassword)) {
-            oldPasswordEditText.setError(getString(R.string.error_password_match));
+        if (!MRKUtil.isPasswordValid(this, oldPassword, oldPasswordEditText)) {
             focusView = oldPasswordEditText;
             cancel = true;
         }

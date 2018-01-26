@@ -8,32 +8,27 @@ import kwasilewski.marketplace.util.MRKUtil;
 public interface ErrorListener {
 
     default void unauthorized(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled unauthorized");
-        unhandledError(activity);
+        unhandledError(activity, "Unhandled unauthorized");
     }
 
     default void notAcceptable(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled notAcceptable");
-        unhandledError(activity);
+        unhandledError(activity, "Unhandled notAcceptable");
     }
 
     default void notFound(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled notFound");
-        unhandledError(activity);
+        unhandledError(activity, "Unhandled notFound");
     }
 
     default void serverError(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled serverError");
-        unhandledError(activity);
+        unhandledError(activity, "Unhandled serverError");
     }
 
     default void failure(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled failure");
-        unhandledError(activity);
+        unhandledError(activity, "Unhandled failure");
     }
 
-    default void unhandledError(Activity activity) {
-        Log.d("RetrofitListener", "Unhandled error");
+    default void unhandledError(Activity activity, String error) {
+        Log.d("RetrofitListener", error);
         MRKUtil.connectionProblem(activity);
     }
 

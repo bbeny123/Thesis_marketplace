@@ -55,17 +55,7 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
     }
 
     @Override
-    public void serverError(Activity activity) {
-        MRKUtil.startNetErrorActivity(activity);
-    }
-
-    @Override
-    public void failure(Activity activity) {
-        MRKUtil.startNetErrorActivity(activity);
-    }
-
-    @Override
-    public void unhandledError(Activity activity) {
+    public void unhandledError(Activity activity, String error) {
         MRKUtil.startNetErrorActivity(activity);
     }
 

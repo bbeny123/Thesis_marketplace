@@ -1,5 +1,7 @@
 package kwasilewski.marketplace.dto.user;
 
+import kwasilewski.marketplace.util.MRKUtil;
+
 public class LoginData {
 
     private String email;
@@ -10,7 +12,7 @@ public class LoginData {
 
     public LoginData(String email, String password) {
         this.email = email;
-        this.password = password;
+        this.password = MRKUtil.encodePassword(email, password);
     }
 
     public String getEmail() {

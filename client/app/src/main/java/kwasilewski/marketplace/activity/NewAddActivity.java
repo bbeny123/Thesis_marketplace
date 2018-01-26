@@ -382,7 +382,7 @@ public class NewAddActivity extends AppCompatActivity {
             phoneEditText.setError(getString(R.string.error_field_required));
             focusView = phoneEditText;
             cancel = true;
-        } else if (!MRKUtil.isPhoneValid(phone)) {
+        } else if (!MRKUtil.isPhoneValid(this, phone, phoneEditText, true)) {
             phoneEditText.setError(getString(R.string.error_incorrect_phone));
             focusView = phoneEditText;
             cancel = true;

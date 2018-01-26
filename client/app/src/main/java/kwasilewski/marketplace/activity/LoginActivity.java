@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     private TextInputEditText passwordEditText;
     private View progressBar;
     private View loginFormView;
+    private Boolean isClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,9 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         MRKUtil.setToolbar(this, toolbar);
 
         userManager = new UserManager(this, this, this);
+
+        progressBar = findViewById(R.id.login_progress);
+        loginFormView = findViewById(R.id.login_form);
 
         emailEditText = findViewById(R.id.login_email);
         passwordEditText = findViewById(R.id.login_password);
@@ -55,9 +58,12 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
 
         Button registerButton = findViewById(R.id.login_register_button);
         registerButton.setOnClickListener(view -> goToRegister());
+    }
 
-        loginFormView = findViewById(R.id.login_form);
-        progressBar = findViewById(R.id.login_progress);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isClicked = false;
     }
 
     @Override
@@ -68,14 +74,8 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
+        MRKUtil.backButtonClicked(this, item);
         return super.onOptionsItemSelected(item);
-    }
-
-    private void goToRegister() {
-        startActivity(new Intent(this, RegisterActivity.class));
     }
 
     private void attemptLogin() {
@@ -84,30 +84,22 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         }
 
         loginInProgress = true;
+
         emailEditText.setError(null);
         passwordEditText.setError(null);
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
+
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError(getString(R.string.error_field_required));
-            focusView = passwordEditText;
-            cancel = true;
-        } else if (!MRKUtil.isPasswordValid(password)) {
-            passwordEditText.setError(getString(R.string.error_invalid_password));
+        if (!MRKUtil.isPasswordValid(this, password, passwordEditText)) {
             focusView = passwordEditText;
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            emailEditText.setError(getString(R.string.error_field_required));
-            focusView = emailEditText;
-            cancel = true;
-        } else if (!MRKUtil.isEmailValid(email)) {
-            emailEditText.setError(getString(R.string.error_invalid_email));
+        if (!MRKUtil.isEmailValid(this, email, emailEditText)) {
             focusView = emailEditText;
             cancel = true;
         }
@@ -117,7 +109,14 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
             loginInProgress = false;
         } else {
             showProgress(true);
-            login(new LoginData(email, MRKUtil.encodePassword(email, password)));
+            userManager.login((new LoginData(email, password)));
+        }
+    }
+
+    private void goToRegister() {
+        if (!isClicked) {
+            isClicked = true;
+            startActivity(new Intent(this, RegisterActivity.class));
         }
     }
 
@@ -125,35 +124,25 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         MRKUtil.showProgressBarHideView(this, loginFormView, progressBar, show);
     }
 
-    private void login(LoginData loginData) {
-        userManager.login(loginData);
-    }
-
     @Override
     public void logged(UserData user) {
-        loginSuccessful(user);
-        loginInProgress = false;
+        SharedPrefUtil.getInstance(this).saveLoginData(user);
+        finish();
     }
 
     @Override
     public void unauthorized(Activity activity) {
-        passwordEditText.setError(getString(R.string.error_invalid_password_email));
-        passwordEditText.requestFocus();
         loginInProgress = false;
         showProgress(false);
+        passwordEditText.setError(getString(R.string.error_invalid_password_email));
+        passwordEditText.requestFocus();
     }
 
     @Override
-    public void unhandledError(Activity activity) {
+    public void unhandledError(Activity activity, String error) {
         loginInProgress = false;
         showProgress(false);
         MRKUtil.connectionProblem(this);
-    }
-
-    private void loginSuccessful(UserData user) {
-        SharedPrefUtil.getInstance(this).saveLoginData(user);
-        setResult(RESULT_OK);
-        finish();
     }
 
 }

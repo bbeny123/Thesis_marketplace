@@ -402,7 +402,7 @@ public class EditActivity extends AppCompatActivity {
             phone.setError(getString(R.string.error_field_required));
             focusView = phone;
             cancel = true;
-        } else if (!MRKUtil.isPhoneValid(phoneText)) {
+        } else if (!MRKUtil.isPhoneValid(this, phoneText, phone, false)) {
             phone.setError(getString(R.string.error_incorrect_phone));
             focusView = phone;
             cancel = true;

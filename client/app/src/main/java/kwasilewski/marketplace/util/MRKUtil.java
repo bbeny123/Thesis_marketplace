@@ -10,16 +10,19 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -35,7 +38,9 @@ import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.activity.NetErrorActivity;
+import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.helper.DialogItem;
+import kwasilewski.marketplace.helper.HintSpinner;
 
 public class MRKUtil {
 
@@ -105,16 +110,53 @@ public class MRKUtil {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static boolean isEmailValid(String email) {
-        return email.contains("@");
+    public static boolean isEmailValid(Context context, String email, TextInputEditText emailEditText) {
+        if (fieldEmpty(context, email, emailEditText)) {
+            return false;
+        } else if (!email.contains("@")) {
+            emailEditText.setError(context.getString(R.string.error_invalid_email));
+            return false;
+        }
+        return true;
     }
 
-    public static boolean isPasswordValid(String password) {
-        return password.length() > 3;
+    public static boolean isPasswordValid(Context context, String password, TextInputEditText passwordEditText) {
+        if (fieldEmpty(context, password, passwordEditText)) {
+            return false;
+        } else if (password.length() < 4) {
+            passwordEditText.setError(context.getString(R.string.error_invalid_password));
+            return false;
+        }
+        return true;
     }
 
-    public static boolean isPhoneValid(String phone) {
-        return PhoneNumberUtils.isGlobalPhoneNumber(phone);
+    public static boolean fieldEmpty(Context context, String fieldText, TextInputEditText field) {
+        if (TextUtils.isEmpty(fieldText)) {
+            field.setError(context.getString(R.string.error_field_required));
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean spinnerEmpty(Context context, Long selectedItem, HintSpinner spinner) {
+        if (selectedItem == null) {
+            spinner.setError(context.getString(R.string.error_field_required));
+            return true;
+        }
+        return false;
+    }
+
+
+    public static boolean isPhoneValid(Context context, String phoneText, TextInputEditText phone, boolean nullable) {
+        if (nullable && TextUtils.isEmpty(phoneText)) {
+            return true;
+        } else if (fieldEmpty(context, phoneText, phone)) {
+            return false;
+        } else if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneText)) {
+            phone.setError(context.getString(R.string.error_incorrect_phone));
+            return false;
+        }
+        return true;
     }
 
     public static ListAdapter getDialogAdapter(final Context context, final List<DialogItem> items) {
@@ -212,6 +254,21 @@ public class MRKUtil {
 
     public static boolean compareNumericStrings(String s1, String s2) {
         return !s1.isEmpty() && !s2.isEmpty() && Long.parseLong(s1) > Long.parseLong(s2);
+    }
+
+    public static void backButtonClicked(Activity activity, MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            activity.finish();
+        }
+    }
+
+    public static Long getClickedItemId(AdapterView<?> parent, int position, HintSpinner spinner, Long selected) {
+        Object item = parent.getItemAtPosition(position);
+        if (item instanceof HintData) {
+            selected = ((HintData) item).getId();
+        }
+        spinner.setError(null);
+        return selected;
     }
 
 }

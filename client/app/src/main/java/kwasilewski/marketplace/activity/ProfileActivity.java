@@ -204,7 +204,7 @@ public class ProfileActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(phone) && !MRKUtil.isPhoneValid(phone)) {
+        if (!TextUtils.isEmpty(phone) && !MRKUtil.isPhoneValid(this, phone, phoneEditText, false)) {
             phoneEditText.setError(getString(R.string.error_incorrect_phone));
             focusView = phoneEditText;
             cancel = true;

@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
         super.onResume();
         String token = SharedPrefUtil.getInstance(this).getToken();
         if (token != null) {
-            validateToken();
+            userManager.validateToken();
         } else {
             goToMainActivity();
         }
@@ -38,10 +38,6 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
     protected void onPause() {
         userManager.cancelCalls();
         super.onPause();
-    }
-
-    private void validateToken() {
-        userManager.validateToken();
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
     private boolean inProgress = false;
     private HintManager hintManager;
     private UserManager userManager;
-    private Long province;
 
     private View progressBar;
     private View registerForm;
@@ -123,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         String lastName = lastNameField.getText().toString();
         String city = cityField.getText().toString();
         String phone = phoneField.getText().toString();
+        Long province = provinceField.getItemId();
 
         boolean cancel = false;
         View focusView = null;
@@ -173,8 +172,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
 
     @Override
     public void provincesReceived(List<HintData> provinces) {
-        ArrayAdapter<HintData> adapter = new ArrayAdapter<>(this, android.R.layout.simple_selectable_list_item, provinces);
-        provinceField.setAdapter(adapter);
+        MRKUtil.setHintAdapter(this, provinceField, provinces);
         showProgress(false);
     }
 

@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/nav_ads"
+            android:checkable="true"
             android:icon="@drawable/ic_basket"
             android:title="@string/nav_ads" />
     </group>
@@ -15,6 +16,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_favourites"
+                    android:checkable="true"
                     android:icon="@drawable/ic_favorite"
                     android:title="@string/nav_favourites" />
                 <item
@@ -23,10 +25,12 @@
                     android:title="@string/nav_new" />
                 <item
                     android:id="@+id/nav_active"
+                    android:checkable="true"
                     android:icon="@drawable/ic_check"
                     android:title="@string/nav_active" />
                 <item
                     android:id="@+id/nav_inactive"
+                    android:checkable="true"
                     android:icon="@drawable/ic_close_black"
                     android:title="@string/nav_inactive" />
             </menu>

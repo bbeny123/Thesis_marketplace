@@ -1,5 +1,7 @@
 package kwasilewski.marketplace.dto.user;
 
+import kwasilewski.marketplace.util.MRKUtil;
+
 public class PasswordData {
 
     private String oldPassword;
@@ -8,9 +10,9 @@ public class PasswordData {
     public PasswordData() {
     }
 
-    public PasswordData(String oldPassword, String newPassword) {
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
+    public PasswordData(String email, String oldPassword, String newPassword) {
+        this.oldPassword = MRKUtil.encodePassword(email, oldPassword);
+        this.newPassword = MRKUtil.encodePassword(email, newPassword);
     }
 
     public String getOldPassword() {

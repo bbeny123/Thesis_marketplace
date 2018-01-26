@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -9,30 +10,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import java.net.HttpURLConnection;
-
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.PasswordData;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.UserService;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.listener.UserListener;
+import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class PasswordActivity extends AppCompatActivity {
+public class PasswordActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
-    private boolean modifyInProgress = false;
-    private UserService userService;
-    private Call<ResponseBody> callUser;
+    private boolean changingOn = false;
+    private UserManager userManager;
 
     private View progressBar;
-    private View passwordFormView;
-    private TextInputEditText oldPasswordEditText;
-    private TextInputEditText newPasswordEditText;
-    private TextInputEditText confirmPasswordEditText;
+    private View passwordForm;
+    private TextInputEditText oldField;
+    private TextInputEditText newField;
+    private TextInputEditText confirmField;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,127 +37,101 @@ public class PasswordActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.password_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        userService = RetrofitService.getInstance().getUserService();
+        userManager = new UserManager(this, this, this);
 
         progressBar = findViewById(R.id.password_progress);
-        passwordFormView = findViewById(R.id.password_form);
+        passwordForm = findViewById(R.id.password_form);
 
-        oldPasswordEditText = findViewById(R.id.password_old_password);
-        newPasswordEditText = findViewById(R.id.password_new_password);
-        confirmPasswordEditText = findViewById(R.id.password_confirm_password);
+        oldField = findViewById(R.id.password_old_password);
+        newField = findViewById(R.id.password_new_password);
+        confirmField = findViewById(R.id.password_confirm_password);
 
         Button modifyButton = findViewById(R.id.password_modify_button);
-        modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptModify();
-            }
-        });
+        modifyButton.setOnClickListener(view -> attemptModify());
     }
 
     @Override
     protected void onPause() {
-        if(callUser != null) callUser.cancel();
+        userManager.cancelCalls();
         super.onPause();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
+        MRKUtil.backButtonClicked(this, item);
         return super.onOptionsItemSelected(item);
     }
 
     private void showProgress(final boolean show) {
-        MRKUtil.showProgressBarHideView(this, passwordFormView, progressBar, show);
-    }
-
-    private void connectionProblem() {
-        MRKUtil.connectionProblem(this);
-    }
-
-    private void modifySuccess() {
-        MRKUtil.toast(this, getString(R.string.toast_password_changed));
-        finish();
+        changingOn = show;
+        MRKUtil.showProgressBarHideView(this, passwordForm, progressBar, show);
     }
 
     private void attemptModify() {
-        if (modifyInProgress) {
+        if (changingOn) {
             return;
         }
 
-        modifyInProgress = true;
-        oldPasswordEditText.setError(null);
-        newPasswordEditText.setError(null);
-        confirmPasswordEditText.setError(null);
+        changingOn = true;
+        oldField.setError(null);
+        newField.setError(null);
+        confirmField.setError(null);
 
-        String oldPassword = oldPasswordEditText.getText().toString();
-        String newPassword = newPasswordEditText.getText().toString();
-        String confirmPassword = confirmPasswordEditText.getText().toString();
+        String oldText = oldField.getText().toString();
+        String newText = newField.getText().toString();
+        String confirmText = confirmField.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPasswordValid(this, newPassword, newPasswordEditText)) {
-            focusView = newPasswordEditText;
+        if (!MRKUtil.isPasswordValid(this, newText, newField)) {
+            focusView = newField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, confirmPassword, confirmPasswordEditText)) {
-            confirmPasswordEditText.setError(getString(R.string.error_field_required));
-            focusView = confirmPasswordEditText;
+        if (MRKUtil.fieldEmpty(this, confirmText, confirmField)) {
+            focusView = confirmField;
             cancel = true;
         }
 
-        if (!cancel && !TextUtils.equals(newPassword, confirmPassword)) {
-            confirmPasswordEditText.setError(getString(R.string.error_passwords_match));
-            focusView = confirmPasswordEditText;
+        if (!cancel && !TextUtils.equals(newText, confirmText)) {
+            confirmField.setError(getString(R.string.error_passwords_match));
+            focusView = confirmField;
             cancel = true;
         }
 
-        if (!MRKUtil.isPasswordValid(this, oldPassword, oldPasswordEditText)) {
-            focusView = oldPasswordEditText;
+        if (!MRKUtil.isPasswordValid(this, oldText, oldField)) {
+            focusView = oldField;
             cancel = true;
         }
 
         if (cancel) {
             focusView.requestFocus();
-            modifyInProgress = false;
+            changingOn = false;
         } else {
             showProgress(true);
             String email = SharedPrefUtil.getInstance(this).getUserData().getEmail();
-            modify(new PasswordData(MRKUtil.encodePassword(email, oldPassword), MRKUtil.encodePassword(email, newPassword)));
+            userManager.changePassword(new PasswordData(email, oldText, newText));
         }
     }
 
-    private void modify(PasswordData passwordData) {
-        callUser = userService.changePassword(SharedPrefUtil.getInstance(this).getToken(), passwordData);
-        callUser.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                modifyInProgress = false;
-                if (response.isSuccessful()) {
-                    modifySuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                    showProgress(false);
-                    oldPasswordEditText.setError(getString(R.string.error_password_match));
-                    oldPasswordEditText.requestFocus();
-                } else {
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
+    @Override
+    public void passwordChanged(ResponseBody response) {
+        MRKUtil.toast(this, getString(R.string.toast_password_changed));
+        finish();
+    }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) {
-                    modifyInProgress = false;
-                    showProgress(false);
-                    connectionProblem();
-                }
-            }
-        });
+    @Override
+    public void notAcceptable(Activity activity) {
+        showProgress(false);
+        oldField.setError(getString(R.string.error_password_match));
+        oldField.requestFocus();
+    }
+
+    @Override
+    public void unhandledError(Activity activity, String error) {
+        showProgress(false);
+        MRKUtil.connectionProblem(this);
     }
 
 }

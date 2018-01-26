@@ -21,14 +21,15 @@ import kwasilewski.marketplace.util.SharedPrefUtil;
 
 public class LoginActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
-    private UserManager userManager;
     private boolean loginInProgress = false;
+    private boolean clicked = false;
+    private UserManager userManager;
 
     private TextInputEditText emailEditText;
     private TextInputEditText passwordEditText;
     private View progressBar;
     private View loginFormView;
-    private Boolean isClicked = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     @Override
     protected void onResume() {
         super.onResume();
-        isClicked = false;
+        clicked = false;
     }
 
     @Override
@@ -114,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     }
 
     private void goToRegister() {
-        if (!isClicked) {
-            isClicked = true;
+        if (!clicked) {
+            clicked = true;
             startActivity(new Intent(this, RegisterActivity.class));
         }
     }

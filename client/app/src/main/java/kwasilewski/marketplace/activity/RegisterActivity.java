@@ -27,7 +27,7 @@ import okhttp3.ResponseBody;
 
 public class RegisterActivity extends AppCompatActivity implements UserListener, HintListener, ErrorListener {
 
-    private boolean registerOn = false;
+    private boolean inProgress = false;
     private HintManager hintManager;
     private UserManager userManager;
     private Long province;
@@ -104,11 +104,11 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
     }
 
     private void attemptRegister() {
-        if (registerOn) {
+        if (inProgress) {
             return;
         }
 
-        registerOn = true;
+        inProgress = true;
 
         emailField.setError(null);
         passwordField.setError(null);
@@ -117,17 +117,17 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         provinceField.setError(null);
         phoneField.setError(null);
 
-        String emailText = emailField.getText().toString();
-        String passwordText = passwordField.getText().toString();
-        String firstNameText = firstNameField.getText().toString();
-        String lastNameText = lastNameField.getText().toString();
-        String cityText = cityField.getText().toString();
-        String phoneText = phoneField.getText().toString();
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+        String firstName = firstNameField.getText().toString();
+        String lastName = lastNameField.getText().toString();
+        String city = cityField.getText().toString();
+        String phone = phoneField.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPhoneValid(this, phoneText, phoneField, true)) {
+        if (!MRKUtil.isPhoneValid(this, phone, phoneField, true)) {
             focusView = phoneField;
             cancel = true;
         }
@@ -137,37 +137,37 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, cityText, cityField)) {
+        if (MRKUtil.fieldEmpty(this, city, cityField)) {
             focusView = cityField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, firstNameText, firstNameField)) {
+        if (MRKUtil.fieldEmpty(this, firstName, firstNameField)) {
             focusView = firstNameField;
             cancel = true;
         }
 
-        if (!MRKUtil.isPasswordValid(this, passwordText, passwordField)) {
+        if (!MRKUtil.isPasswordValid(this, password, passwordField)) {
             focusView = passwordField;
             cancel = true;
         }
 
-        if (!MRKUtil.isEmailValid(this, emailText, emailField)) {
+        if (!MRKUtil.isEmailValid(this, email, emailField)) {
             focusView = emailField;
             cancel = true;
         }
 
         if (cancel) {
             focusView.requestFocus();
-            registerOn = false;
+            inProgress = false;
         } else {
             showProgress(true);
-            userManager.register(new UserData(emailText, passwordText, firstNameText, lastNameText, cityText, province, phoneText));
+            userManager.register(new UserData(email, password, firstName, lastName, city, province, phone));
         }
     }
 
     private void showProgress(final boolean show) {
-        registerOn = show;
+        inProgress = show;
         MRKUtil.showProgressBarHideView(this, registerForm, progressBar, show);
     }
 

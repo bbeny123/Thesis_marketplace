@@ -8,6 +8,7 @@ public class AdDetailsData extends AdData {
     private String category;
     private String subcategory;
     private boolean favourite;
+    private boolean owner;
 
     public AdDetailsData() {
     }
@@ -58,5 +59,13 @@ public class AdDetailsData extends AdData {
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
     }
 }

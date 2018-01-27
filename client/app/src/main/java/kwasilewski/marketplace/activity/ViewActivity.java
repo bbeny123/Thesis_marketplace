@@ -29,40 +29,33 @@ import okhttp3.ResponseBody;
 
 public class ViewActivity extends AppCompatActivity implements AdListener, ErrorListener {
 
-    public final static String MODE_KEY = "mode";
-    public final static String POSITION_KEY = "position";
-    private final static int NORMAL_MODE = AdFragment.ListModes.NORMAL_MODE;
-    private final static int ACTIVE_MODE = AdFragment.ListModes.ACTIVE_MODE;
-    private final static int INACTIVE_MODE = AdFragment.ListModes.INACTIVE_MODE;
+    private int position;
     private Long adId;
-    private int mode;
-    private AdDetailsData ad;
 
     private boolean inProgress = false;
     private AdManager adManager;
-
+    private AdDetailsData ad;
     private String token;
-    private boolean favourite = false;
-    private boolean active = false;
-    private int position;
 
     private View progressBar;
-    private View adFormView;
+    private View adForm;
     private TextView priceText;
     private TextView titleText;
     private TextView descriptionText;
-    private TextView sellerNameText;
-    private TextView sellerLocationText;
+    private TextView nameText;
+    private TextView locationText;
     private TextView phoneText;
     private TextView emailText;
     private TextView viewsText;
     private Button favouriteButton;
     private Button refreshButton;
+    private Button editButton;
     private Button statusButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         if (extras == null){
             finish();
@@ -72,9 +65,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         setContentView(R.layout.activity_view);
 
         adId = extras.getLong(AppConstants.AD_ID_KEY);
-        position = extras.getInt(POSITION_KEY);
-        mode = extras.getInt(MODE_KEY);
-
+        position = extras.getInt(AppConstants.AD_POSITION);
 
         Toolbar toolbar = findViewById(R.id.ad_toolbar);
         MRKUtil.setToolbar(this, toolbar);
@@ -83,74 +74,26 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         token = SharedPrefUtil.getInstance(this).getToken();
 
         progressBar = findViewById(R.id.ad_progress);
-        adFormView = findViewById(R.id.ad_form);
+        adForm = findViewById(R.id.ad_form);
         priceText = findViewById(R.id.ad_price);
         titleText = findViewById(R.id.ad_title);
         descriptionText = findViewById(R.id.ad_description);
-        sellerNameText = findViewById(R.id.ad_user_name);
-        sellerLocationText = findViewById(R.id.ad_location);
+        nameText = findViewById(R.id.ad_user_name);
+        locationText = findViewById(R.id.ad_location);
         phoneText = findViewById(R.id.ad_phone);
         emailText = findViewById(R.id.ad_email);
         viewsText = findViewById(R.id.ad_views);
 
         favouriteButton = findViewById(R.id.view_favourite_button);
         refreshButton = findViewById(R.id.view_refresh_button);
+        editButton = findViewById(R.id.view_edit_button);
         statusButton = findViewById(R.id.view_status_button);
-
-    }
-
-    private void initButtons() {
-        if(token == null) {
-            statusButton.setVisibility(View.GONE);
-            favouriteButton.setVisibility(View.GONE);
-            refreshButton.setVisibility(View.GONE);
-            return;
-        }
-        if (mode == ACTIVE_MODE || mode == INACTIVE_MODE) {
-            statusButton.setVisibility(View.VISIBLE);
-            setStatusButtonText();
-        }  else {
-            statusButton.setVisibility(View.GONE);
-        }
-        if (mode == NORMAL_MODE) {
-            favouriteButton.setVisibility(View.VISIBLE);
-            setFavouriteButtonText();
-        } else {
-            favouriteButton.setVisibility(View.GONE);
-        }
-        if(mode == ACTIVE_MODE) {
-            refreshButton.setVisibility(View.VISIBLE);
-            refreshButton.setEnabled(ad.isRefreshable());
-        } else {
-            refreshButton.setVisibility(View.GONE);
-        }
-        setButtonListeners();
-    }
-
-    private void setButtonListeners() {
-        if (favouriteButton.getVisibility() == View.VISIBLE) {
-            favouriteButton.setOnClickListener(v -> favouriteAction());
-        }
-        if (refreshButton.getVisibility() == View.VISIBLE) {
-            refreshButton.setOnClickListener(v -> adManager.refreshAd(adId, this));
-        }
-        if (statusButton.getVisibility() == View.VISIBLE) {
-            statusButton.setOnClickListener(v -> adManager.changeAdStatus(adId, this));
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (ad == null) {
-            showProgress(true);
-            adManager.getAd(adId, new ErrorListener() {
-                @Override
-                public void unauthorized(Activity activity) {
-                    addNotExists();
-                }
-            });
-        }
+        pullAd();
     }
 
     @Override
@@ -160,55 +103,31 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong(AppConstants.AD_ID_KEY, adId);
+        outState.putInt(AppConstants.AD_POSITION, position);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putLong(AppConstants.AD_ID_KEY, adId);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        MRKUtil.backButtonClicked(this, item);
+        return super.onOptionsItemSelected(item);
     }
 
-    private void setFavouriteButtonText() {
-        if(favourite) {
-            favouriteButton.setText(getString(R.string.action_ad_remove_favourite));
-        } else {
-            favouriteButton.setText(getString(R.string.action_ad_favourite));
-        }
+    private void showProgress(final boolean show) {
+        inProgress = show;
+        MRKUtil.showProgressBarHideView(this, adForm, progressBar, show);
     }
 
-    private void setStatusButtonText() {
-        if(active) {
-            statusButton.setText(getString(R.string.action_finish));
-        } else {
-            statusButton.setText(getString(R.string.action_activate));
-        }
-    }
-
-    private void setAdData() {
-        favourite = ad.isFavourite();
-        active = ad.isActive();
-        initButtons();
-        setPhotoAdapter();
-
-        priceText.setText(String.format(getString(R.string.ad_price_text), ad.getPrice()));
-        titleText.setText(ad.getTitle());
-        if(TextUtils.isEmpty(ad.getDescription())) {
-            View descriptionForm = findViewById(R.id.ad_description_form);
-            descriptionForm.setVisibility(View.GONE);
-        } else {
-            descriptionText.setText(ad.getDescription());
-        }
-        sellerNameText.setText(ad.getUserName());
-        sellerLocationText.setText(String.format(getString(R.string.ad_location_text), ad.getCity(), ad.getProvince()));
-        phoneText.setText(ad.getPhone());
-        emailText.setText(ad.getEmail());
-        viewsText.setText(ad.getViews());
-        showProgress(false);
+    private void pullAd() {
+        showProgress(true);
+        adManager.pullAd(adId, new ErrorListener() {
+            @Override
+            public void notFound(Activity activity) {
+                addNotExists();
+            }
+        });
     }
 
     private void setPhotoAdapter() {
@@ -226,20 +145,88 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         indicator.setViewPager(viewPager);
     }
 
+    private void initButtons() {
+        editButton.setVisibility(token != null && ad.isOwner() ? View.VISIBLE : View.GONE);
+        statusButton.setVisibility(token != null && ad.isOwner() ? View.VISIBLE : View.GONE);
+        refreshButton.setVisibility(token != null && ad.isOwner() ? View.VISIBLE : View.GONE);
+        favouriteButton.setVisibility(token != null && !ad.isOwner() ? View.VISIBLE : View.GONE);
+        if (token == null) {
+            return;
+        }
+        if (ad.isOwner()) {
+            refreshButton.setEnabled(ad.isRefreshable());
+            refreshButton.setOnClickListener(v -> refresh());
+            editButton.setOnClickListener(v -> edit());
+            statusButton.setOnClickListener(v -> changeStatus());
+            setStatusButtonText();
+        } else {
+            favouriteButton.setOnClickListener(v -> favouriteAction());
+            setFavouriteButtonText();
+        }
+    }
+
+    private void favouriteAction() {
+        if (!inProgress) {
+            inProgress = true;
+            if (ad.isFavourite()) {
+                adManager.removeFavourite(adId, this);
+            } else {
+                adManager.addFavourite(adId, this);
+            }
+        }
+    }
+
+    private void refresh() {
+        if (!inProgress) {
+            inProgress = true;
+            adManager.refreshAd(adId, this);
+        }
+    }
+
+    private void edit() {
+        Intent intent = new Intent(this, EditActivity.class);
+        intent.putExtra(AppConstants.AD_ID_KEY, adId);
+        startActivity(intent);
+    }
+
+    private void changeStatus() {
+        if (!inProgress) {
+            inProgress = true;
+            adManager.changeAdStatus(adId, this);
+        }
+    }
+
+    private void setFavouriteButtonText() {
+        favouriteButton.setText(ad.isFavourite() ? getString(R.string.action_ad_remove_favourite) : getString(R.string.action_ad_favourite));
+    }
+
+    private void setStatusButtonText() {
+        statusButton.setText(ad.isActive() ? getString(R.string.action_finish) : getString(R.string.action_activate));
+    }
+
     @Override
     public void adReceived(AdDetailsData ad) {
         this.ad = ad;
-        setAdData();
-    }
 
-    @Override
-    public void notFound(Activity activity) {
-        addNotExists();
-    }
+        initButtons();
+        setPhotoAdapter();
 
-    @Override
-    public void unhandledError(Activity activity, String error) {
-        MRKUtil.connectionProblem(this);
+        titleText.setText(ad.getTitle());
+        nameText.setText(ad.getUserName());
+        phoneText.setText(ad.getPhone());
+        emailText.setText(ad.getEmail());
+        viewsText.setText(ad.getViews());
+        priceText.setText(String.format(getString(R.string.ad_price_text), ad.getPrice()));
+        locationText.setText(String.format(getString(R.string.ad_location_text), ad.getCity(), ad.getProvince()));
+
+        if (TextUtils.isEmpty(ad.getDescription())) {
+            View descriptionForm = findViewById(R.id.ad_description_form);
+            descriptionForm.setVisibility(View.GONE);
+        } else {
+            descriptionText.setText(ad.getDescription());
+        }
+
+        showProgress(false);
     }
 
     @Override
@@ -253,54 +240,55 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     }
 
     private void favouriteActionSuccess(boolean favourite) {
-        if (favourite) MRKUtil.toast(this, getString(R.string.toast_added_favourite));
-        else MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
-        this.favourite = favourite;
+        ad.setFavourite(favourite);
+        MRKUtil.toast(this, favourite ? getString(R.string.toast_added_favourite) : getString(R.string.toast_removed_favourite));
         setFavouriteButtonText();
+        inProgress = false;
+    }
+
+    @Override
+    public void adRefreshed(ResponseBody responseBody) {
+        ad.setRefreshable(false);
+        MRKUtil.toast(this, getString(R.string.toast_ad_refreshed));
+        refreshButton.setEnabled(false);
+        inProgress = false;
+    }
+
+    @Override
+    public void adStatusChanged(ResponseBody responseBody) {
+        ad.setActive(!ad.isActive());
+        MRKUtil.toast(this, ad.isActive() ? getString(R.string.toast_ad_activated) : getString(R.string.toast_ad_deactivated));
+        setStatusButtonText();
+        inProgress = false;
+    }
+
+    @Override
+    public void notFound(Activity activity) {
+        addNotExists();
     }
 
     @Override
     public void notAcceptable(Activity activity) {
-        if (favourite) MRKUtil.toast(this, getString(R.string.toast_already_favourite));
-        else MRKUtil.toast(this, getString(R.string.toast_not_favourite));
+        MRKUtil.toast(this, ad.isFavourite() ? getString(R.string.toast_already_favourite) : getString(R.string.toast_not_favourite));
+        inProgress = false;
     }
 
     @Override
     public void unauthorized(Activity activity) {
         MRKUtil.toast(this, getString(R.string.toast_own_add_favourite));
-    }
-
-    private void favouriteAction() {
-        if (favourite) {
-            adManager.removeFavourite(adId, this);
-        } else {
-            adManager.addFavourite(adId, this);
-        }
+        inProgress = false;
     }
 
     @Override
-    public void adRefreshed(ResponseBody responseBody) {
-        MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
-        ad.setRefreshable(!ad.isRefreshable());
-        refreshButton.setEnabled(ad.isRefreshable());
-    }
-
-    @Override
-    public void adStatusChanged(ResponseBody responseBody) {
-        if (!active) MRKUtil.toast(this, getString(R.string.toast_ad_activated));
-        else MRKUtil.toast(this, getString(R.string.toast_ad_deactivated));
-        active = !active;
-        setFavouriteButtonText();
-    }
-
-    private void showProgress(final boolean show) {
-        MRKUtil.showProgressBarHideView(this, adFormView, progressBar, show);
+    public void unhandledError(Activity activity, String error) {
+        MRKUtil.connectionProblem(this);
+        inProgress = false;
     }
 
     private void addNotExists() {
         MRKUtil.toast(this, getString(R.string.toast_ad_not_available));
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(POSITION_KEY, position);
+        resultIntent.putExtra(AppConstants.AD_POSITION, position);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

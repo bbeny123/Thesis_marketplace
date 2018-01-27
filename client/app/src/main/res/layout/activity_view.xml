@@ -56,13 +56,13 @@
 
                 <com.viewpagerindicator.LinePageIndicator
                     android:id="@+id/ad_indicator"
-                    android:padding="5dp"
-                    android:layout_height="wrap_content"
                     android:layout_width="fill_parent"
-                    app:strokeWidth="4dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     app:lineWidth="30dp"
-                    app:unselectedColor="#FF888888"
                     app:selectedColor="#FF880000"
+                    app:strokeWidth="4dp"
+                    app:unselectedColor="#FF888888"
                     />
 
                 <LinearLayout
@@ -198,6 +198,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/action_ad_favourite"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/view_edit_button"
+                        style="?android:textAppearanceSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_edit"
                         android:textStyle="bold"
                         android:visibility="gone" />
 

@@ -121,25 +121,25 @@ public class AdManager {
         call.enqueue(getRetrofitCallback(adListener::favouriteRemoved, errorListener));
     }
 
-    public void getAd(Long id, ErrorListener errorListener) {
+    public void pullAd(Long id, ErrorListener errorListener) {
         if (token == null) {
-            getGuestAd(id, errorListener);
+            pullGuestAd(id, errorListener);
         }
         callAd = adService.getUserAd(token, id);
         callAd.enqueue(getRetrofitCallback(adListener::adReceived, errorListener));
     }
 
-    private void getGuestAd(Long id, ErrorListener errorListener) {
+    private void pullGuestAd(Long id, ErrorListener errorListener) {
         callAd = adService.getAd(id);
         callAd.enqueue(getRetrofitCallback(adListener::adReceived, errorListener));
     }
 
-    public void getAds(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax, ErrorListener errorListener) {
+    public void pullAds(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax, ErrorListener errorListener) {
         callList = adService.getAds(getAdSearchQuery(offset, sortingMethod, title, prvId, catId, priceMin, priceMax));
         callList.enqueue(getRetrofitCallback(adListener::adsReceived, errorListener));
     }
 
-    public void getUserAds(int offset, boolean active, ErrorListener errorListener) {
+    public void pullUserAds(int offset, boolean active, ErrorListener errorListener) {
         if (token == null) {
             return;
         }
@@ -147,7 +147,7 @@ public class AdManager {
         callList.enqueue(getRetrofitCallback(adListener::userAdsReceived, errorListener));
     }
 
-    public void getFavourites(int offset, ErrorListener errorListener) {
+    public void pullFavourites(int offset, ErrorListener errorListener) {
         if (token == null) {
             return;
         }

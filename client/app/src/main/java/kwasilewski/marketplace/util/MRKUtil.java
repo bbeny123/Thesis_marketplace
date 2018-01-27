@@ -43,13 +43,18 @@ import kwasilewski.marketplace.helper.HintSpinner;
 
 public class MRKUtil {
 
+    private static Toast toast;
+
     public static void connectionProblem(final Activity activity) {
         toast(activity, activity.getString(R.string.error_connection_problem));
     }
 
     public static void toast(final Activity activity, String msg) {
         hideKeyboard(activity);
-        Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
         toast.show();
     }
 

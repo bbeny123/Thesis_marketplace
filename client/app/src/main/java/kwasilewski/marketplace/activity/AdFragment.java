@@ -74,26 +74,6 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdListViewAdapter adapter;
-    //listeners - init code at the bottom (except recycler)
-    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
-        private final int threshold = 3;
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-    };
     private TextView emptyListTextView;
     private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
         @Override
@@ -111,6 +91,26 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
                 connectionProblemAtStart();
             } else {
                 connectionProblem();
+            }
+        }
+    };
+    //listeners - init code at the bottom (except recycler)
+    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
+        private final int threshold = 3;
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                pullAds();
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                pullAds();
             }
         }
     };
@@ -425,8 +425,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     public void viewAd(Long id, int position) {
         Intent viewIntent = new Intent(getActivity(), ViewActivity.class);
         viewIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        viewIntent.putExtra(ViewActivity.POSITION_KEY, position);
-        viewIntent.putExtra(ViewActivity.MODE_KEY, listMode == ListModes.FAVOURITE_MODE ? ListModes.NORMAL_MODE : listMode);
+        viewIntent.putExtra(AppConstants.AD_POSITION, position);
+        viewIntent.putExtra(AppConstants.VIEW_MODE, listMode == ListModes.FAVOURITE_MODE ? ListModes.NORMAL_MODE : listMode);
         startActivityForResult(viewIntent, REMOVABLE_CODE);
     }
 

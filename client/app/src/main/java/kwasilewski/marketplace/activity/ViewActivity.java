@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,22 +16,18 @@ import android.widget.TextView;
 import com.viewpagerindicator.LinePageIndicator;
 import com.viewpagerindicator.PageIndicator;
 
-import java.net.HttpURLConnection;
-
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.ad.AdDetailsData;
 import kwasilewski.marketplace.helper.PhotoAdapter;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.AdService;
+import kwasilewski.marketplace.retrofit.listener.AdListener;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.manager.AdManager;
 import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class ViewActivity extends AppCompatActivity {
+public class ViewActivity extends AppCompatActivity implements AdListener, ErrorListener {
 
     public final static String MODE_KEY = "mode";
     public final static String POSITION_KEY = "position";
@@ -40,13 +37,13 @@ public class ViewActivity extends AppCompatActivity {
     private Long adId;
     private int mode;
     private AdDetailsData ad;
-    private AdService adService;
-    private Call<AdDetailsData> callAd;
-    private Call<ResponseBody> callFav;
+
+    private boolean inProgress = false;
+    private AdManager adManager;
+
     private String token;
     private boolean favourite = false;
     private boolean active = false;
-    private boolean favouriteActionInProgress = false;
     private int position;
 
     private View progressBar;
@@ -82,7 +79,7 @@ public class ViewActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.ad_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        adService = RetrofitService.getInstance().getAdService();
+        adManager = new AdManager(this, this);
         token = SharedPrefUtil.getInstance(this).getToken();
 
         progressBar = findViewById(R.id.ad_progress);
@@ -132,28 +129,13 @@ public class ViewActivity extends AppCompatActivity {
 
     private void setButtonListeners() {
         if (favouriteButton.getVisibility() == View.VISIBLE) {
-            favouriteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    favouriteAction();
-                }
-            });
+            favouriteButton.setOnClickListener(v -> favouriteAction());
         }
         if (refreshButton.getVisibility() == View.VISIBLE) {
-            refreshButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    refreshAction();
-                }
-            });
+            refreshButton.setOnClickListener(v -> adManager.refreshAd(adId, this));
         }
         if (statusButton.getVisibility() == View.VISIBLE) {
-            statusButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    statusAction();
-                }
-            });
+            statusButton.setOnClickListener(v -> adManager.changeAdStatus(adId, this));
         }
     }
 
@@ -162,14 +144,18 @@ public class ViewActivity extends AppCompatActivity {
         super.onResume();
         if (ad == null) {
             showProgress(true);
-            initAd();
+            adManager.getAd(adId, new ErrorListener() {
+                @Override
+                public void unhandledError(Activity activity, String error) {
+
+                }
+            });
         }
     }
 
     @Override
     protected void onPause() {
-        if(callAd != null) callAd.cancel();
-        if(callFav != null) callFav.cancel();
+        adManager.cancelCalls();
         super.onPause();
     }
 
@@ -207,7 +193,7 @@ public class ViewActivity extends AppCompatActivity {
         favourite = ad.isFavourite();
         active = ad.isActive();
         initButtons();
-        setAdapter();
+        setPhotoAdapter();
 
         priceText.setText(String.format(getString(R.string.ad_price_text), ad.getPrice()));
         titleText.setText(ad.getTitle());
@@ -225,7 +211,7 @@ public class ViewActivity extends AppCompatActivity {
         showProgress(false);
     }
 
-    private void setAdapter() {
+    private void setPhotoAdapter() {
         if (ad.getPhotos().size() == 0) {
             return;
         }
@@ -240,111 +226,76 @@ public class ViewActivity extends AppCompatActivity {
         indicator.setViewPager(viewPager);
     }
 
-    private void initAd() {
-        callAd = token != null ? adService.getUserAd(token, adId) : adService.getAd(adId);
-        callAd.enqueue(new Callback<AdDetailsData>() {
-            @Override
-            public void onResponse(Call<AdDetailsData> call, Response<AdDetailsData> response) {
-                if (response.isSuccessful()) {
-                    ad = response.body();
-                    setAdData();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    addNotExists();
-                } else {
-                    connectionProblemAtStart();
-                }
-            }
+    @Override
+    public void adReceived(AdDetailsData ad) {
+        this.ad = ad;
+        setAdData();
+    }
 
-            @Override
-            public void onFailure(Call<AdDetailsData> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblemAtStart();
-            }
-        });
+    @Override
+    public void notFound(Activity activity) {
+        addNotExists();
+    }
+
+    @Override
+    public void unhandledError(Activity activity, String error) {
+        startActivity(new Intent(this, NetErrorActivity.class));
+    }
+
+    @Override
+    public void favouriteAdded(ResponseBody responseBody) {
+        favouriteActionSuccess(true);
+    }
+
+    @Override
+    public void favouriteRemoved(ResponseBody responseBody) {
+        favouriteActionSuccess(false);
+    }
+
+    private void favouriteActionSuccess(boolean favourite) {
+        if (favourite) MRKUtil.toast(this, getString(R.string.toast_added_favourite));
+        else MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
+        this.favourite = favourite;
+        setFavouriteButtonText();
+    }
+
+    @Override
+    public void notAcceptable(Activity activity) {
+        if (favourite) MRKUtil.toast(this, getString(R.string.toast_already_favourite));
+        else MRKUtil.toast(this, getString(R.string.toast_not_favourite));
+    }
+
+    @Override
+    public void unauthorized(Activity activity) {
+        MRKUtil.toast(this, getString(R.string.toast_own_add_favourite));
+    }
+
+    //fav
+    public void unhandledErrorfav(Activity activity, String error) {
+        MRKUtil.connectionProblem(this);
     }
 
     private void favouriteAction() {
-        if(favouriteActionInProgress) {
-            return;
+        if (favourite) {
+            adManager.removeFavourite(adId, this);
+        } else {
+            adManager.addFavourite(adId, this);
         }
-        favouriteActionInProgress = true;
-        callFav = favourite ? adService.removeFavourite(token, adId) : adService.addFavourite(token, adId);
-        callFav.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    favouriteActionSuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    addNotExists();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                    favouriteActionNotAcceptable();
-                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    ownAd();
-                } else {
-                    connectionProblem();
-                }
-                favouriteActionInProgress = false;
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblem();
-                favouriteActionInProgress = false;
-            }
-        });
     }
 
-    private void refreshAction() {
-        if(favouriteActionInProgress) {
-            return;
-        }
-        favouriteActionInProgress = true;
-        callFav = adService.refreshAd(token, adId);
-        callFav.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    refreshActionSuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    addNotExists();
-                } else {
-                    connectionProblem();
-                }
-                favouriteActionInProgress = false;
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblem();
-                favouriteActionInProgress = false;
-            }
-        });
+    @Override
+    public void adRefreshed(ResponseBody responseBody) {
+        MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
+        ad.setRefreshable(!ad.isRefreshable());
+        refreshButton.setEnabled(ad.isRefreshable());
     }
 
-    private void statusAction() {
-        if(favouriteActionInProgress) {
-            return;
-        }
-        favouriteActionInProgress = true;
-        callFav = adService.changeAdStatus(token, adId);
-        callFav.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    statusActionSuccess();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    addNotExists();
-                } else {
-                    connectionProblem();
-                }
-                favouriteActionInProgress = false;
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblem();
-                favouriteActionInProgress = false;
-            }
-        });
+    @Override
+    public void adStatusChanged(ResponseBody responseBody) {
+        if (!active) MRKUtil.toast(this, getString(R.string.toast_ad_activated));
+        else MRKUtil.toast(this, getString(R.string.toast_ad_deactivated));
+        active = !active;
+        setFavouriteButtonText();
     }
 
     private void showProgress(final boolean show) {
@@ -358,45 +309,5 @@ public class ViewActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
     }
-
-    private void favouriteActionSuccess() {
-        if(!favourite) MRKUtil.toast(this, getString(R.string.toast_added_favourite));
-        else MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
-        favourite = !favourite;
-        setFavouriteButtonText();
-    }
-
-    private void refreshActionSuccess() {
-        MRKUtil.toast(this, getString(R.string.toast_removed_favourite));
-        ad.setRefreshable(!ad.isRefreshable());
-        refreshButton.setEnabled(ad.isRefreshable());
-    }
-
-    private void statusActionSuccess() {
-        if(!active) MRKUtil.toast(this, getString(R.string.toast_ad_activated));
-        else MRKUtil.toast(this, getString(R.string.toast_ad_deactivated));
-        active = !active;
-        setFavouriteButtonText();
-    }
-
-    private void favouriteActionNotAcceptable() {
-        if(favourite) MRKUtil.toast(this, getString(R.string.toast_already_favourite));
-        else MRKUtil.toast(this, getString(R.string.toast_not_favourite));
-
-    }
-
-    private void ownAd() {
-        MRKUtil.toast(this, getString(R.string.toast_own_add_favourite));
-    }
-
-    private void connectionProblem() {
-        MRKUtil.connectionProblem(this);
-    }
-
-    private void connectionProblemAtStart() {
-        startActivity(new Intent(this, NetErrorActivity.class));
-    }
-
-
 
 }

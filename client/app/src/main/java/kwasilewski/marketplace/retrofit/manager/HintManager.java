@@ -21,22 +21,20 @@ public class HintManager {
     private Call<ComboHintData> callCombo;
     private Call<List<HintData>> callProvince;
     private HintListener hintListener;
-    private ErrorListener errorListener;
 
-    public HintManager(Activity activity, HintListener hintListener, ErrorListener errorListener) {
+    public HintManager(Activity activity, HintListener hintListener) {
         this.activity = activity;
         this.hintListener = hintListener;
-        this.errorListener = errorListener;
     }
 
-    public void getAllHints() {
+    public void getAllHints(ErrorListener errorListener) {
         callCombo = hintService.getAllHints();
-        callCombo.enqueue(getRetrofitCallback(hintListener::hintsReceived));
+        callCombo.enqueue(getRetrofitCallback(hintListener::hintsReceived, errorListener));
     }
 
-    public void getProvinces() {
+    public void getProvinces(ErrorListener errorListener) {
         callProvince = hintService.getProvinces();
-        callProvince.enqueue(getRetrofitCallback(hintListener::provincesReceived));
+        callProvince.enqueue(getRetrofitCallback(hintListener::provincesReceived, errorListener));
     }
 
     public void cancelCalls() {
@@ -48,7 +46,7 @@ public class HintManager {
         }
     }
 
-    private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function) {
+    private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function, ErrorListener errorListener) {
         return new RetrofitCallback<>(function, activity, errorListener);
     }
 

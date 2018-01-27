@@ -24,38 +24,45 @@ public class UserManager {
     private Call<UserData> callUser;
     private UserListener userListener;
     private String token;
-    private ErrorListener errorListener;
 
-    public UserManager(Activity activity, UserListener userListener, ErrorListener errorListener) {
+    public UserManager(Activity activity, UserListener userListener) {
         this.activity = activity;
         this.userListener = userListener;
         this.token = SharedPrefUtil.getInstance(activity).getToken();
-        this.errorListener = errorListener;
     }
 
-    public void register(UserData user) {
+    public void register(UserData user, ErrorListener errorListener) {
         call = userService.register(user);
-        call.enqueue(getRetrofitCallback(userListener::registered));
+        call.enqueue(getRetrofitCallback(userListener::registered, errorListener));
     }
 
-    public void login(LoginData loginData) {
+    public void login(LoginData loginData, ErrorListener errorListener) {
         callUser = userService.login(loginData);
-        callUser.enqueue(getRetrofitCallback(userListener::logged));
+        callUser.enqueue(getRetrofitCallback(userListener::logged, errorListener));
     }
 
-    public void validateToken() {
+    public void validateToken(ErrorListener errorListener) {
+        if (token == null) {
+            return;
+        }
         callUser = userService.validateToken(token);
-        callUser.enqueue(getRetrofitCallback(userListener::tokenValidated));
+        callUser.enqueue(getRetrofitCallback(userListener::tokenValidated, errorListener));
     }
 
-    public void updateProfile(UserData user) {
+    public void updateProfile(UserData user, ErrorListener errorListener) {
+        if (token == null) {
+            return;
+        }
         callUser = userService.updateProfile(token, user);
-        callUser.enqueue(getRetrofitCallback(userListener::profileUpdated));
+        callUser.enqueue(getRetrofitCallback(userListener::profileUpdated, errorListener));
     }
 
-    public void changePassword(PasswordData passwordData) {
+    public void changePassword(PasswordData passwordData, ErrorListener errorListener) {
+        if (token == null) {
+            return;
+        }
         call = userService.changePassword(token, passwordData);
-        call.enqueue(getRetrofitCallback(userListener::passwordChanged));
+        call.enqueue(getRetrofitCallback(userListener::passwordChanged, errorListener));
     }
 
     public void cancelCalls() {
@@ -67,7 +74,7 @@ public class UserManager {
         }
     }
 
-    private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function) {
+    private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function, ErrorListener errorListener) {
         return new RetrofitCallback<>(function, activity, errorListener);
     }
 

@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userManager = new UserManager(this, this, this);
+        userManager = new UserManager(this, this);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
         super.onResume();
         String token = SharedPrefUtil.getInstance(this).getToken();
         if (token != null) {
-            userManager.validateToken();
+            userManager.validateToken(this);
         } else {
             goToMainActivity();
         }

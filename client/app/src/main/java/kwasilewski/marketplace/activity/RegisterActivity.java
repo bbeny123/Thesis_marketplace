@@ -48,14 +48,8 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         Toolbar toolbar = findViewById(R.id.register_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        hintManager = new HintManager(this, this, new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
-        });
-
-        userManager = new UserManager(this, this, this);
+        hintManager = new HintManager(this, this);
+        userManager = new UserManager(this, this);
 
         progressBar = findViewById(R.id.register_progress);
         registerForm = findViewById(R.id.register_form);
@@ -85,7 +79,12 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
     protected void onResume() {
         super.onResume();
         showProgress(true);
-        hintManager.getProvinces();
+        hintManager.getProvinces(new ErrorListener() {
+            @Override
+            public void unhandledError(Activity activity, String error) {
+                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
+            }
+        });
     }
 
     @Override
@@ -161,7 +160,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
             inProgress = false;
         } else {
             showProgress(true);
-            userManager.register(new UserData(email, password, firstName, lastName, city, province, phone));
+            userManager.register(new UserData(email, password, firstName, lastName, city, province, phone), this);
         }
     }
 

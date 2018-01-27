@@ -37,7 +37,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         Toolbar toolbar = findViewById(R.id.password_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        userManager = new UserManager(this, this, this);
+        userManager = new UserManager(this, this);
 
         progressBar = findViewById(R.id.password_progress);
         passwordForm = findViewById(R.id.password_form);
@@ -111,7 +111,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         } else {
             showProgress(true);
             String email = SharedPrefUtil.getInstance(this).getUserData().getEmail();
-            userManager.changePassword(new PasswordData(email, oldText, newText));
+            userManager.changePassword(new PasswordData(email, oldText, newText), this);
         }
     }
 

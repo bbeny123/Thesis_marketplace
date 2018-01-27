@@ -46,14 +46,9 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        hintManager = new HintManager(this, this, new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
-        });
+        hintManager = new HintManager(this, this);
 
-        userManager = new UserManager(this, this, this);
+        userManager = new UserManager(this, this);
 
         progressBar = findViewById(R.id.profile_progress);
         updateForm = findViewById(R.id.profile_form);
@@ -85,7 +80,12 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         super.onResume();
         clicked = false;
         showProgress(true);
-        hintManager.getProvinces();
+        hintManager.getProvinces(new ErrorListener() {
+            @Override
+            public void unhandledError(Activity activity, String error) {
+                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
+            }
+        });
         setUserData();
     }
 
@@ -170,7 +170,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
             inProgress = false;
         } else {
             showProgress(true);
-            userManager.updateProfile(new UserData(firstName, lastName, city, province, phone));
+            userManager.updateProfile(new UserData(firstName, lastName, city, province, phone), this);
         }
     }
 

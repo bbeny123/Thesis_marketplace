@@ -74,13 +74,8 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         Toolbar toolbar = findViewById(R.id.new_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        adManager = new AdManager(this, this, this);
-        hintManager = new HintManager(this, this, new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
-        });
+        adManager = new AdManager(this, this);
+        hintManager = new HintManager(this, this);
 
         progressBar = findViewById(R.id.new_progress);
         newForm = findViewById(R.id.new_form);
@@ -129,7 +124,12 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
     protected void onResume() {
         super.onResume();
         showProgress(true);
-        hintManager.getAllHints();
+        hintManager.getAllHints(new ErrorListener() {
+            @Override
+            public void unhandledError(Activity activity, String error) {
+                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
+            }
+        });
     }
 
     @Override
@@ -292,7 +292,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
             inProgress = false;
         } else {
             showProgress(true);
-            adManager.createAd(new AdData(title, price, subcategory, province, description, city, phone, photos.getEncodedThumbnail(this), photos.getEncodedPhotos(this)));
+            adManager.createAd(new AdData(title, price, subcategory, province, description, city, phone, photos.getEncodedThumbnail(this), photos.getEncodedPhotos(this)), this);
         }
     }
 

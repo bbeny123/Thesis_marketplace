@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         Toolbar toolbar = findViewById(R.id.login_toolbar);
         MRKUtil.setToolbar(this, toolbar);
 
-        userManager = new UserManager(this, this, this);
+        userManager = new UserManager(this, this);
 
         progressBar = findViewById(R.id.login_progress);
         loginFormView = findViewById(R.id.login_form);
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
             loginInProgress = false;
         } else {
             showProgress(true);
-            userManager.login((new LoginData(email, password)));
+            userManager.login(new LoginData(email, password), this);
         }
     }
 

@@ -38,10 +38,6 @@ public interface AdListener {
         Log.d("RetrofitListener", "Unhandled adReceived");
     }
 
-    default void userAdReceived(AdDetailsData ad) {
-        Log.d("RetrofitListener", "Unhandled userAdReceived");
-    }
-
     default void adsReceived(List<AdMinimalData> ads) {
         Log.d("RetrofitListener", "Unhandled adsReceived");
     }

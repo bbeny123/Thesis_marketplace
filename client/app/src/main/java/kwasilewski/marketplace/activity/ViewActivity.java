@@ -146,8 +146,8 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
             showProgress(true);
             adManager.getAd(adId, new ErrorListener() {
                 @Override
-                public void unhandledError(Activity activity, String error) {
-
+                public void unauthorized(Activity activity) {
+                    addNotExists();
                 }
             });
         }
@@ -239,7 +239,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
 
     @Override
     public void unhandledError(Activity activity, String error) {
-        startActivity(new Intent(this, NetErrorActivity.class));
+        MRKUtil.connectionProblem(this);
     }
 
     @Override
@@ -268,11 +268,6 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     @Override
     public void unauthorized(Activity activity) {
         MRKUtil.toast(this, getString(R.string.toast_own_add_favourite));
-    }
-
-    //fav
-    public void unhandledErrorfav(Activity activity, String error) {
-        MRKUtil.connectionProblem(this);
     }
 
     private void favouriteAction() {

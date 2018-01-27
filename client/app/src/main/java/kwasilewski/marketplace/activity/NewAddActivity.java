@@ -125,10 +125,6 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         super.onResume();
         showProgress(true);
         hintManager.getAllHints(new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
         });
     }
 

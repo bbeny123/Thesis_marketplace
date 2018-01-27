@@ -1,7 +1,6 @@
 package kwasilewski.marketplace.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -80,10 +79,6 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         super.onResume();
         showProgress(true);
         hintManager.getProvinces(new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
         });
     }
 

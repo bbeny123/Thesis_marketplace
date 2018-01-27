@@ -81,10 +81,6 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         clicked = false;
         showProgress(true);
         hintManager.getProvinces(new ErrorListener() {
-            @Override
-            public void unhandledError(Activity activity, String error) {
-                startActivity(new Intent(getApplicationContext(), NetErrorActivity.class));
-            }
         });
         setUserData();
     }

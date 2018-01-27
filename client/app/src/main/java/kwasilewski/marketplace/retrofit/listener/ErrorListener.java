@@ -1,9 +1,10 @@
 package kwasilewski.marketplace.retrofit.listener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
-import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.activity.NetErrorActivity;
 
 public interface ErrorListener {
 
@@ -29,7 +30,7 @@ public interface ErrorListener {
 
     default void unhandledError(Activity activity, String error) {
         Log.d("RetrofitListener", error);
-        MRKUtil.connectionProblem(activity);
+        activity.startActivity(new Intent(activity, NetErrorActivity.class));
     }
 
 }

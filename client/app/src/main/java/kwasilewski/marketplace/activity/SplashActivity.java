@@ -9,7 +9,6 @@ import kwasilewski.marketplace.dto.user.UserData;
 import kwasilewski.marketplace.retrofit.listener.ErrorListener;
 import kwasilewski.marketplace.retrofit.listener.UserListener;
 import kwasilewski.marketplace.retrofit.manager.UserManager;
-import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 
 public class SplashActivity extends AppCompatActivity implements UserListener, ErrorListener {
@@ -48,11 +47,6 @@ public class SplashActivity extends AppCompatActivity implements UserListener, E
     @Override
     public void unauthorized(Activity activity) {
         tokenAuthorized(false);
-    }
-
-    @Override
-    public void unhandledError(Activity activity, String error) {
-        MRKUtil.startNetErrorActivity(activity);
     }
 
     private void tokenAuthorized(boolean authorized) {

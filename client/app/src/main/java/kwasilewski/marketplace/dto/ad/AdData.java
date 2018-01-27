@@ -100,4 +100,15 @@ public class AdData extends AdMinimalData {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public void update(String title, String price, Long sctId, Long prvId, String description, String city, String phone, boolean active) {
+        this.title = title;
+        this.price = price;
+        this.sctId = sctId;
+        this.prvId = prvId;
+        this.description = description;
+        this.city = city;
+        this.phone = phone;
+        this.active = active;
+    }
 }

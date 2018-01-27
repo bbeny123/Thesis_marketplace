@@ -39,6 +39,7 @@ public final class AppConstants {
     public static final int ACTIVE_MODE = 2;
     public static final int INACTIVE_MODE = 3;
     public static final int FAVOURITE_MODE = 4;
+    public static final int LOGIN_CODE = 5;
     public static final String VIEW_MODE = "mode";
     public static final String AD_POSITION = "position";
 

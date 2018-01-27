@@ -10,6 +10,7 @@ public class AdDetailsDataExt extends AdDataExt {
     private String category;
     private String subcategory;
     private boolean favourite;
+    private boolean owner;
 
     public AdDetailsDataExt(AdData ad) {
         super(ad);
@@ -19,6 +20,7 @@ public class AdDetailsDataExt extends AdDataExt {
         this.category = ad.getCategory().getCategory().getName();
         this.subcategory = ad.getCategory().getName();
         this.favourite = ad.isFavourite();
+        this.owner = ad.isOwner();
     }
 
     public String getEmail() {
@@ -69,4 +71,11 @@ public class AdDetailsDataExt extends AdDataExt {
         this.favourite = favourite;
     }
 
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
 }

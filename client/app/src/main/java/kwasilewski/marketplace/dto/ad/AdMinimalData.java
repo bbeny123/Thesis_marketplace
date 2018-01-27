@@ -6,9 +6,9 @@ import android.util.Base64;
 
 public class AdMinimalData {
 
+    protected String title;
+    protected String price;
     private Long id;
-    private String title;
-    private String price;
     private String views;
     private String miniature;
     private boolean refreshable;

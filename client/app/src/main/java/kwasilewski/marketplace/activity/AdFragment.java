@@ -74,26 +74,6 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdListViewAdapter adapter;
-    private TextView emptyListTextView;
-    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
-        @Override
-        public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
-            if (response.isSuccessful()) {
-                addAdsToAdapter(response.body());
-            } else {
-                connectionProblem();
-            }
-        }
-
-        @Override
-        public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
-            if (!call.isCanceled() && ads.size() == 0) {
-                connectionProblemAtStart();
-            } else {
-                connectionProblem();
-            }
-        }
-    };
     //listeners - init code at the bottom (except recycler)
     private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
         private final int threshold = 3;
@@ -111,6 +91,26 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             super.onScrolled(recyclerView, dx, dy);
             if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
                 pullAds();
+            }
+        }
+    };
+    private TextView emptyListTextView;
+    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
+        @Override
+        public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
+            if (response.isSuccessful()) {
+                addAdsToAdapter(response.body());
+            } else {
+                connectionProblem();
+            }
+        }
+
+        @Override
+        public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
+            if (!call.isCanceled() && ads.size() == 0) {
+                connectionProblemAtStart();
+            } else {
+                connectionProblem();
             }
         }
     };
@@ -197,7 +197,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else if (requestCode == REMOVABLE_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                removeAdFromAdapter(extras.getInt(EditActivity.POSITION_KEY));
+                removeAdFromAdapter(extras.getInt(AppConstants.AD_POSITION));
             }
         }
     }
@@ -434,7 +434,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     public void editAd(final Long id, int position) {
         Intent editIntent = new Intent(getActivity(), EditActivity.class);
         editIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        editIntent.putExtra(EditActivity.POSITION_KEY, position);
+        editIntent.putExtra(AppConstants.AD_POSITION, position);
         startActivityForResult(editIntent, REMOVABLE_CODE);
     }
 

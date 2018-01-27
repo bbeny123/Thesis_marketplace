@@ -128,6 +128,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     @Override
     public void logged(UserData user) {
         SharedPrefUtil.getInstance(this).saveLoginData(user);
+        setResult(RESULT_OK);
         finish();
     }
 

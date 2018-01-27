@@ -89,6 +89,9 @@ public class AdData {
     @Transient
     private boolean favourite;
 
+    @Transient
+    private boolean owner;
+
     public Long getId() {
         return id;
     }
@@ -207,6 +210,14 @@ public class AdData {
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
     }
 
     public UserData getUser() {

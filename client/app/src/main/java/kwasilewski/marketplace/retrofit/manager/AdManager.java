@@ -167,6 +167,10 @@ public class AdManager {
         }
     }
 
+    public void updateToken() {
+        this.token = SharedPrefUtil.getInstance(activity).getToken();
+    }
+
     private <T> RetrofitCallback<T> getRetrofitCallback(Consumer<T> function, ErrorListener errorListener) {
         return new RetrofitCallback<>(function, activity, errorListener);
     }

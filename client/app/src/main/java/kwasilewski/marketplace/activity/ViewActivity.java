@@ -1,5 +1,6 @@
 package kwasilewski.marketplace.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -102,11 +103,11 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         super.onPause();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putLong(AppConstants.AD_ID_KEY, adId);
         outState.putInt(AppConstants.AD_POSITION, position);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -186,6 +187,8 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     private void edit() {
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(AppConstants.AD_ID_KEY, adId);
+        intent.putExtra(AppConstants.AD_POSITION, position);
+        //    startActivityForResult(editIntent, REMOVABLE_CODE);
         startActivity(intent);
     }
 

@@ -188,7 +188,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(AppConstants.AD_ID_KEY, adId);
         intent.putExtra(AppConstants.AD_POSITION, position);
-        //    startActivityForResult(editIntent, REMOVABLE_CODE);
+        //      startActivityForResult(intent, AppConstants);
         startActivity(intent);
     }
 

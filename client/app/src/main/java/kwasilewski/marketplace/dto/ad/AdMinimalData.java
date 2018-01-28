@@ -10,7 +10,6 @@ public class AdMinimalData {
     private String views;
     private String miniature;
     private boolean refreshable;
-
     AdMinimalData() {
     }
 
@@ -88,6 +87,12 @@ public class AdMinimalData {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public interface SortingMethod {
+        int NEWEST = 1;
+        int CHEAPEST = 2;
+        int MOSTEXPENSIVE = 3;
     }
 
 }

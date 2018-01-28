@@ -42,8 +42,4 @@ public interface AdListener {
         Log.d("RetrofitListener", "Unhandled adsReceived");
     }
 
-    default void favouritesReceived(List<AdMinimalData> ads) {
-        Log.d("RetrofitListener", "Unhandled favouritesReceived");
-    }
-
 }

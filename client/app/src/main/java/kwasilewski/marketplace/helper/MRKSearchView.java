@@ -70,6 +70,14 @@ public class MRKSearchView extends SearchView {
         });
     }
 
+    public void setSearchBar(String title) {
+        if (!TextUtils.isEmpty(title)) {
+            searchBar.expandActionView();
+            setQuery(title, false);
+            clearFocus();
+        }
+    }
+
     public interface TitleListener {
 
         void setTitle(String query);

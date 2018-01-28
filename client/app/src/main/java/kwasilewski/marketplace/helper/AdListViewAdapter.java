@@ -1,6 +1,6 @@
 package kwasilewski.marketplace.helper;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,19 +14,24 @@ import java.util.List;
 import java.util.Locale;
 
 import kwasilewski.marketplace.R;
-import kwasilewski.marketplace.activity.AdFragment;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
+import kwasilewski.marketplace.retrofit.listener.AdListener;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.manager.AdManager;
+import kwasilewski.marketplace.util.AppConstants;
+import kwasilewski.marketplace.util.MRKUtil;
+import okhttp3.ResponseBody;
 
 public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.ViewHolder> {
 
     private final List<AdMinimalData> ads;
-    private final Context context;
+    private final Activity activity;
     private final OnButtonsClickListener listener;
     private final int listMode;
 
-    public AdListViewAdapter(List<AdMinimalData> ads, Context context, OnButtonsClickListener listener, int listMode) {
+    public AdListViewAdapter(List<AdMinimalData> ads, Activity activity, OnButtonsClickListener listener, int listMode) {
         this.ads = ads;
-        this.context = context;
+        this.activity = activity;
         this.listener = listener;
         this.listMode = listMode;
     }
@@ -43,30 +48,9 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         holder.setPrice(ad.getPrice());
         holder.setViews(ad.getViews());
         holder.setThumbnail(ad.getDecodedMiniature());
-        setListeners(holder, ad.getId(), ad.isRefreshable(), holder.getAdapterPosition());
-    }
-
-    private void setListeners(final ViewHolder holder, final Long id, final boolean refreshable, int position) {
-        holder.view.setOnClickListener(getItemClickListener(id, position));
-
-        if(holder.editButton != null) {
-            holder.editButton.setOnClickListener(getEditClickListener(id, position));
-        }
-        if(holder.refreshButton != null) {
-            if (refreshable) {
-                holder.refreshButton.setOnClickListener(getRefreshClickListener(id, holder.refreshButton));
-            } else {
-                holder.refreshButton.setEnabled(false);
-            }
-        }
-
-        if(holder.statusButton != null) {
-            holder.statusButton.setOnClickListener(getStatusClickListener(id, position));
-        }
-
-        if(holder.favouriteButton != null) {
-            holder.favouriteButton.setOnClickListener(getFavouriteClickListener(id, position));
-        }
+        holder.enableRefreshButton(ad.isRefreshable());
+        holder.setButtonListeners(ad.getId());
+        holder.view.setOnClickListener(v -> listener.viewAd(ad.getId(), position));
 
     }
 
@@ -75,66 +59,27 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         return ads.size();
     }
 
-    private View.OnClickListener getItemClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.viewAd(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getEditClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.editAd(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getRefreshClickListener(final Long id, final Button button) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.refreshAd(id, button);
-            }
-        };
-    }
-
-    private View.OnClickListener getStatusClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.changeAdStatus(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getFavouriteClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.removeFavourite(id, position);
-            }
-        };
-    }
-
     public interface OnButtonsClickListener {
 
-        void viewAd(final Long id, final int position);
+        void viewAd(final Long id, int position);
 
-        void editAd(final Long id, final int position);
+        void editAd(final Long id, int position);
 
-        void refreshAd(final Long id, final Button button);
+        void refreshAd(final Long id, final AdManager manager, final ErrorListener errorListener);
 
-        void changeAdStatus(final Long id, final int position);
+        void changeAdStatus(final Long id, final AdManager manager, final ErrorListener errorListener);
 
-        void removeFavourite(final Long id, final int position);
+        void removeFavourite(final Long id, final AdManager manager, final ErrorListener errorListener);
+
+        void removeAd(final int position);
+
+        void adRefreshed();
+
+        void unhandledError(Activity activity, String error);
 
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements AdListener, ErrorListener {
         private final View view;
         private final TextView title;
         private final TextView price;
@@ -144,6 +89,7 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         private final Button refreshButton;
         private final Button statusButton;
         private final Button favouriteButton;
+        private AdManager adManager;
 
         ViewHolder(View view) {
             super(view);
@@ -153,32 +99,40 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
             views = view.findViewById(R.id.ad_list_views);
             thumbnail = view.findViewById(R.id.ad_list_thumbnail);
 
-            if (listMode == AdFragment.ListModes.ACTIVE_MODE) {
-                View buttonsContainer = view.findViewById(R.id.ad_list_active_buttons);
-                buttonsContainer.setVisibility(View.VISIBLE);
-                editButton = view.findViewById(R.id.ad_list_active_edit);
-                refreshButton = view.findViewById(R.id.ad_list_active_refresh);
-                statusButton = view.findViewById(R.id.ad_list_active_finish);
-                favouriteButton = null;
-            } else if (listMode == AdFragment.ListModes.INACTIVE_MODE) {
-                View buttonsContainer = view.findViewById(R.id.ad_list_inactive_buttons);
-                buttonsContainer.setVisibility(View.VISIBLE);
-                editButton = view.findViewById(R.id.ad_list_inactive_edit);
-                refreshButton = null;
-                statusButton = view.findViewById(R.id.ad_list_inactive_activate);
-                favouriteButton = null;
-            } else if (listMode == AdFragment.ListModes.FAVOURITE_MODE) {
-                View buttonsContainer = view.findViewById(R.id.ad_list_favourite_buttons);
-                buttonsContainer.setVisibility(View.VISIBLE);
-                editButton = null;
-                refreshButton = null;
-                statusButton = null;
-                favouriteButton = view.findViewById(R.id.ad_list_favourite_remove);
-            } else {
-                editButton = null;
-                refreshButton = null;
-                statusButton = null;
-                favouriteButton = null;
+            switch (listMode) {
+                case AppConstants.MODE_ACTIVE: {
+                    View buttonsContainer = view.findViewById(R.id.ad_list_active_buttons);
+                    buttonsContainer.setVisibility(View.VISIBLE);
+                    editButton = view.findViewById(R.id.ad_list_active_edit);
+                    refreshButton = view.findViewById(R.id.ad_list_active_refresh);
+                    statusButton = view.findViewById(R.id.ad_list_active_finish);
+                    favouriteButton = null;
+                    break;
+                }
+                case AppConstants.MODE_INACTIVE: {
+                    View buttonsContainer = view.findViewById(R.id.ad_list_inactive_buttons);
+                    buttonsContainer.setVisibility(View.VISIBLE);
+                    editButton = view.findViewById(R.id.ad_list_inactive_edit);
+                    refreshButton = null;
+                    statusButton = view.findViewById(R.id.ad_list_inactive_activate);
+                    favouriteButton = null;
+                    break;
+                }
+                case AppConstants.MODE_FAVOURITE: {
+                    View buttonsContainer = view.findViewById(R.id.ad_list_favourite_buttons);
+                    buttonsContainer.setVisibility(View.VISIBLE);
+                    editButton = null;
+                    refreshButton = null;
+                    statusButton = null;
+                    favouriteButton = view.findViewById(R.id.ad_list_favourite_remove);
+                    break;
+                }
+                default:
+                    editButton = null;
+                    refreshButton = null;
+                    statusButton = null;
+                    favouriteButton = null;
+                    break;
             }
         }
 
@@ -187,7 +141,7 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         }
 
         private void setPrice(String price) {
-            this.price.setText(String.format(context.getString(R.string.ad_price_text), price));
+            this.price.setText(String.format(activity.getString(R.string.ad_price_text), price));
         }
 
         private void setViews(String views) {
@@ -196,6 +150,71 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
         private void setThumbnail(byte[] decodedPhoto) {
             this.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(decodedPhoto, 0, decodedPhoto.length));
+        }
+
+        private void enableRefreshButton(boolean enable) {
+            if (refreshButton != null) {
+                refreshButton.setEnabled(enable);
+            }
+        }
+
+        private AdManager getAdManager() {
+            if (adManager == null) {
+                adManager = new AdManager(activity, this);
+            }
+            return adManager;
+        }
+
+        private void setButtonListeners(Long id) {
+            if (editButton != null) {
+                editButton.setOnClickListener(v -> listener.editAd(id, getAdapterPosition()));
+            }
+            if (refreshButton != null) {
+                refreshButton.setOnClickListener(v -> listener.refreshAd(id, getAdManager(), this));
+            }
+            if (statusButton != null) {
+                statusButton.setOnClickListener(v -> listener.changeAdStatus(id, getAdManager(), this));
+            }
+            if (favouriteButton != null) {
+                favouriteButton.setOnClickListener(v -> listener.removeFavourite(id, getAdManager(), this));
+            }
+        }
+
+        @Override
+        public void adStatusChanged(ResponseBody responseBody) {
+            MRKUtil.toast(activity, listMode == AppConstants.MODE_ACTIVE ? activity.getString(R.string.toast_ad_deactivated) : activity.getString(R.string.toast_ad_activated));
+            listener.removeAd(getAdapterPosition());
+        }
+
+        @Override
+        public void adRefreshed(ResponseBody responseBody) {
+            MRKUtil.toast(activity, activity.getString(R.string.toast_ad_refreshed));
+            refreshButton.setEnabled(false);
+            listener.adRefreshed();
+        }
+
+        @Override
+        public void favouriteRemoved(ResponseBody responseBody) {
+            MRKUtil.toast(activity, activity.getString(R.string.toast_removed_favourite));
+            listener.removeAd(getAdapterPosition());
+        }
+
+        @Override
+        public void notFound(Activity activity) {
+            MRKUtil.toast(activity, activity.getString(R.string.toast_ad_not_exist));
+            listener.removeAd(getAdapterPosition());
+        }
+
+        @Override
+        public void notAcceptable(Activity activity) {
+            MRKUtil.toast(activity, activity.getString(R.string.toast_not_favourite));
+            listener.removeAd(getAdapterPosition());
+        }
+
+        @Override
+        public void unhandledError(Activity activity, String error) {
+            MRKUtil.toast(activity, activity.getString(R.string.toast_not_favourite));
+            listener.unhandledError(activity, error);
         }
     }
 

@@ -35,10 +35,6 @@ public final class AppConstants {
     public static final int MAX_RESULTS = 6;
     public static final String AD_ID_KEY = "adId";
 
-    public static final int NORMAL_MODE = 1;
-    public static final int ACTIVE_MODE = 2;
-    public static final int INACTIVE_MODE = 3;
-    public static final int FAVOURITE_MODE = 4;
     public static final int LOGIN_CODE = 5;
     public static final String VIEW_MODE = "mode";
     public static final String AD_POSITION = "position";
@@ -49,5 +45,10 @@ public final class AppConstants {
     public static final String CATEGORY_KEY = "categoryId";
     public static final String SUBCATEGORY_KEY = "subcategoryId";
     public static final String PROVINCE_KEY = "provinceId";
+
+    public static final int MODE_NORMAL = 0;
+    public static final int MODE_ACTIVE = 1;
+    public static final int MODE_INACTIVE = 2;
+    public static final int MODE_FAVOURITE = 3;
 
 }

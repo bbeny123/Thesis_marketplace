@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.user.UserData;
+import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nameField = headerView.findViewById(R.id.nav_user);
         emailField = headerView.findViewById(R.id.nav_email);
 
-        startAdListFragment(AdFragment.ListModes.NORMAL_MODE, R.id.nav_ads, getString(R.string.title_default));
+        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
     }
 
     @Override
@@ -67,16 +68,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_ads:
-                startAdListFragment(AdFragment.ListModes.NORMAL_MODE, R.id.nav_ads, getString(R.string.title_default));
+                startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
                 break;
             case R.id.nav_favourites:
-                startAdListFragment(AdFragment.ListModes.FAVOURITE_MODE, R.id.nav_favourites, getString(R.string.title_favourites));
+                startAdListFragment(AppConstants.MODE_FAVOURITE, R.id.nav_favourites, getString(R.string.title_favourites));
                 break;
             case R.id.nav_active:
-                startAdListFragment(AdFragment.ListModes.ACTIVE_MODE, R.id.nav_active, getString(R.string.title_active));
+                startAdListFragment(AppConstants.MODE_ACTIVE, R.id.nav_active, getString(R.string.title_active));
                 break;
             case R.id.nav_inactive:
-                startAdListFragment(AdFragment.ListModes.INACTIVE_MODE, R.id.nav_inactive, getString(R.string.title_inactive));
+                startAdListFragment(AppConstants.MODE_INACTIVE, R.id.nav_inactive, getString(R.string.title_inactive));
                 break;
             case R.id.nav_new:
                 startActivity(new Intent(this, NewAddActivity.class));
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void logout() {
         SharedPrefUtil.getInstance(this).removeUserData();
-        startAdListFragment(AdFragment.ListModes.NORMAL_MODE, R.id.nav_ads, getString(R.string.title_default));
+        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
         prepareActivity();
         MRKUtil.toast(this, getString(R.string.toast_logout_successful));
     }

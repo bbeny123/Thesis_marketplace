@@ -152,7 +152,7 @@ public class AdManager {
             return;
         }
         callList = adService.getFavourites(token, getFavouriteAdSearchQuery(offset));
-        callList.enqueue(getRetrofitCallback(adListener::favouritesReceived, errorListener));
+        callList.enqueue(getRetrofitCallback(adListener::adsReceived, errorListener));
     }
 
     public void cancelCalls() {

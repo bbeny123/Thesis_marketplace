@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="kwasilewski.marketplace.activity.AdFragment">
@@ -88,14 +88,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <kwasilewski.marketplace.helper.MRKRecyclerView
             android:id="@+id/ad_list_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/fragment_ad">
 
-        </android.support.v7.widget.RecyclerView>
+        </kwasilewski.marketplace.helper.MRKRecyclerView>
 
         <TextView
             android:id="@+id/ad_list_empty"

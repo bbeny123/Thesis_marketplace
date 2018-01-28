@@ -93,6 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_weight="0.33"
+            android:enabled="false"
             android:text="@string/action_refresh" />
 
         <Button

@@ -22,6 +22,8 @@ import kwasilewski.marketplace.retrofit.manager.AdManager;
 import kwasilewski.marketplace.retrofit.manager.HintManager;
 import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SpinnerUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 import okhttp3.ResponseBody;
 
 public class EditActivity extends AppCompatActivity implements HintListener, AdListener, ErrorListener {
@@ -59,7 +61,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         setContentView(R.layout.activity_edit);
 
         adId = extras.getLong(AppConstants.AD_ID_KEY);
-        position = extras.getInt(AppConstants.AD_POSITION);
+        position = extras.getInt(AppConstants.AD_POS_KEY);
 
         Toolbar toolbar = findViewById(R.id.edit_toolbar);
         MRKUtil.setToolbar(this, toolbar);
@@ -72,19 +74,19 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
 
         titleField = findViewById(R.id.edit_title);
         priceField = findViewById(R.id.edit_price);
-        priceField.addTextChangedListener(MRKUtil.getTextWatcherPositiveNumber());
+        priceField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
         descriptionField = findViewById(R.id.edit_description);
         cityField = findViewById(R.id.edit_city);
         phoneField = findViewById(R.id.edit_phone);
 
         provinceField = findViewById(R.id.edit_province);
-        provinceField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, provinceField));
+        provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
 
         categoryField = findViewById(R.id.edit_category);
-        categoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
+        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
 
         subcategoryField = findViewById(R.id.edit_subcategory);
-        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, subcategoryField));
+        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
 
         Button saveButton = findViewById(R.id.edit_save_button);
         saveButton.setOnClickListener(v -> attemptModify(ad.isActive()));
@@ -109,7 +111,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putLong(AppConstants.AD_ID_KEY, adId);
-        outState.putInt(AppConstants.AD_POSITION, position);
+        outState.putInt(AppConstants.AD_POS_KEY, position);
         super.onSaveInstanceState(outState);
     }
 
@@ -130,7 +132,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
 
     private void showProgress(final boolean show) {
         inProgress = show;
-        MRKUtil.showProgressBarHideView(this, editForm, progressBar, show);
+        MRKUtil.showProgressBar(this, editForm, progressBar, show);
     }
 
     private void pullAd() {
@@ -170,35 +172,35 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPhoneValid(this, phone, phoneField, false)) {
+        if (!ValidUtil.isPhoneValid(this, phone, phoneField, false)) {
             focusView = phoneField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, province, provinceField)) {
+        if (ValidUtil.spinnerEmpty(this, province, provinceField)) {
             focusView = provinceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, city, cityField)) {
+        if (ValidUtil.fieldEmpty(this, city, cityField)) {
             focusView = cityField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, category, categoryField)) {
+        if (ValidUtil.spinnerEmpty(this, category, categoryField)) {
             focusView = categoryField;
             cancel = true;
-        } else if (MRKUtil.spinnerEmpty(this, subcategory, subcategoryField)) {
+        } else if (ValidUtil.spinnerEmpty(this, subcategory, subcategoryField)) {
             focusView = subcategoryField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, price, priceField)) {
+        if (ValidUtil.fieldEmpty(this, price, priceField)) {
             focusView = priceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, title, titleField)) {
+        if (ValidUtil.fieldEmpty(this, title, titleField)) {
             focusView = titleField;
             cancel = true;
         }
@@ -257,9 +259,9 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
 
     @Override
     public void hintsReceived(ComboHintData hints) {
-        MRKUtil.setHintAdapter(this, provinceField, hints.getProvinces());
-        MRKUtil.setHintAdapter(this, categoryField, hints.getCategories());
-        MRKUtil.setHintAdapter(this, subcategoryField, hints.getCategories().stream().filter(cat -> cat.getId().equals(categoryField.getItemId())).findAny().orElse(null).getSubcategories());
+        SpinnerUtil.setHintAdapter(this, provinceField, hints.getProvinces());
+        SpinnerUtil.setHintAdapter(this, categoryField, hints.getCategories());
+        SpinnerUtil.setHintAdapter(this, subcategoryField, hints.getCategories().stream().filter(cat -> cat.getId().equals(categoryField.getItemId())).findAny().orElse(null).getSubcategories());
         showProgress(false);
     }
 
@@ -268,7 +270,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         MRKUtil.toast(this, getString(R.string.toast_ad_modified));
         if (ad.isActive()) {
             Intent resultIntent = new Intent();
-            resultIntent.putExtra(AppConstants.AD_POSITION, position);
+            resultIntent.putExtra(AppConstants.AD_POS_KEY, position);
             setResult(RESULT_OK, resultIntent);
         }
         finish();
@@ -295,7 +297,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     private void addNotExists() {
         MRKUtil.toast(this, getString(R.string.toast_ad_not_available));
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(AppConstants.AD_POSITION, position);
+        resultIntent.putExtra(AppConstants.AD_POS_KEY, position);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

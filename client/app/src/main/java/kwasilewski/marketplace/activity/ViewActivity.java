@@ -67,7 +67,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         setContentView(R.layout.activity_view);
 
         adId = extras.getLong(AppConstants.AD_ID_KEY);
-        position = extras.getInt(AppConstants.AD_POSITION);
+        position = extras.getInt(AppConstants.AD_POS_KEY);
 
         Toolbar toolbar = findViewById(R.id.ad_toolbar);
         MRKUtil.setToolbar(this, toolbar);
@@ -108,7 +108,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putLong(AppConstants.AD_ID_KEY, adId);
-        outState.putInt(AppConstants.AD_POSITION, position);
+        outState.putInt(AppConstants.AD_POS_KEY, position);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
 
     private void showProgress(final boolean show) {
         inProgress = show;
-        MRKUtil.showProgressBarHideView(this, adForm, progressBar, show);
+        MRKUtil.showProgressBar(this, adForm, progressBar, show);
     }
 
     private void pullAd() {
@@ -149,7 +149,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         }
 
         ViewPager viewPager = findViewById(R.id.ad_view_pager);
-        viewPager.setLayoutParams(MRKUtil.getPagerLayout(this));
+        viewPager.setLayoutParams(PhotoAdapter.getPagerLayout(this));
 
         PhotoAdapter adapter = new PhotoAdapter(getSupportFragmentManager(), ad.getDecodedPhotos());
         viewPager.setAdapter(adapter);
@@ -301,7 +301,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     private void addNotExists() {
         MRKUtil.toast(this, getString(R.string.toast_ad_not_available));
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(AppConstants.AD_POSITION, position);
+        resultIntent.putExtra(AppConstants.AD_POS_KEY, position);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

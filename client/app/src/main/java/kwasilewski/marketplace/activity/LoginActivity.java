@@ -18,6 +18,7 @@ import kwasilewski.marketplace.retrofit.listener.UserListener;
 import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 
 public class LoginActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
@@ -95,12 +96,12 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPasswordValid(this, password, passwordEditText)) {
+        if (!ValidUtil.isPasswordValid(this, password, passwordEditText)) {
             focusView = passwordEditText;
             cancel = true;
         }
 
-        if (!MRKUtil.isEmailValid(this, email, emailEditText)) {
+        if (!ValidUtil.isEmailValid(this, email, emailEditText)) {
             focusView = emailEditText;
             cancel = true;
         }
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     }
 
     private void showProgress(final boolean show) {
-        MRKUtil.showProgressBarHideView(this, loginFormView, progressBar, show);
+        MRKUtil.showProgressBar(this, loginFormView, progressBar, show);
     }
 
     @Override

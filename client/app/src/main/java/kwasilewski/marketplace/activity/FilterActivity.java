@@ -18,6 +18,8 @@ import kwasilewski.marketplace.retrofit.listener.HintListener;
 import kwasilewski.marketplace.retrofit.manager.HintManager;
 import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SpinnerUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 
 public class FilterActivity extends AppCompatActivity implements HintListener, ErrorListener {
 
@@ -47,17 +49,17 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         titleField = findViewById(R.id.filter_title);
         priceFromField = findViewById(R.id.filter_price_from);
         priceToField = findViewById(R.id.filter_price_to);
-        priceToField.addTextChangedListener(MRKUtil.getTextWatcherPositiveNumber());
+        priceToField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
 
         provinceField = findViewById(R.id.filter_province);
-        provinceField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, provinceField));
+        provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
 
         categoryField = findViewById(R.id.filter_category);
-        categoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
+        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
 
         subcategoryField = findViewById(R.id.filter_subcategory);
-        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, subcategoryField));
-        MRKUtil.enableSpinner(subcategoryField, false);
+        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
+        SpinnerUtil.enableSpinner(subcategoryField, false);
 
         Button searchButton = findViewById(R.id.filter_search_button);
         searchButton.setOnClickListener(v -> searchAds());
@@ -111,8 +113,8 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
     private void setDataFromBundles(Bundle extras) {
         if (extras != null) {
             titleField.setText(extras.getString(AppConstants.TITLE_KEY));
-            priceFromField.setText(extras.getString(AppConstants.PRICE_FROM_KEY));
-            priceToField.setText(extras.getString(AppConstants.PRICE_TO_KEY));
+            priceFromField.setText(extras.getString(AppConstants.PRICE_MIN_KEY));
+            priceToField.setText(extras.getString(AppConstants.PRICE_MAX_KEY));
             provinceField.setItemId(extras.getLong(AppConstants.PROVINCE_KEY));
             categoryField.setItemId(extras.getLong(AppConstants.CATEGORY_KEY));
             subcategoryField.setItemId(extras.getLong(AppConstants.SUBCATEGORY_KEY));
@@ -129,21 +131,21 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         categoryField.setItemId(null);
         subcategoryField.setText(null);
         subcategoryField.setItemId(null);
-        MRKUtil.enableSpinner(subcategoryField, false);
+        SpinnerUtil.enableSpinner(subcategoryField, false);
         filterView.clearFocus();
         MRKUtil.hideKeyboard(this);
     }
 
     private void showProgress(final boolean show) {
-        MRKUtil.showProgressBarHideView(this, filterView, progressBar, show);
+        MRKUtil.showProgressBar(this, filterView, progressBar, show);
     }
 
     @Override
     public void hintsReceived(ComboHintData hints) {
-        MRKUtil.setSpinnerAdapterAndName(this, provinceField, hints.getProvinces());
-        MRKUtil.setSpinnerAdapterAndName(this, categoryField, hints.getCategories());
-        hints.getCategories().stream().filter(cat -> cat.getId().equals(categoryField.getItemId())).findAny().ifPresent(cat -> MRKUtil.setSpinnerAdapterAndName(this, subcategoryField, cat.getSubcategories()));
-        MRKUtil.enableSpinner(subcategoryField, subcategoryField.getAdapter() != null);
+        SpinnerUtil.setSpinnerAdapterAndName(this, provinceField, hints.getProvinces());
+        SpinnerUtil.setSpinnerAdapterAndName(this, categoryField, hints.getCategories());
+        hints.getCategories().stream().filter(cat -> cat.getId().equals(categoryField.getItemId())).findAny().ifPresent(cat -> SpinnerUtil.setSpinnerAdapterAndName(this, subcategoryField, cat.getSubcategories()));
+        SpinnerUtil.enableSpinner(subcategoryField, subcategoryField.getAdapter() != null);
         showProgress(false);
     }
 

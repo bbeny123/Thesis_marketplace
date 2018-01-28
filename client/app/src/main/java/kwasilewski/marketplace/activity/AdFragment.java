@@ -64,7 +64,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         AdFragment fragment = new AdFragment();
 
         Bundle args = new Bundle();
-        args.putInt(AppConstants.VIEW_MODE, listMode);
+        args.putInt(AppConstants.MODE_KEY, listMode);
         fragment.setArguments(args);
 
         return fragment;
@@ -73,7 +73,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listMode = getArguments() != null ? getArguments().getInt(AppConstants.VIEW_MODE) : AppConstants.MODE_NORMAL;
+        listMode = getArguments() != null ? getArguments().getInt(AppConstants.MODE_KEY) : AppConstants.MODE_NORMAL;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         filterButton = view.findViewById(R.id.ad_list_filters);
         filterButton.setOnClickListener(v -> {
             v.setEnabled(false);
-            startActivityForResult(MRKUtil.getFilterIntent(getContext(), title, priceMin, priceMax, prvId, catId, sctId), AppConstants.FILTER_ACTIVITY_CODE);
+            startActivityForResult(MRKUtil.getFilterIntent(getContext(), title, priceMin, priceMax, prvId, catId, sctId), AppConstants.FILTER_CODE);
         });
 
         View sortButton = view.findViewById(R.id.ad_list_sort);
@@ -158,7 +158,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AppConstants.FILTER_ACTIVITY_CODE && resultCode == RESULT_OK) {
+        if (requestCode == AppConstants.FILTER_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
                 setFilterParams(extras);
@@ -166,7 +166,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else if (requestCode == AppConstants.REMOVABLE_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                removeAd(extras.getInt(AppConstants.AD_POSITION));
+                removeAd(extras.getInt(AppConstants.AD_POS_KEY));
             }
         }
     }
@@ -196,8 +196,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     private void setFilterParams(Bundle extras) {
         title = extras.getString(AppConstants.TITLE_KEY);
-        priceMin = extras.getString(AppConstants.PRICE_FROM_KEY);
-        priceMax = extras.getString(AppConstants.PRICE_TO_KEY);
+        priceMin = extras.getString(AppConstants.PRICE_MIN_KEY);
+        priceMax = extras.getString(AppConstants.PRICE_MAX_KEY);
         catId = extras.getLong(AppConstants.CATEGORY_KEY);
         sctId = extras.getLong(AppConstants.SUBCATEGORY_KEY);
         prvId = extras.getLong(AppConstants.PROVINCE_KEY);
@@ -296,8 +296,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     public void viewAd(Long id, int position) {
         Intent viewIntent = new Intent(getActivity(), ViewActivity.class);
         viewIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        viewIntent.putExtra(AppConstants.AD_POSITION, position);
-        viewIntent.putExtra(AppConstants.VIEW_MODE, listMode == AppConstants.MODE_FAVOURITE ? AppConstants.MODE_NORMAL : listMode);
+        viewIntent.putExtra(AppConstants.AD_POS_KEY, position);
+        viewIntent.putExtra(AppConstants.MODE_KEY, listMode == AppConstants.MODE_FAVOURITE ? AppConstants.MODE_NORMAL : listMode);
         startActivityForResult(viewIntent, AppConstants.REMOVABLE_CODE);
     }
 
@@ -305,7 +305,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     public void editAd(final Long id, int position) {
         Intent editIntent = new Intent(getActivity(), EditActivity.class);
         editIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        editIntent.putExtra(AppConstants.AD_POSITION, position);
+        editIntent.putExtra(AppConstants.AD_POS_KEY, position);
         startActivityForResult(editIntent, AppConstants.REMOVABLE_CODE);
     }
 

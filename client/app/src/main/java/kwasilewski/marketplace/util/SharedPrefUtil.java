@@ -11,15 +11,14 @@ public class SharedPrefUtil {
 
     private static SharedPrefUtil instance;
     private final SharedPreferences sharedPref;
-    private final Gson gson;
+    private final Gson gson = new Gson();
+    private boolean tokenSet;
+    private boolean userDataSet;
     private String token;
     private UserData userData;
-    private boolean tokenSet = false;
-    private boolean userDataSet = false;
 
     private SharedPrefUtil(Context context) {
         sharedPref = context.getSharedPreferences(AppConstants.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        gson = new Gson();
     }
 
     public static SharedPrefUtil getInstance(Context context) {

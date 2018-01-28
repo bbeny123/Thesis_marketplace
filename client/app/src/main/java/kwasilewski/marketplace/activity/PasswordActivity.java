@@ -17,6 +17,7 @@ import kwasilewski.marketplace.retrofit.listener.UserListener;
 import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 import okhttp3.ResponseBody;
 
 public class PasswordActivity extends AppCompatActivity implements UserListener, ErrorListener {
@@ -65,7 +66,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
 
     private void showProgress(final boolean show) {
         changingOn = show;
-        MRKUtil.showProgressBarHideView(this, passwordForm, progressBar, show);
+        MRKUtil.showProgressBar(this, passwordForm, progressBar, show);
     }
 
     private void attemptModify() {
@@ -85,12 +86,12 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPasswordValid(this, newText, newField)) {
+        if (!ValidUtil.isPasswordValid(this, newText, newField)) {
             focusView = newField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, confirmText, confirmField)) {
+        if (ValidUtil.fieldEmpty(this, confirmText, confirmField)) {
             focusView = confirmField;
             cancel = true;
         }
@@ -101,7 +102,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
             cancel = true;
         }
 
-        if (!MRKUtil.isPasswordValid(this, oldText, oldField)) {
+        if (!ValidUtil.isPasswordValid(this, oldText, oldField)) {
             focusView = oldField;
             cancel = true;
         }

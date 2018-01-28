@@ -23,6 +23,8 @@ import kwasilewski.marketplace.retrofit.manager.HintManager;
 import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
+import kwasilewski.marketplace.util.SpinnerUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 
 public class ProfileActivity extends AppCompatActivity implements HintListener, UserListener, ErrorListener {
 
@@ -66,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         });
 
         provinceField = findViewById(R.id.profile_province);
-        provinceField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, provinceField));
+        provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
 
         Button modifyButton = findViewById(R.id.profile_modify_button);
         modifyButton.setOnClickListener(view -> attemptModify());
@@ -110,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
 
     private void showProgress(final boolean show) {
         inProgress = show;
-        MRKUtil.showProgressBarHideView(this, updateForm, progressBar, show);
+        MRKUtil.showProgressBar(this, updateForm, progressBar, show);
     }
 
     private void goToPasswordChange() {
@@ -141,22 +143,22 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPhoneValid(this, phone, phoneField, true)) {
+        if (!ValidUtil.isPhoneValid(this, phone, phoneField, true)) {
             focusView = phoneField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, province, provinceField)) {
+        if (ValidUtil.spinnerEmpty(this, province, provinceField)) {
             focusView = provinceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, city, cityField)) {
+        if (ValidUtil.fieldEmpty(this, city, cityField)) {
             focusView = cityField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, firstName, firstNameField)) {
+        if (ValidUtil.fieldEmpty(this, firstName, firstNameField)) {
             focusView = firstNameField;
             cancel = true;
         }
@@ -172,7 +174,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
 
     @Override
     public void provincesReceived(List<HintData> provinces) {
-        MRKUtil.setHintAdapter(this, provinceField, provinces);
+        SpinnerUtil.setHintAdapter(this, provinceField, provinces);
         showProgress(false);
     }
 

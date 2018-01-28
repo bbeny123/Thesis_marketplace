@@ -41,6 +41,8 @@ import kwasilewski.marketplace.retrofit.manager.HintManager;
 import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
+import kwasilewski.marketplace.util.SpinnerUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 import okhttp3.ResponseBody;
 
 public class NewAddActivity extends AppCompatActivity implements HintListener, AdListener, ErrorListener {
@@ -82,7 +84,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
         titleField = findViewById(R.id.new_title);
         priceField = findViewById(R.id.new_price);
-        priceField.addTextChangedListener(MRKUtil.getTextWatcherPositiveNumber());
+        priceField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
         descriptionField = findViewById(R.id.new_description);
         cityField = findViewById(R.id.new_city);
         phoneField = findViewById(R.id.new_phone);
@@ -95,12 +97,12 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         });
 
         provinceField = findViewById(R.id.new_province);
-        provinceField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, provinceField));
+        provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
         categoryField = findViewById(R.id.new_category);
-        categoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
+        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
         subcategoryField = findViewById(R.id.new_subcategory);
-        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> MRKUtil.getClickedItemId(adapterView, position, subcategoryField));
-        MRKUtil.enableSpinner(subcategoryField, false);
+        subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
+        SpinnerUtil.enableSpinner(subcategoryField, false);
 
         Button addButton = findViewById(R.id.new_add_button);
         addButton.setOnClickListener(view -> attemptAdd());
@@ -197,7 +199,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         items.add(new DialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setAdapter(MRKUtil.getDialogAdapter(this, items), (dialog, which) -> {
+        builder.setAdapter(DialogItem.getDialogAdapter(this, items), (dialog, which) -> {
             if (which == 0 && position != 0) {
                 photos.setThumbnail(this, position);
             } else {
@@ -218,8 +220,8 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
     @Override
     public void hintsReceived(ComboHintData hints) {
-        MRKUtil.setHintAdapter(this, provinceField, hints.getProvinces());
-        MRKUtil.setHintAdapter(this, categoryField, hints.getCategories());
+        SpinnerUtil.setHintAdapter(this, provinceField, hints.getProvinces());
+        SpinnerUtil.setHintAdapter(this, categoryField, hints.getCategories());
         showProgress(false);
     }
 
@@ -250,35 +252,35 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPhoneValid(this, phone, phoneField, false)) {
+        if (!ValidUtil.isPhoneValid(this, phone, phoneField, false)) {
             focusView = phoneField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, province, provinceField)) {
+        if (ValidUtil.spinnerEmpty(this, province, provinceField)) {
             focusView = provinceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, city, cityField)) {
+        if (ValidUtil.fieldEmpty(this, city, cityField)) {
             focusView = cityField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, category, categoryField)) {
+        if (ValidUtil.spinnerEmpty(this, category, categoryField)) {
             focusView = categoryField;
             cancel = true;
-        } else if (MRKUtil.spinnerEmpty(this, subcategory, subcategoryField)) {
+        } else if (ValidUtil.spinnerEmpty(this, subcategory, subcategoryField)) {
             focusView = subcategoryField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, price, priceField)) {
+        if (ValidUtil.fieldEmpty(this, price, priceField)) {
             focusView = priceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, title, titleField)) {
+        if (ValidUtil.fieldEmpty(this, title, titleField)) {
             focusView = titleField;
             cancel = true;
         }
@@ -294,7 +296,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
     private void showProgress(final boolean show) {
         inProgress = true;
-        MRKUtil.showProgressBarHideView(this, newForm, progressBar, show);
+        MRKUtil.showProgressBar(this, newForm, progressBar, show);
     }
 
     @Override

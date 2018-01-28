@@ -21,6 +21,8 @@ import kwasilewski.marketplace.retrofit.listener.UserListener;
 import kwasilewski.marketplace.retrofit.manager.HintManager;
 import kwasilewski.marketplace.retrofit.manager.UserManager;
 import kwasilewski.marketplace.util.MRKUtil;
+import kwasilewski.marketplace.util.SpinnerUtil;
+import kwasilewski.marketplace.util.ValidUtil;
 import okhttp3.ResponseBody;
 
 public class RegisterActivity extends AppCompatActivity implements UserListener, HintListener, ErrorListener {
@@ -68,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         });
 
         provinceField = findViewById(R.id.register_province);
-        provinceField.setOnItemClickListener((adapter, view, position, l) -> MRKUtil.getClickedItemId(adapter, position, provinceField));
+        provinceField.setOnItemClickListener((adapter, view, position, l) -> SpinnerUtil.getClickedItemId(adapter, position, provinceField));
 
         Button singUpButton = findViewById(R.id.register_button);
         singUpButton.setOnClickListener(view -> attemptRegister());
@@ -120,32 +122,32 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         boolean cancel = false;
         View focusView = null;
 
-        if (!MRKUtil.isPhoneValid(this, phone, phoneField, true)) {
+        if (!ValidUtil.isPhoneValid(this, phone, phoneField, true)) {
             focusView = phoneField;
             cancel = true;
         }
 
-        if (MRKUtil.spinnerEmpty(this, province, provinceField)) {
+        if (ValidUtil.spinnerEmpty(this, province, provinceField)) {
             focusView = provinceField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, city, cityField)) {
+        if (ValidUtil.fieldEmpty(this, city, cityField)) {
             focusView = cityField;
             cancel = true;
         }
 
-        if (MRKUtil.fieldEmpty(this, firstName, firstNameField)) {
+        if (ValidUtil.fieldEmpty(this, firstName, firstNameField)) {
             focusView = firstNameField;
             cancel = true;
         }
 
-        if (!MRKUtil.isPasswordValid(this, password, passwordField)) {
+        if (!ValidUtil.isPasswordValid(this, password, passwordField)) {
             focusView = passwordField;
             cancel = true;
         }
 
-        if (!MRKUtil.isEmailValid(this, email, emailField)) {
+        if (!ValidUtil.isEmailValid(this, email, emailField)) {
             focusView = emailField;
             cancel = true;
         }
@@ -161,12 +163,12 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
 
     private void showProgress(final boolean show) {
         inProgress = show;
-        MRKUtil.showProgressBarHideView(this, registerForm, progressBar, show);
+        MRKUtil.showProgressBar(this, registerForm, progressBar, show);
     }
 
     @Override
     public void provincesReceived(List<HintData> provinces) {
-        MRKUtil.setHintAdapter(this, provinceField, provinces);
+        SpinnerUtil.setHintAdapter(this, provinceField, provinces);
         showProgress(false);
     }
 

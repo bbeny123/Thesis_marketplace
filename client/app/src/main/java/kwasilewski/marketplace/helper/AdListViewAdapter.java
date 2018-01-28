@@ -149,7 +149,11 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         }
 
         private void setThumbnail(byte[] decodedPhoto) {
-            this.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(decodedPhoto, 0, decodedPhoto.length));
+            if (decodedPhoto != null) {
+                this.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(decodedPhoto, 0, decodedPhoto.length));
+            } else {
+                this.thumbnail.setImageDrawable(activity.getDrawable(android.R.drawable.ic_menu_camera));
+            }
         }
 
         private void enableRefreshButton(boolean enable) {

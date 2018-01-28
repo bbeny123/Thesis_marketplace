@@ -51,4 +51,6 @@ public final class AppConstants {
     public static final int MODE_INACTIVE = 2;
     public static final int MODE_FAVOURITE = 3;
 
+    public static final int FILTER_ACTIVITY_CODE = 1;
+    public static final int REMOVABLE_CODE = 2;
 }

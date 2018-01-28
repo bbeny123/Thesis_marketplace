@@ -30,6 +30,7 @@ import okhttp3.ResponseBody;
 
 public class ViewActivity extends AppCompatActivity implements AdListener, ErrorListener {
 
+
     private int position;
     private Long adId;
 
@@ -116,6 +117,17 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppConstants.REMOVABLE_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                addNotExists();
+            }
+        }
+    }
+
     private void showProgress(final boolean show) {
         inProgress = show;
         MRKUtil.showProgressBarHideView(this, adForm, progressBar, show);
@@ -187,9 +199,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     private void edit() {
         Intent intent = new Intent(this, EditActivity.class);
         intent.putExtra(AppConstants.AD_ID_KEY, adId);
-        intent.putExtra(AppConstants.AD_POSITION, position);
-        //      startActivityForResult(intent, AppConstants);
-        startActivity(intent);
+        startActivityForResult(intent, AppConstants.REMOVABLE_CODE);
     }
 
     private void changeStatus() {

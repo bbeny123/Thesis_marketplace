@@ -35,14 +35,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener, AdListener, ErrorListener, MRKSearchView.TitleListener, MRKRecyclerView.RecyclerListener {
 
-    private static final int FILTER_ACTIVITY_CODE = 1;
-    private static final int REMOVABLE_CODE = 2;
     private final List<AdMinimalData> ads = new ArrayList<>();
     private int listMode = AppConstants.MODE_NORMAL;
     private boolean inProgress = false;
     private AdManager adManager;
     private AdManager adButtonManager;
-    //filter params
     private int sortingMethod = AdMinimalData.SortingMethod.NEWEST;
     private String title = "";
     private String priceMin;
@@ -108,7 +105,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         filterButton = view.findViewById(R.id.ad_list_filters);
         filterButton.setOnClickListener(v -> {
             v.setEnabled(false);
-            startActivityForResult(MRKUtil.getFilterIntent(getContext(), title, priceMin, priceMax, prvId, catId, sctId), FILTER_ACTIVITY_CODE);
+            startActivityForResult(MRKUtil.getFilterIntent(getContext(), title, priceMin, priceMax, prvId, catId, sctId), AppConstants.FILTER_ACTIVITY_CODE);
         });
 
         View sortButton = view.findViewById(R.id.ad_list_sort);
@@ -161,12 +158,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == FILTER_ACTIVITY_CODE && resultCode == RESULT_OK) {
+        if (requestCode == AppConstants.FILTER_ACTIVITY_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
                 setFilterParams(extras);
             }
-        } else if (requestCode == REMOVABLE_CODE && resultCode == RESULT_OK) {
+        } else if (requestCode == AppConstants.REMOVABLE_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
                 removeAd(extras.getInt(AppConstants.AD_POSITION));
@@ -232,7 +229,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             LinkedHashSet<AdMinimalData> newAds = new LinkedHashSet<>(this.ads);
             newAds.addAll(ads);
             this.ads.clear();
-            this.ads.addAll(ads);
+            this.ads.addAll(newAds);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
         setEmptyListTextView();
@@ -301,7 +298,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         viewIntent.putExtra(AppConstants.AD_ID_KEY, id);
         viewIntent.putExtra(AppConstants.AD_POSITION, position);
         viewIntent.putExtra(AppConstants.VIEW_MODE, listMode == AppConstants.MODE_FAVOURITE ? AppConstants.MODE_NORMAL : listMode);
-        startActivityForResult(viewIntent, REMOVABLE_CODE);
+        startActivityForResult(viewIntent, AppConstants.REMOVABLE_CODE);
     }
 
     @Override
@@ -309,7 +306,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         Intent editIntent = new Intent(getActivity(), EditActivity.class);
         editIntent.putExtra(AppConstants.AD_ID_KEY, id);
         editIntent.putExtra(AppConstants.AD_POSITION, position);
-        startActivityForResult(editIntent, REMOVABLE_CODE);
+        startActivityForResult(editIntent, AppConstants.REMOVABLE_CODE);
     }
 
     @Override

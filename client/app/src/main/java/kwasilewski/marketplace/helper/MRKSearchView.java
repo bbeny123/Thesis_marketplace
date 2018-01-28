@@ -10,7 +10,7 @@ public class MRKSearchView extends SearchView {
 
     private TitleListener titleListener;
     private MenuItem searchBar;
-    private SearchView.OnQueryTextListener queryListener = new OnQueryTextListener() {
+    private final SearchView.OnQueryTextListener queryListener = new OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
             if (!TextUtils.isEmpty(query)) {

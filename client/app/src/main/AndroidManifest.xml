@@ -54,6 +54,9 @@
         <activity
             android:name=".activity.FilterActivity"
             android:label="@string/title_activity_filter" />
+        <activity
+            android:name=".activity.EditActivity"
+            android:label="@string/title_activity_edit" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -65,10 +68,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".activity.EditActivity"
-            android:label="@string/title_activity_edit"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

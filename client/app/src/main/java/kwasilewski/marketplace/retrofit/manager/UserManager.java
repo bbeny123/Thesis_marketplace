@@ -19,10 +19,10 @@ import retrofit2.Call;
 public class UserManager {
 
     private final static UserService userService = RetrofitService.getInstance().getUserService();
-    private Activity activity;
+    private final Activity activity;
+    private final UserListener userListener;
     private Call<ResponseBody> call;
     private Call<UserData> callUser;
-    private UserListener userListener;
     private String token;
 
     public UserManager(Activity activity, UserListener userListener) {

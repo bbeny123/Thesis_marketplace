@@ -61,7 +61,7 @@ public class SharedPrefUtil {
         this.token = token;
     }
 
-    public void saveToken(String token) {
+    private void saveToken(String token) {
         saveString(AppConstants.SHARED_PREF_TOKEN, token);
         setToken(token);
     }

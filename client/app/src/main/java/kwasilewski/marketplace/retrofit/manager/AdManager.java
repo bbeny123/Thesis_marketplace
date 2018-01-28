@@ -24,11 +24,11 @@ import retrofit2.Call;
 public class AdManager {
 
     private final static AdService adService = RetrofitService.getInstance().getAdService();
-    private Activity activity;
+    private final Activity activity;
+    private final AdListener adListener;
     private Call<ResponseBody> call;
     private Call<AdDetailsData> callAd;
     private Call<List<AdMinimalData>> callList;
-    private AdListener adListener;
     private String token;
 
     public AdManager(Activity activity, AdListener adListener) {

@@ -31,9 +31,7 @@ import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
@@ -195,43 +193,6 @@ public class MRKUtil {
         return new LinearLayout.LayoutParams(size.x, size.x);
     }
 
-    public static Map<String, String> getAdSearchQuery(int offset, int sortingMethod, String title, Long prvId, Long catId, String priceMin, String priceMax) {
-        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
-        searchQuery.put("sortingMethod", String.valueOf(sortingMethod));
-        if (!TextUtils.isEmpty(title)) {
-            searchQuery.put("title", title);
-        }
-        if (prvId != null && prvId != 0) {
-            searchQuery.put("prvId", String.valueOf(prvId));
-        }
-        if (catId != null && catId != 0) {
-            searchQuery.put("catId", String.valueOf(catId));
-        }
-        if (!TextUtils.isEmpty(priceMin)) {
-            searchQuery.put("priceMin", priceMin);
-        }
-        if (!TextUtils.isEmpty(priceMax)) {
-            searchQuery.put("priceMax", priceMax);
-        }
-        return searchQuery;
-    }
-
-    public static Map<String, String> getUserAdSearchQuery(int offset, boolean active) {
-        Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
-        if (!active) {
-            searchQuery.put("active", "false");
-        }
-        return searchQuery;
-    }
-
-    public static Map<String, String> getFavouriteAdSearchQuery(int offset) {
-        Map<String, String> searchQuery = new HashMap<>();
-        searchQuery.put("offset", String.valueOf(offset));
-        searchQuery.put("maxResults", String.valueOf(AppConstants.MAX_RESULTS));
-        return searchQuery;
-    }
-
-
     public static TextWatcher getTextWatcherPositiveNumber() {
         return new TextWatcher() {
             @Override
@@ -288,7 +249,7 @@ public class MRKUtil {
         spinner.setAdapter(adapter);
     }
 
-    public static void refreshSpinner(Context context, HintSpinner spinner, List<HintData> hintData) {
+    private static void refreshSpinner(Context context, HintSpinner spinner, List<HintData> hintData) {
         spinner.setText(null);
         spinner.setItemId(null);
         setHintAdapter(context, spinner, hintData);

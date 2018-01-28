@@ -17,10 +17,10 @@ import retrofit2.Call;
 public class HintManager {
 
     private final static HintService hintService = RetrofitService.getInstance().getHintService();
-    private Activity activity;
+    private final Activity activity;
+    private final HintListener hintListener;
     private Call<ComboHintData> callCombo;
     private Call<List<HintData>> callProvince;
-    private HintListener hintListener;
 
     public HintManager(Activity activity, HintListener hintListener) {
         this.activity = activity;

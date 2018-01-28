@@ -12,9 +12,9 @@ import retrofit2.Response;
 
 public class RetrofitCallback<T> implements Callback<T> {
 
-    private Consumer<T> function;
-    private Activity activity;
-    private ErrorListener errorListener;
+    private final Consumer<T> function;
+    private final Activity activity;
+    private final ErrorListener errorListener;
 
     public RetrofitCallback(Consumer<T> function, Activity activity, ErrorListener errorListener) {
         this.function = function;

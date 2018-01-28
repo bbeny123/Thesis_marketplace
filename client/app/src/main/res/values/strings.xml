@@ -68,7 +68,6 @@
     <string name="action_remove_photo">Remove photo</string>
     <string name="action_cancel">Cancel</string>
     <string name="toast_permissions">Camera and file permissions are required to add photo!</string>
-    <string name="error_price_invalid">Price must be bigger than 0.</string>
     <string name="toast_ad_created">Ad successfully created.</string>
     <string name="ad_image_description">Photo</string>
     <string name="ad_thumbnail_description">Thumbnail</string>

@@ -293,5 +293,13 @@ public class MRKUtil {
         enableSpinner(spinner, true);
     }
 
+    public static void setSpinnerAdapterAndName(Context context, HintSpinner spinner, List<? extends HintData> hintData) {
+        if (hintData != null) {
+            HintData hint = hintData.stream().filter(prv -> prv.getId().equals(spinner.getItemId())).findAny().orElse(null);
+            spinner.setText(hint != null ? hint.getName() : null);
+        }
+        setHintAdapter(context, spinner, hintData);
+    }
+
 }
 

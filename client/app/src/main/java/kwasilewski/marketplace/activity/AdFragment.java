@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import kwasilewski.marketplace.R;
@@ -74,26 +73,6 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdListViewAdapter adapter;
-    //listeners - init code at the bottom (except recycler)
-    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
-        private final int threshold = 3;
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-    };
     private TextView emptyListTextView;
     private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
         @Override
@@ -111,6 +90,26 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
                 connectionProblemAtStart();
             } else {
                 connectionProblem();
+            }
+        }
+    };
+    //listeners - init code at the bottom (except recycler)
+    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
+        private final int threshold = 3;
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                pullAds();
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                pullAds();
             }
         }
     };
@@ -225,12 +224,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
 
     private void setFilterParams(Bundle extras) {
-        title = extras.getString(FilterActivity.TITLE_KEY);
-        priceMin = extras.getString(FilterActivity.PRICE_FROM_KEY);
-        priceMax = extras.getString(FilterActivity.PRICE_TO_KEY);
-        catId = extras.getLong(FilterActivity.CATEGORY_KEY);
-        sctId = extras.getLong(FilterActivity.SUBCATEGORY_KEY);
-        prvId = extras.getLong(FilterActivity.PROVINCE_KEY);
+        title = extras.getString(AppConstants.TITLE_KEY);
+        priceMin = extras.getString(AppConstants.PRICE_FROM_KEY);
+        priceMax = extras.getString(AppConstants.PRICE_TO_KEY);
+        catId = extras.getLong(AppConstants.CATEGORY_KEY);
+        sctId = extras.getLong(AppConstants.SUBCATEGORY_KEY);
+        prvId = extras.getLong(AppConstants.PROVINCE_KEY);
         resetAdapter();
         setSearchBar();
         setFilterLabel();
@@ -286,7 +285,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void setAdsCall() {
         if(listMode == ListModes.NORMAL_MODE) {
             Long categoryId = sctId != 0L ? sctId : catId;
-            callAds = adService.getAds(MRKUtil.getAdSearchQuery(ads.size(), sortingMethod, title, prvId, categoryId, priceMin, priceMax));
+            callAds = adService.getAds(MRKUtil.getAdSearchQuery(0, sortingMethod, title, prvId, categoryId, priceMin, priceMax));
         } else if (listMode == ListModes.ACTIVE_MODE) {
             callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), true));
         } else if (listMode == ListModes.INACTIVE_MODE) {
@@ -297,9 +296,9 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
     private void addAdsToAdapter(List<AdMinimalData> newAds) {
         if (!newAds.isEmpty()) {
-            LinkedHashSet<AdMinimalData> noDuplicates = new LinkedHashSet<>(ads);
-            noDuplicates.addAll(newAds);
-            ads.clear();
+            //LinkedHashSet<AdMinimalData> noDuplicates = new LinkedHashSet<>(ads);
+            //   noDuplicates.addAll(newAds);
+            //    ads.clear();
             ads.addAll(newAds);
             adapter.notifyDataSetChanged();
         }
@@ -327,12 +326,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             public void onClick(View v) {
                 v.setEnabled(false);
                 Intent filterIntent = new Intent(getContext(), FilterActivity.class);
-                filterIntent.putExtra(FilterActivity.TITLE_KEY, title);
-                filterIntent.putExtra(FilterActivity.PRICE_FROM_KEY, priceMin);
-                filterIntent.putExtra(FilterActivity.PRICE_TO_KEY, priceMax);
-                filterIntent.putExtra(FilterActivity.CATEGORY_KEY, catId);
-                filterIntent.putExtra(FilterActivity.SUBCATEGORY_KEY, sctId);
-                filterIntent.putExtra(FilterActivity.PROVINCE_KEY, prvId);
+                filterIntent.putExtra(AppConstants.TITLE_KEY, title);
+                filterIntent.putExtra(AppConstants.PRICE_FROM_KEY, priceMin);
+                filterIntent.putExtra(AppConstants.PRICE_TO_KEY, priceMax);
+                filterIntent.putExtra(AppConstants.CATEGORY_KEY, catId);
+                filterIntent.putExtra(AppConstants.SUBCATEGORY_KEY, sctId);
+                filterIntent.putExtra(AppConstants.PROVINCE_KEY, prvId);
                 startActivityForResult(filterIntent, FILTER_ACTIVITY_CODE);
             }
         };

@@ -43,4 +43,11 @@ public final class AppConstants {
     public static final String VIEW_MODE = "mode";
     public static final String AD_POSITION = "position";
 
+    public static final String TITLE_KEY = "title";
+    public static final String PRICE_FROM_KEY = "priceFrom";
+    public static final String PRICE_TO_KEY = "priceTo";
+    public static final String CATEGORY_KEY = "categoryId";
+    public static final String SUBCATEGORY_KEY = "subcategoryId";
+    public static final String PROVINCE_KEY = "provinceId";
+
 }

@@ -41,7 +41,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private int listMode = AppConstants.MODE_NORMAL;
     private boolean inProgress = false;
     private AdManager adManager;
-
+    private AdManager adButtonManager;
     //filter params
     private int sortingMethod = AdMinimalData.SortingMethod.NEWEST;
     private String title = "";
@@ -169,7 +169,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else if (requestCode == REMOVABLE_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                //       removeAdFromAdapter(extras.getInt(AppConstants.AD_POSITION));
+                removeAd(extras.getInt(AppConstants.AD_POSITION));
             }
         }
     }
@@ -188,7 +188,12 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void onPause() {
-        adManager.cancelCalls();
+        if (adManager != null) {
+            adManager.cancelCalls();
+        }
+        if (adButtonManager != null) {
+            adButtonManager.cancelCalls();
+        }
         super.onPause();
     }
 
@@ -310,6 +315,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void refreshAd(final Long id, final AdManager manager, final ErrorListener errorListener) {
         if (!inProgress) {
+            adButtonManager = manager;
             showProgress(true);
             manager.refreshAd(id, errorListener);
         }
@@ -318,6 +324,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void changeAdStatus(final Long id, final AdManager manager, final ErrorListener errorListener) {
         if (!inProgress) {
+            adButtonManager = manager;
             showProgress(true);
             manager.changeAdStatus(id, errorListener);
         }
@@ -326,6 +333,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     @Override
     public void removeFavourite(final Long id, final AdManager manager, final ErrorListener errorListener) {
         if (!inProgress) {
+            adButtonManager = manager;
             showProgress(true);
             manager.removeFavourite(id, errorListener);
         }

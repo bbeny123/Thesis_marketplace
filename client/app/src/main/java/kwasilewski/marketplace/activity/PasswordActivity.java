@@ -29,6 +29,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
     private TextInputEditText oldField;
     private TextInputEditText newField;
     private TextInputEditText confirmField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

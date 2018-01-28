@@ -62,8 +62,7 @@
                     app:lineWidth="30dp"
                     app:selectedColor="#FF880000"
                     app:strokeWidth="4dp"
-                    app:unselectedColor="#FF888888"
-                    />
+                    app:unselectedColor="#FF888888" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

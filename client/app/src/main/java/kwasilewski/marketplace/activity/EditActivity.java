@@ -51,7 +51,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras == null){
+        if (extras == null) {
             finish();
             return;
         }

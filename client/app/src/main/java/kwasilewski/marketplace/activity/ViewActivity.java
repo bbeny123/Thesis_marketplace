@@ -58,7 +58,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras == null){
+        if (extras == null) {
             finish();
             return;
         }
@@ -142,7 +142,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         PhotoAdapter adapter = new PhotoAdapter(getSupportFragmentManager(), ad.getDecodedPhotos());
         viewPager.setAdapter(adapter);
 
-        PageIndicator indicator = (LinePageIndicator)findViewById(R.id.ad_indicator);
+        PageIndicator indicator = (LinePageIndicator) findViewById(R.id.ad_indicator);
         indicator.setViewPager(viewPager);
     }
 

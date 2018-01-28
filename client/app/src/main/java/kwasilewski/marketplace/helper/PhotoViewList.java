@@ -35,9 +35,9 @@ public class PhotoViewList {
 
     public void remove(Context context, int position) {
         photoContained--;
-        for(int i = position; i < photoContained; i++) {
-            if (photos.get(i).getUri().equals(photos.get(i+1).getUri())) continue;
-            photos.get(i).setUri(photos.get(i+1).getUri());
+        for (int i = position; i < photoContained; i++) {
+            if (photos.get(i).getUri().equals(photos.get(i + 1).getUri())) continue;
+            photos.get(i).setUri(photos.get(i + 1).getUri());
             Picasso.with(context).load(photos.get(i).getUri()).transform(new PhotoTransform(i == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(i));
         }
         photos.get(photoContained).setContainsPhoto(false);
@@ -71,7 +71,7 @@ public class PhotoViewList {
     public String getEncodedThumbnail(Context context) {
         if (photoContained == 0) return null;
         byte[] encodedPhoto = getByteFromUri(context, photos.get(0).getUri());
-        if(encodedPhoto != null) {
+        if (encodedPhoto != null) {
             return Base64.encodeToString(encodedPhoto, Base64.DEFAULT);
         }
         return null;
@@ -82,7 +82,7 @@ public class PhotoViewList {
         List<String> encodedPhotos = new ArrayList<>();
         for (int i = 1; i < photoContained; i++) {
             byte[] encodedPhoto = getByteFromUri(context, photos.get(i).getUri());
-            if(encodedPhoto != null) {
+            if (encodedPhoto != null) {
                 encodedPhotos.add(Base64.encodeToString(encodedPhoto, Base64.DEFAULT));
             }
         }
@@ -93,7 +93,7 @@ public class PhotoViewList {
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,bos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             return bos.toByteArray();
         } catch (IOException e) {
             return null;

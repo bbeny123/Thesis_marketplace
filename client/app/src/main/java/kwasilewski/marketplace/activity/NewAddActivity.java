@@ -191,7 +191,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
     private void photoDialog(final int position) {
         List<DialogItem> items = new ArrayList<>();
-        if(position != 0) {
+        if (position != 0) {
             items.add(new DialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery));
         }
         items.add(new DialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete));

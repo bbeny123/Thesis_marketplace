@@ -10,6 +10,7 @@ public class AdMinimalData {
     private String views;
     private String miniature;
     private boolean refreshable;
+
     AdMinimalData() {
     }
 

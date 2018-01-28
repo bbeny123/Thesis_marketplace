@@ -17,8 +17,8 @@
             android:id="@+id/filter_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:paddingEnd="8dp"
             android:background="?attr/colorPrimary"
+            android:paddingEnd="8dp"
             app:popupTheme="@style/PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>

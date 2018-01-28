@@ -31,7 +31,7 @@ public class PhotoAdapterItem extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             decodedPhoto = getArguments().getByteArray(KEY_CONTENT);
         }
     }

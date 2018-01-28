@@ -49,7 +49,7 @@ public class HintSpinner extends AppCompatAutoCompleteTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(!super.isEnabled()) return false;
+        if (!super.isEnabled()) return false;
         performClick();
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP: {

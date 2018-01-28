@@ -94,7 +94,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
     }
 
     private void searchAds() {
-        Intent result = new Intent();
+
 
         String priceMin = priceFromField.getText().toString();
         String priceMax = priceToField.getText().toString();
@@ -103,13 +103,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
             priceMin = priceMax;
             priceMax = temp;
         }
-
-        result.putExtra(AppConstants.TITLE_KEY, titleField.getText().toString());
-        result.putExtra(AppConstants.PRICE_FROM_KEY, priceMin);
-        result.putExtra(AppConstants.PRICE_TO_KEY, priceMax);
-        result.putExtra(AppConstants.PROVINCE_KEY, provinceField.getItemId());
-        result.putExtra(AppConstants.SUBCATEGORY_KEY, subcategoryField.getItemId());
-        result.putExtra(AppConstants.CATEGORY_KEY, categoryField.getItemId());
+        Intent result = MRKUtil.getFilterIntent(this, titleField.getText().toString(), priceMin, priceMax, provinceField.getItemId(), categoryField.getItemId(), subcategoryField.getItemId());
         setResult(AppCompatActivity.RESULT_OK, result);
         finish();
     }

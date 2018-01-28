@@ -1,15 +1,15 @@
 package kwasilewski.marketplace.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,36 +19,35 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 import kwasilewski.marketplace.R;
 import kwasilewski.marketplace.dto.ad.AdMinimalData;
 import kwasilewski.marketplace.helper.AdListViewAdapter;
 import kwasilewski.marketplace.helper.MRKSearchView;
-import kwasilewski.marketplace.retrofit.RetrofitService;
-import kwasilewski.marketplace.retrofit.service.AdService;
+import kwasilewski.marketplace.retrofit.listener.AdListener;
+import kwasilewski.marketplace.retrofit.listener.ErrorListener;
+import kwasilewski.marketplace.retrofit.manager.AdManager;
 import kwasilewski.marketplace.util.AppConstants;
 import kwasilewski.marketplace.util.MRKUtil;
 import kwasilewski.marketplace.util.SharedPrefUtil;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener {
+public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsClickListener, AdListener, ErrorListener, MRKSearchView.TitleListener {
 
     private static final int FILTER_ACTIVITY_CODE = 1;
     private static final int REMOVABLE_CODE = 2;
     private static final int REFRESH_ACTION = 1;
     private static final int STATUS_ACTION = 2;
     private static final int FAVOURITE_ACTION = 3;
-    private static final String LIST_MODE = "mode";
     private final List<AdMinimalData> ads = new ArrayList<>();
-    private final AdService adService = RetrofitService.getInstance().getAdService();
+
+    private AdManager adManager;
     private int listMode = ListModes.NORMAL_MODE;
     //filter params
     private int sortingMethod = SortingMethod.NEWEST;
@@ -59,60 +58,16 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private String priceMin;
     private String priceMax;
     private String token;
-    private Call<List<AdMinimalData>> callAds;
-    private Call<ResponseBody> callAd;
-    private boolean callActive = false;
-    private View.OnClickListener listenerFilter;
-    private View.OnClickListener listenerSort;
-    private PopupMenu.OnMenuItemClickListener listenerPopupMenu;
-    private SearchView.OnQueryTextListener listenerSearchQuery;
-    private View.OnClickListener listenerSearchClear;
-    private MenuItemCompat.OnActionExpandListener listenerSearchClose;
+
+    private boolean inProgress = false;
+
     private View progressBar;
     private View filterButton;
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private AdListViewAdapter adapter;
     private TextView emptyListTextView;
-    private final Callback<List<AdMinimalData>> callbackAds = new Callback<List<AdMinimalData>>() {
-        @Override
-        public void onResponse(Call<List<AdMinimalData>> call, Response<List<AdMinimalData>> response) {
-            if (response.isSuccessful()) {
-                addAdsToAdapter(response.body());
-            } else {
-                connectionProblem();
-            }
-        }
 
-        @Override
-        public void onFailure(Call<List<AdMinimalData>> call, Throwable t) {
-            if (!call.isCanceled() && ads.size() == 0) {
-                connectionProblemAtStart();
-            } else {
-                connectionProblem();
-            }
-        }
-    };
-    //listeners - init code at the bottom (except recycler)
-    private final RecyclerView.OnScrollListener listenerRecycler = new RecyclerView.OnScrollListener() {
-        private final int threshold = 3;
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
-                pullAds();
-            }
-        }
-    };
     private TextView filterLabel;
     private TextView filterActiveLabel;
     private TextView sortLabel;
@@ -126,7 +81,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         AdFragment fragment = new AdFragment();
 
         Bundle args = new Bundle();
-        args.putInt(LIST_MODE, listMode);
+        args.putInt(AppConstants.VIEW_MODE, listMode);
         fragment.setArguments(args);
 
         return fragment;
@@ -136,7 +91,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            listMode = getArguments().getInt(LIST_MODE);
+            listMode = getArguments().getInt(AppConstants.VIEW_MODE);
         }
     }
 
@@ -151,8 +106,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         adapter = new AdListViewAdapter(ads, getContext(), this, listMode);
         setRecyclerAdapter();
 
+        adManager = new AdManager(getActivity(), this);
         if (listMode == ListModes.NORMAL_MODE) {
-            setNormalModeListeners();
             setHasOptionsMenu(true);
             View filterView = view.findViewById(R.id.ad_list_filters_bar);
             filterView.setVisibility(View.VISIBLE);
@@ -160,9 +115,30 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
             filterActiveLabel = view.findViewById(R.id.ad_list_filters_active);
             sortLabel = view.findViewById(R.id.ad_list_sort_label);
             filterButton = view.findViewById(R.id.ad_list_filters);
-            filterButton.setOnClickListener(listenerFilter);
+            filterButton.setOnClickListener(v -> {
+                v.setEnabled(false);
+                Intent filterIntent = MRKUtil.getFilterIntent(getContext(), title, priceMin, priceMax, prvId, catId, sctId);
+                startActivityForResult(filterIntent, FILTER_ACTIVITY_CODE);
+            });
             View sortByButton = view.findViewById(R.id.ad_list_sort);
-            sortByButton.setOnClickListener(listenerSort);
+            sortByButton.setOnClickListener(v -> {
+                if (getContext() == null) {
+                    return;
+                }
+                PopupMenu popupMenu = new PopupMenu(getContext(), v);
+                popupMenu.inflate(R.menu.menu_sort);
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.sort_newest) {
+                        sortingMenuItemClicked(R.string.label_sort_default, SortingMethod.NEWEST);
+                    } else if (item.getItemId() == R.id.sort_cheapest) {
+                        sortingMenuItemClicked(R.string.label_sort_cheapest, SortingMethod.CHEAPEST);
+                    } else if (item.getItemId() == R.id.sort_most_expensive) {
+                        sortingMenuItemClicked(R.string.label_sort_most_expensive, SortingMethod.MOSTEXPENSIVE);
+                    }
+                    return true;
+                });
+                popupMenu.show();
+            });
         } else {
             token = SharedPrefUtil.getInstance(getContext()).getToken();
         }
@@ -179,10 +155,9 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         inflater.inflate(R.menu.menu_search, menu);
         searchBar = menu.findItem(R.id.action_search);
         searchView = (MRKSearchView) searchBar.getActionView();
-        searchView.setOnQueryTextListener(listenerSearchQuery);
+        searchView.prepareSearchView(searchBar, this);
         searchView.setQueryHint(getString(R.string.label_search));
-        searchView.findViewById(R.id.search_close_btn).setOnClickListener(listenerSearchClear);
-        MenuItemCompat.setOnActionExpandListener(searchBar, listenerSearchClose);
+        searchView.findViewById(R.id.search_close_btn).setOnClickListener(v -> searchBar.collapseActionView());
     }
 
     @Override
@@ -196,7 +171,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else if (requestCode == REMOVABLE_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                removeAdFromAdapter(extras.getInt(AppConstants.AD_POSITION));
+                //       removeAdFromAdapter(extras.getInt(AppConstants.AD_POSITION));
             }
         }
     }
@@ -214,12 +189,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void onPause() {
-        if (callAds != null) {
-            callAds.cancel();
-        }
-        if (callAd != null) {
-            callAd.cancel();
-        }
+        adManager.cancelCalls();
         super.onPause();
     }
 
@@ -235,6 +205,11 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         setFilterLabel();
     }
 
+    private void resetAdapter() {
+        ads.clear();
+        pullAds();
+    }
+
     private void setSearchBar() {
         if (!TextUtils.isEmpty(title)) {
             searchBar.expandActionView();
@@ -244,13 +219,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     }
 
     private void setFilterLabel() {
-        int activeFilters = 0;
-        activeFilters += TextUtils.isEmpty(title) ? 0 : 1;
-        activeFilters += prvId == 0 ? 0 : 1;
-        activeFilters += catId == 0 ? 0 : 1;
-        activeFilters += TextUtils.isEmpty(priceMin) ? 0 : 1;
-        activeFilters += TextUtils.isEmpty(priceMax) ? 0 : 1;
-
+        long activeFilters = Stream.of(TextUtils.isEmpty(title), prvId == 0, catId == 0, TextUtils.isEmpty(priceMin), TextUtils.isEmpty(priceMax)).filter(bool -> !bool).count();
         if (activeFilters != 0) {
             filterActiveLabel.setText(String.format(getString(R.string.label_filters_active), activeFilters));
             filterLabel.setText(null);
@@ -264,145 +233,86 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void setRecyclerAdapter() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(listenerRecycler);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private final int threshold = 3;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                    pullAds();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (recyclerView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && layoutManager.findLastVisibleItemPosition() >= adapter.getItemCount() - threshold) {
+                    pullAds();
+                }
+            }
+        });
     }
 
-    private void resetAdapter() {
-        ads.clear();
-        pullAds();
-    }
-
-    private void pullAds() {
-        if (callActive) {
-            return;
-        }
-        callActive = true;
-        showProgress(true);
-        setAdsCall();
-        callAds.enqueue(callbackAds);
-    }
-
-    private void setAdsCall() {
-        if(listMode == ListModes.NORMAL_MODE) {
-            Long categoryId = sctId != 0L ? sctId : catId;
-            callAds = adService.getAds(MRKUtil.getAdSearchQuery(0, sortingMethod, title, prvId, categoryId, priceMin, priceMax));
-        } else if (listMode == ListModes.ACTIVE_MODE) {
-            callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), true));
-        } else if (listMode == ListModes.INACTIVE_MODE) {
-            callAds = adService.getUserAds(token, MRKUtil.getUserAdSearchQuery(adapter.getItemCount(), false));
-        } else if (listMode == ListModes.FAVOURITE_MODE) {
-            callAds = adService.getFavourites(token, MRKUtil.getFavouriteAdSearchQuery(adapter.getItemCount()));
-        }
-    }
-    private void addAdsToAdapter(List<AdMinimalData> newAds) {
-        if (!newAds.isEmpty()) {
-            //LinkedHashSet<AdMinimalData> noDuplicates = new LinkedHashSet<>(ads);
-            //   noDuplicates.addAll(newAds);
-            //    ads.clear();
-            ads.addAll(newAds);
+    @Override
+    public void adsReceived(List<AdMinimalData> ads) {
+        if (!ads.isEmpty()) {
+            LinkedHashSet<AdMinimalData> noDuplicates = new LinkedHashSet<>(this.ads);
+            noDuplicates.addAll(ads);
+            this.ads.clear();
+            this.ads.addAll(ads);
             adapter.notifyDataSetChanged();
         }
         setEmptyListTextView();
-        endOfCall();
+        showProgress(false);
+    }
+
+    @Override
+    public void unhandledError(Activity activity, String error) {
+        if (ads.size() == 0) {
+            startActivity(new Intent(getActivity(), NetErrorActivity.class));
+        } else {
+            showProgress(false);
+            MRKUtil.connectionProblem(getActivity());
+        }
+    }
+
+    private void setEmptyListTextView() {
+        if (!ads.isEmpty()) {
+            emptyListTextView.setVisibility(View.GONE);
+        } else {
+            emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode - 1]);
+            emptyListTextView.setVisibility(View.VISIBLE);
+        }
+    }
+    private void pullAds() {
+        if (inProgress) {
+            return;
+        }
+        inProgress = true;
+        showProgress(true);
+        switch (listMode) {
+            case ListModes.NORMAL_MODE:
+                Long categoryId = sctId != 0L ? sctId : catId;
+                adManager.pullAds(ads.size(), sortingMethod, title, prvId, categoryId, priceMin, priceMax, this);
+                break;
+            case ListModes.ACTIVE_MODE:
+                adManager.pullUserAds(adapter.getItemCount(), true, this);
+                break;
+            case ListModes.INACTIVE_MODE:
+                adManager.pullUserAds(adapter.getItemCount(), false, this);
+                break;
+            case ListModes.FAVOURITE_MODE:
+                adManager.pullFavourites(adapter.getItemCount(), this);
+                break;
+        }
     }
 
     private void showProgress(final boolean show) {
+        inProgress = show;
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void connectionProblem() {
-        showProgress(false);
-        MRKUtil.connectionProblem(getActivity());
-    }
-
-    private void connectionProblemAtStart() {
-        startActivity(new Intent(getActivity(), NetErrorActivity.class));
-    }
-
-    private void setNormalModeListeners() {
-
-        listenerFilter = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setEnabled(false);
-                Intent filterIntent = new Intent(getContext(), FilterActivity.class);
-                filterIntent.putExtra(AppConstants.TITLE_KEY, title);
-                filterIntent.putExtra(AppConstants.PRICE_FROM_KEY, priceMin);
-                filterIntent.putExtra(AppConstants.PRICE_TO_KEY, priceMax);
-                filterIntent.putExtra(AppConstants.CATEGORY_KEY, catId);
-                filterIntent.putExtra(AppConstants.SUBCATEGORY_KEY, sctId);
-                filterIntent.putExtra(AppConstants.PROVINCE_KEY, prvId);
-                startActivityForResult(filterIntent, FILTER_ACTIVITY_CODE);
-            }
-        };
-
-        listenerSort = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getContext() == null) {
-                    return;
-                }
-                PopupMenu popupMenu = new PopupMenu(getContext(), v);
-                popupMenu.inflate(R.menu.menu_sort);
-                popupMenu.setOnMenuItemClickListener(listenerPopupMenu);
-                popupMenu.show();
-            }
-        };
-
-        listenerPopupMenu = new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.sort_newest) {
-                    sortingMenuItemClicked(R.string.label_sort_default, SortingMethod.NEWEST);
-                } else if (item.getItemId() == R.id.sort_cheapest) {
-                    sortingMenuItemClicked(R.string.label_sort_cheapest, SortingMethod.CHEAPEST);
-                } else if (item.getItemId() == R.id.sort_most_expensive) {
-                    sortingMenuItemClicked(R.string.label_sort_most_expensive, SortingMethod.MOSTEXPENSIVE);
-                }
-                return true;
-            }
-        };
-
-        listenerSearchQuery = new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (!TextUtils.isEmpty(query)) {
-                    searchView.clearFocus();
-                    setTitle(query);
-                } else {
-                    searchBar.collapseActionView();
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        };
-
-        listenerSearchClear = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchBar.collapseActionView();
-            }
-        };
-
-        //searchView.setOnCloseListener is bugged since 4.1, deprecated methods are only way to do that
-        listenerSearchClose = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                setTitle("");
-                return true;
-            }
-        };
-
-    }
 
     private void sortingMenuItemClicked(int labelId, int sortingMethod) {
         if (this.sortingMethod != sortingMethod) {
@@ -412,7 +322,8 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         }
     }
 
-    private void setTitle(String title) {
+    @Override
+    public void setTitle(String title) {
         if (!TextUtils.equals(this.title, title)) {
             this.title = title;
             resetAdapter();
@@ -439,107 +350,28 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void refreshAd(final Long id, final Button button) {
-        changeAd(id, REFRESH_ACTION, 0, button);
+        //   changeAd(id, REFRESH_ACTION, 0, button);
     }
+
+
+//
+//
+//
+//
 
     @Override
     public void changeAdStatus(final Long id, final int position) {
-        changeAd(id, STATUS_ACTION, position, null);
+        //  changeAd(id, STATUS_ACTION, position, null);
     }
 
     @Override
     public void removeFavourite(final Long id, final int position) {
-        changeAd(id, FAVOURITE_ACTION, position, null);
+        //     changeAd(id, FAVOURITE_ACTION, position, null);
     }
 
-    private void changeAd(Long id, final int action, final int position, final Button button) {
-        if (callActive) {
-            return;
-        }
-        callActive = true;
-        showProgress(true);
-        setAdCall(action, id);
-        callAd.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    changeSuccess(action, position, button);
-                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    connectionProblem();
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
-                    adNotFound(position);
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
-                    favouriteNotExists(position);
-                } else {
-                    connectionProblem();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                if (!call.isCanceled()) connectionProblem();
-            }
-        });
-    }
-
-    private void setAdCall(int action, Long id) {
-        if (action == REFRESH_ACTION) {
-            callAd = adService.refreshAd(token, id);
-        } else if (action == STATUS_ACTION) {
-            callAd = adService.changeAdStatus(token, id);
-        } else if (action == FAVOURITE_ACTION) {
-            callAd = adService.removeFavourite(token, id);
-        }
-    }
-
-    private void removeAdFromAdapter(int position) {
-        ads.remove(position);
-        adapter.notifyDataSetChanged();
-        setEmptyListTextView();
-        endOfCall();
-    }
-
-    private void changeSuccess(int action, int position, Button button) {
-        if (action == REFRESH_ACTION) {
-            MRKUtil.toast(getActivity(), getString(R.string.toast_ad_refreshed));
-            button.setEnabled(false);
-            endOfCall();
-        } else {
-            if (action == STATUS_ACTION) {
-                if (listMode == ListModes.ACTIVE_MODE) {
-                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_deactivated));
-                } else {
-                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_activated));
-                }
-            } else if (action == FAVOURITE_ACTION) {
-                MRKUtil.toast(getActivity(), getString(R.string.toast_removed_favourite));
-            }
-            removeAdFromAdapter(position);
-        }
-    }
-
-    private void endOfCall() {
-        showProgress(false);
-        callActive = false;
-    }
-
-    private void adNotFound(int position) {
-        removeAdFromAdapter(position);
-        MRKUtil.toast(getActivity(), getString(R.string.toast_ad_not_exist));
-    }
-
-    private void favouriteNotExists(int position) {
-        removeAdFromAdapter(position);
-        MRKUtil.toast(getActivity(), getString(R.string.toast_not_favourite));
-    }
-
-    private void setEmptyListTextView() {
-        if (!ads.isEmpty()) {
-            emptyListTextView.setVisibility(View.GONE);
-        } else {
-            emptyListTextView.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode-1]);
-            emptyListTextView.setVisibility(View.VISIBLE);
-        }
+    @Override
+    public void adStatusChanged(ResponseBody responseBody) {
+        Log.d("RetrofitListener", "Unhandled adStatusChanged");
     }
 
     public interface SortingMethod {
@@ -554,5 +386,90 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         int INACTIVE_MODE = 3;
         int FAVOURITE_MODE = 4;
     }
+
+//
+//    private void changeAd(Long id, final int action, final int position, final Button button) {
+//        if (inProgress) {
+//            return;
+//        }
+//        inProgress = true;
+//        showProgress(true);
+//        if (action == REFRESH_ACTION) {
+//            adManager.refreshAd(id, this);
+//        } else if (action == STATUS_ACTION) {
+//            adManager.changeAdStatus(id, this);
+//        } else if (action == FAVOURITE_ACTION) {
+//            adManager.removeFavourite(id, this);
+//        }
+//        callAd.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()) {
+//                    changeSuccess(action, position, button);
+//                } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+//                    connectionProblem();
+//                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND) {
+//                    adNotFound(position);
+//                } else if (response.code() == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
+//                    favouriteNotExists(position);
+//                } else {
+//                    connectionProblem();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                if (!call.isCanceled()) connectionProblem();
+//            }
+//        });
+//    }
+//
+//    private void removeAdFromAdapter(int position) {
+//        ads.remove(position);
+//        adapter.notifyDataSetChanged();
+//        setEmptyListTextView();
+//        endOfCall();
+//    }
+//
+//    private void changeSuccess(int action, int position, Button button) {
+//        if (action == REFRESH_ACTION) {
+//            MRKUtil.toast(getActivity(), getString(R.string.toast_ad_refreshed));
+//            button.setEnabled(false);
+//            endOfCall();
+//        } else {
+//            if (action == STATUS_ACTION) {
+//                if (listMode == ListModes.ACTIVE_MODE) {
+//                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_deactivated));
+//                } else {
+//                    MRKUtil.toast(getActivity(), getString(R.string.toast_ad_activated));
+//                }
+//            } else if (action == FAVOURITE_ACTION) {
+//                MRKUtil.toast(getActivity(), getString(R.string.toast_removed_favourite));
+//            }
+//            removeAdFromAdapter(position);
+//        }
+//    }
+//
+//    private void endOfCall() {
+//
+//        inProgress = false;
+//    }
+//
+//    private void adNotFound(int position) {
+//        removeAdFromAdapter(position);
+//        MRKUtil.toast(getActivity(), getString(R.string.toast_ad_not_exist));
+//    }
+//
+//    private void favouriteNotExists(int position) {
+//        removeAdFromAdapter(position);
+//        MRKUtil.toast(getActivity(), getString(R.string.toast_not_favourite));
+//    }
+//
+
+//
+//    private void connectionProblem() {
+//        showProgress(false);
+//        MRKUtil.connectionProblem(getActivity());
+//    }
 
 }

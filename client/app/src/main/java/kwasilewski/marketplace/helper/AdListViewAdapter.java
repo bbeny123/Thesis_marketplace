@@ -1,7 +1,7 @@
 package kwasilewski.marketplace.helper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +75,65 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         return ads.size();
     }
 
+    private View.OnClickListener getItemClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.viewAd(id, position);
+            }
+        };
+    }
+
+    private View.OnClickListener getEditClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.editAd(id, position);
+            }
+        };
+    }
+
+    private View.OnClickListener getRefreshClickListener(final Long id, final Button button) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.refreshAd(id, button);
+            }
+        };
+    }
+
+    private View.OnClickListener getStatusClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.changeAdStatus(id, position);
+            }
+        };
+    }
+
+    private View.OnClickListener getFavouriteClickListener(final Long id, final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.removeFavourite(id, position);
+            }
+        };
+    }
+
+    public interface OnButtonsClickListener {
+
+        void viewAd(final Long id, final int position);
+
+        void editAd(final Long id, final int position);
+
+        void refreshAd(final Long id, final Button button);
+
+        void changeAdStatus(final Long id, final int position);
+
+        void removeFavourite(final Long id, final int position);
+
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private final View view;
         private final TextView title;
@@ -135,70 +194,9 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
             this.views.setText(String.format(Locale.getDefault(), "%s", views));
         }
 
-        private void setThumbnail(Bitmap bitmap) {
-            if(bitmap != null) {
-                this.thumbnail.setImageBitmap(bitmap);
-            }
+        private void setThumbnail(byte[] decodedPhoto) {
+            this.thumbnail.setImageBitmap(BitmapFactory.decodeByteArray(decodedPhoto, 0, decodedPhoto.length));
         }
-    }
-
-    private View.OnClickListener getItemClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.viewAd(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getEditClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.editAd(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getRefreshClickListener(final Long id, final Button button) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.refreshAd(id, button);
-            }
-        };
-    }
-
-    private View.OnClickListener getStatusClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.changeAdStatus(id, position);
-            }
-        };
-    }
-
-    private View.OnClickListener getFavouriteClickListener(final Long id, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.removeFavourite(id, position);
-            }
-        };
-    }
-
-    public interface OnButtonsClickListener {
-
-        void viewAd(final Long id, final int position);
-
-        void editAd(final Long id, final int position);
-
-        void refreshAd(final Long id, final Button button);
-
-        void changeAdStatus(final Long id, final int position);
-
-        void removeFavourite(final Long id, final int position);
-
     }
 
 }

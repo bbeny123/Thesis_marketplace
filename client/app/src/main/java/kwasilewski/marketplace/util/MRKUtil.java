@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,6 +37,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.activity.FilterActivity;
 import kwasilewski.marketplace.dto.hint.CategoryData;
 import kwasilewski.marketplace.dto.hint.HintData;
 import kwasilewski.marketplace.helper.DialogItem;
@@ -216,7 +218,7 @@ public class MRKUtil {
 
     public static Map<String, String> getUserAdSearchQuery(int offset, boolean active) {
         Map<String, String> searchQuery = getFavouriteAdSearchQuery(offset);
-        if(!active) {
+        if (!active) {
             searchQuery.put("active", "false");
         }
         return searchQuery;
@@ -295,11 +297,20 @@ public class MRKUtil {
 
     public static void setSpinnerAdapterAndName(Context context, HintSpinner spinner, List<? extends HintData> hintData) {
         if (hintData != null) {
-            HintData hint = hintData.stream().filter(prv -> prv.getId().equals(spinner.getItemId())).findAny().orElse(null);
-            spinner.setText(hint != null ? hint.getName() : null);
+            hintData.stream().filter(hint -> hint.getId().equals(spinner.getItemId())).findAny().ifPresent(hint -> spinner.setText(hint.getName()));
         }
         setHintAdapter(context, spinner, hintData);
     }
 
+    public static Intent getFilterIntent(Context context, String title, String priceMin, String priceMax, Long prvId, Long catId, Long sctId) {
+        Intent intent = new Intent(context, FilterActivity.class);
+        intent.putExtra(AppConstants.TITLE_KEY, title);
+        intent.putExtra(AppConstants.PRICE_FROM_KEY, priceMin);
+        intent.putExtra(AppConstants.PRICE_TO_KEY, priceMax);
+        intent.putExtra(AppConstants.PROVINCE_KEY, prvId);
+        intent.putExtra(AppConstants.CATEGORY_KEY, catId);
+        intent.putExtra(AppConstants.SUBCATEGORY_KEY, sctId);
+        return intent;
+    }
 }
 

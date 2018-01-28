@@ -9,9 +9,9 @@ import java.util.List;
 
 public class PhotoAdapter extends FragmentPagerAdapter {
 
-    private List<String> photos = new ArrayList<>();
+    private List<byte[]> photos = new ArrayList<>();
 
-    public PhotoAdapter(FragmentManager fm, List<String> photos) {
+    public PhotoAdapter(FragmentManager fm, List<byte[]> photos) {
         super(fm);
         this.photos = photos;
     }

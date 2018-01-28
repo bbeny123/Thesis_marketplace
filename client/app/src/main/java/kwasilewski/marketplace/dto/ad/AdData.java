@@ -1,7 +1,10 @@
 package kwasilewski.marketplace.dto.ad;
 
+import android.util.Base64;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdData extends AdMinimalData {
 
@@ -91,6 +94,10 @@ public class AdData extends AdMinimalData {
 
     public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    public List<byte[]> getDecodedPhotos() {
+        return photos.stream().map(photo -> Base64.decode(photo, Base64.DEFAULT)).collect(Collectors.toList());
     }
 
     public boolean isActive() {

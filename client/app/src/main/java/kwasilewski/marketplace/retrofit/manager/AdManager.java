@@ -144,7 +144,7 @@ public class AdManager {
             return;
         }
         callList = adService.getUserAds(token, getUserAdSearchQuery(offset, active));
-        callList.enqueue(getRetrofitCallback(adListener::userAdsReceived, errorListener));
+        callList.enqueue(getRetrofitCallback(adListener::adsReceived, errorListener));
     }
 
     public void pullFavourites(int offset, ErrorListener errorListener) {

@@ -132,14 +132,14 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     }
 
     private void setPhotoAdapter() {
-        if (ad.getPhotos().size() == 0) {
+        if (ad.getDecodedPhotos().size() == 0) {
             return;
         }
 
         ViewPager viewPager = findViewById(R.id.ad_view_pager);
         viewPager.setLayoutParams(MRKUtil.getPagerLayout(this));
 
-        PhotoAdapter adapter = new PhotoAdapter(getSupportFragmentManager(), ad.getPhotos());
+        PhotoAdapter adapter = new PhotoAdapter(getSupportFragmentManager(), ad.getDecodedPhotos());
         viewPager.setAdapter(adapter);
 
         PageIndicator indicator = (LinePageIndicator)findViewById(R.id.ad_indicator);

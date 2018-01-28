@@ -1,7 +1,5 @@
 package kwasilewski.marketplace.dto.ad;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 public class AdMinimalData {
@@ -75,12 +73,11 @@ public class AdMinimalData {
         this.refreshable = refreshable;
     }
 
-    public Bitmap getDecodedMiniature() {
+    public byte[] getDecodedMiniature() {
         if (miniature == null) {
             return null;
         }
-        byte[] decodedMiniature = Base64.decode(miniature, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedMiniature, 0, decodedMiniature.length);
+        return Base64.decode(miniature, Base64.DEFAULT);
     }
 
     @Override

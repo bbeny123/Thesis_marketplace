@@ -32,8 +32,7 @@ public class HintSpinner extends AppCompatAutoCompleteTextView {
     }
 
     @Override
-    protected void onFocusChanged(boolean focused, int direction,
-                                  Rect previouslyFocusedRect) {
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         if (focused) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -49,20 +48,18 @@ public class HintSpinner extends AppCompatAutoCompleteTextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!super.isEnabled()) return false;
+        if (!super.isEnabled()) {
+            return false;
+        }
         performClick();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP: {
-                if (isPopup) {
-                    dismissDropDown();
-                } else {
-                    requestFocus();
-                    showDropDown();
-                }
-                break;
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (isPopup) {
+                dismissDropDown();
+            } else {
+                requestFocus();
+                showDropDown();
             }
         }
-
         return super.onTouchEvent(event);
     }
 
@@ -101,4 +98,5 @@ public class HintSpinner extends AppCompatAutoCompleteTextView {
     public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
+
 }

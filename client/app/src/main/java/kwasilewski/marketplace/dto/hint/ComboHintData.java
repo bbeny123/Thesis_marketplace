@@ -25,4 +25,5 @@ public class ComboHintData {
     public void setCategories(List<CategoryData> categories) {
         this.categories = categories;
     }
+
 }

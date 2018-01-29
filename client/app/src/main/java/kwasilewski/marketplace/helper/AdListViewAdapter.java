@@ -51,7 +51,6 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         holder.enableRefreshButton(ad.isRefreshable());
         holder.setButtonListeners(ad.getId());
         holder.view.setOnClickListener(v -> listener.viewAd(ad.getId(), position));
-
     }
 
     @Override

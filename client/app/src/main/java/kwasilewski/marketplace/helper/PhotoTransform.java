@@ -6,60 +6,44 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 
-import com.squareup.picasso.Transformation;
 
+class PhotoTransform implements com.squareup.picasso.Transformation {
 
-class PhotoTransform implements Transformation {
+    private boolean miniature;
 
-    private boolean border = false;
-
-    public PhotoTransform() {
-
-    }
-
-    public PhotoTransform(boolean border) {
-        this.border = border;
+    public PhotoTransform(boolean miniature) {
+        this.miniature = miniature;
     }
 
     @Override
     public Bitmap transform(Bitmap source) {
-        int size = Math.min(source.getWidth(), source.getHeight());
 
-        int x = (source.getWidth() - size) / 2;
-        int y = (source.getHeight() - size) / 2;
+        if (!miniature) {
+            return source;
+        }
 
-        Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
-        if (squaredBitmap != source) {
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+
+        Bitmap output = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        canvas.drawRoundRect(new RectF(0, 0, source.getWidth(), source.getHeight()), 30, 30, paint);
+
+        if (source != output) {
             source.recycle();
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+        Paint paint1 = new Paint();
+        paint1.setColor(Color.LTGRAY);
+        paint1.setStyle(Paint.Style.STROKE);
+        paint1.setAntiAlias(true);
+        paint1.setStrokeWidth(10);
+        canvas.drawRoundRect(new RectF(0, 0, source.getWidth(), source.getHeight()), 35, 35, paint1);
 
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        BitmapShader shader = new BitmapShader(squaredBitmap, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
-        paint.setShader(shader);
-        paint.setAntiAlias(true);
-
-
-        float r = size / 8f;
-        canvas.drawRoundRect(new RectF(0, 0, source.getWidth(), source.getHeight()), r, r, paint);
-
-        if (border) {
-            addBorder(canvas, source.getWidth(), source.getHeight(), r);
-        }
-
-        squaredBitmap.recycle();
-        return bitmap;
-    }
-
-    private void addBorder(Canvas canvas, int width, int height, float r) {
-        Paint strokePaint = new Paint();
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setColor(Color.GRAY);
-        strokePaint.setStrokeWidth(50);
-        canvas.drawRoundRect(new RectF(0, 0, width, height), r, r, strokePaint);
+        return output;
     }
 
     @Override

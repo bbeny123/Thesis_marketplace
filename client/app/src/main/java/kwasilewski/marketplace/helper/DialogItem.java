@@ -16,9 +16,6 @@ public class DialogItem {
     private String name;
     private Integer icon;
 
-    public DialogItem() {
-    }
-
     public DialogItem(String name, Integer icon) {
         this.name = name;
         this.icon = icon;
@@ -54,4 +51,5 @@ public class DialogItem {
     public void setIcon(Integer icon) {
         this.icon = icon;
     }
+
 }

@@ -54,4 +54,5 @@ public class PhotoView extends android.support.v7.widget.AppCompatImageView {
     public void setUri(Uri uri) {
         this.uri = uri;
     }
+
 }

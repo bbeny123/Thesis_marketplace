@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 import kwasilewski.marketplace.R;
 
 public class PhotoViewList {
@@ -38,7 +39,7 @@ public class PhotoViewList {
         for (int i = position; i < photoContained; i++) {
             if (photos.get(i).getUri().equals(photos.get(i + 1).getUri())) continue;
             photos.get(i).setUri(photos.get(i + 1).getUri());
-            Picasso.with(context).load(photos.get(i).getUri()).transform(new PhotoTransform(i == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(i));
+            Picasso.with(context).load(photos.get(i).getUri()).transform(new RoundedCornersTransformation(20, 0)).fit().centerCrop().transform(new PhotoTransform(i == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(i));
         }
         photos.get(photoContained).setContainsPhoto(false);
         photos.get(photoContained).setUri(null);
@@ -58,14 +59,14 @@ public class PhotoViewList {
         Uri oldThumbnail = photos.get(0).getUri();
         photos.get(0).setUri(photos.get(position).getUri());
         photos.get(position).setUri(oldThumbnail);
-        Picasso.with(context).load(photos.get(0).getUri()).transform(new PhotoTransform(true)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(0));
-        Picasso.with(context).load(photos.get(position).getUri()).transform(new PhotoTransform()).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(position));
+        Picasso.with(context).load(photos.get(0).getUri()).transform(new RoundedCornersTransformation(20, 0)).fit().centerCrop().transform(new PhotoTransform(true)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(0));
+        Picasso.with(context).load(photos.get(position).getUri()).transform(new RoundedCornersTransformation(20, 0)).fit().centerCrop().transform(new PhotoTransform(false)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(position));
     }
 
     public void addPhoto(Context context, Uri uri) {
         photos.get(photoContained).setContainsPhoto(true);
         photos.get(photoContained).setUri(uri);
-        Picasso.with(context).load(uri).transform(new PhotoTransform(photoContained == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(photoContained++));
+        Picasso.with(context).load(uri).transform(new RoundedCornersTransformation(20, 0)).fit().centerCrop().transform(new PhotoTransform(photoContained == 0)).memoryPolicy(MemoryPolicy.NO_CACHE).into(photos.get(photoContained++));
     }
 
     public String getEncodedThumbnail(Context context) {

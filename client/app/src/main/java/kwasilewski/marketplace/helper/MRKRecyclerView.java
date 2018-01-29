@@ -58,7 +58,9 @@ public class MRKRecyclerView extends RecyclerView {
     }
 
     public interface RecyclerListener {
+
         void pullAds();
+
     }
 
 }

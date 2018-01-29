@@ -22,8 +22,8 @@ import kwasilewski.marketplace.util.ValidUtil;
 
 public class LoginActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
-    private boolean loginInProgress = false;
-    private boolean clicked = false;
+    private boolean inProgress;
+    private boolean clicked;
     private UserManager userManager;
 
     private TextInputEditText emailEditText;
@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     protected void onResume() {
         super.onResume();
         clicked = false;
+        inProgress = false;
     }
 
     @Override
@@ -81,11 +82,11 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     }
 
     private void attemptLogin() {
-        if (loginInProgress) {
+        if (inProgress) {
             return;
         }
 
-        loginInProgress = true;
+        inProgress = true;
 
         emailEditText.setError(null);
         passwordEditText.setError(null);
@@ -108,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
 
         if (cancel) {
             focusView.requestFocus();
-            loginInProgress = false;
+            inProgress = false;
         } else {
             showProgress(true);
             userManager.login(new LoginData(email, password), this);
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
 
     @Override
     public void unauthorized(Activity activity) {
-        loginInProgress = false;
+        inProgress = false;
         showProgress(false);
         passwordEditText.setError(getString(R.string.error_invalid_password_email));
         passwordEditText.requestFocus();
@@ -143,7 +144,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
 
     @Override
     public void unhandledError(Activity activity, String error) {
-        loginInProgress = false;
+        inProgress = false;
         showProgress(false);
         MRKUtil.connectionProblem(this);
     }

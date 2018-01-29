@@ -37,7 +37,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     private final List<AdMinimalData> ads = new ArrayList<>();
     private int listMode = AppConstants.MODE_NORMAL;
-    private boolean inProgress = false;
+    private boolean inProgress;
     private AdManager adManager;
     private AdManager adButtonManager;
     private int sortingMethod = AdMinimalData.SortingMethod.NEWEST;
@@ -94,6 +94,57 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_search, menu);
+
+        MenuItem searchBar = menu.findItem(R.id.action_search);
+        searchView = (MRKSearchView) searchBar.getActionView();
+        searchView.prepareSearchView(searchBar, this);
+        searchView.setQueryHint(getString(R.string.label_search));
+        searchView.findViewById(R.id.search_close_btn).setOnClickListener(v -> searchBar.collapseActionView());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        inProgress = false;
+        if (listMode == AppConstants.MODE_NORMAL) {
+            filterButton.setEnabled(true);
+        }
+        if (ads.size() == 0) {
+            pullAds();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (adManager != null) {
+            adManager.cancelCalls();
+        }
+        if (adButtonManager != null) {
+            adButtonManager.cancelCalls();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppConstants.FILTER_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                setFilterParams(extras);
+            }
+        } else if (requestCode == AppConstants.REMOVABLE_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                removeAd(extras.getInt(AppConstants.AD_POS_KEY));
+            }
+        }
+    }
+
     private void prepareNormalView(View view) {
         setHasOptionsMenu(true);
 
@@ -143,57 +194,6 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_search, menu);
-
-        MenuItem searchBar = menu.findItem(R.id.action_search);
-        searchView = (MRKSearchView) searchBar.getActionView();
-        searchView.prepareSearchView(searchBar, this);
-        searchView.setQueryHint(getString(R.string.label_search));
-        searchView.findViewById(R.id.search_close_btn).setOnClickListener(v -> searchBar.collapseActionView());
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AppConstants.FILTER_CODE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                setFilterParams(extras);
-            }
-        } else if (requestCode == AppConstants.REMOVABLE_CODE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                removeAd(extras.getInt(AppConstants.AD_POS_KEY));
-            }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        inProgress = false;
-        if (listMode == AppConstants.MODE_NORMAL) {
-            filterButton.setEnabled(true);
-        }
-        if (ads.size() == 0) {
-            pullAds();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        if (adManager != null) {
-            adManager.cancelCalls();
-        }
-        if (adButtonManager != null) {
-            adButtonManager.cancelCalls();
-        }
-        super.onPause();
-    }
-
     private void setFilterParams(Bundle extras) {
         title = extras.getString(AppConstants.TITLE_KEY);
         priceMin = extras.getString(AppConstants.PRICE_MIN_KEY);
@@ -223,27 +223,9 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         }
     }
 
-    @Override
-    public void adsReceived(List<AdMinimalData> ads) {
-        if (!ads.isEmpty()) {
-            LinkedHashSet<AdMinimalData> newAds = new LinkedHashSet<>(this.ads);
-            newAds.addAll(ads);
-            this.ads.clear();
-            this.ads.addAll(newAds);
-            recyclerView.getAdapter().notifyDataSetChanged();
-        }
-        setEmptyListTextView();
-        showProgress(false);
-    }
-
-    @Override
-    public void unhandledError(Activity activity, String error) {
-        showProgress(false);
-        if (ads.size() == 0) {
-            startActivity(new Intent(getActivity(), NetErrorActivity.class));
-        } else {
-            MRKUtil.connectionProblem(getActivity());
-        }
+    private void showProgress(final boolean show) {
+        inProgress = show;
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void setEmptyListTextView() {
@@ -252,6 +234,15 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         } else {
             emptyText.setText(getResources().getStringArray(R.array.ad_list_empty)[listMode]);
             emptyText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (!TextUtils.equals(this.title, title)) {
+            this.title = title;
+            resetAdapter();
+            setFilterLabel();
         }
     }
 
@@ -278,17 +269,26 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         }
     }
 
-    private void showProgress(final boolean show) {
-        inProgress = show;
-        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+    @Override
+    public void adsReceived(List<AdMinimalData> ads) {
+        if (!ads.isEmpty()) {
+            LinkedHashSet<AdMinimalData> newAds = new LinkedHashSet<>(this.ads);
+            newAds.addAll(ads);
+            this.ads.clear();
+            this.ads.addAll(newAds);
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
+        setEmptyListTextView();
+        showProgress(false);
     }
 
     @Override
-    public void setTitle(String title) {
-        if (!TextUtils.equals(this.title, title)) {
-            this.title = title;
-            resetAdapter();
-            setFilterLabel();
+    public void unhandledError(Activity activity, String error) {
+        showProgress(false);
+        if (ads.size() == 0) {
+            startActivity(new Intent(getActivity(), NetErrorActivity.class));
+        } else {
+            MRKUtil.connectionProblem(getActivity());
         }
     }
 

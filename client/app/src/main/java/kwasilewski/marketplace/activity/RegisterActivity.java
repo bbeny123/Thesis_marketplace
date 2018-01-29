@@ -27,7 +27,7 @@ import okhttp3.ResponseBody;
 
 public class RegisterActivity extends AppCompatActivity implements UserListener, HintListener, ErrorListener {
 
-    private boolean inProgress = false;
+    private boolean inProgress;
     private HintManager hintManager;
     private UserManager userManager;
 

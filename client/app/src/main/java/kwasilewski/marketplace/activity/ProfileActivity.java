@@ -28,8 +28,8 @@ import kwasilewski.marketplace.util.ValidUtil;
 
 public class ProfileActivity extends AppCompatActivity implements HintListener, UserListener, ErrorListener {
 
-    private boolean inProgress = false;
-    private boolean clicked = false;
+    private boolean inProgress;
+    private boolean clicked;
     private HintManager hintManager;
     private UserManager userManager;
     private View progressBar;

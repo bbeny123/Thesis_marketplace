@@ -95,6 +95,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     @Override
     protected void onResume() {
         super.onResume();
+        inProgress = false;
         if (subcategoryField.getAdapter() == null) {
             showProgress(true);
             pullAd();

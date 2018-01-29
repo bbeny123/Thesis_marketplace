@@ -22,7 +22,7 @@ import okhttp3.ResponseBody;
 
 public class PasswordActivity extends AppCompatActivity implements UserListener, ErrorListener {
 
-    private boolean changingOn = false;
+    private boolean inProgress;
     private UserManager userManager;
 
     private View progressBar;
@@ -53,6 +53,12 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        inProgress = false;
+    }
+
+    @Override
     protected void onPause() {
         userManager.cancelCalls();
         super.onPause();
@@ -65,16 +71,16 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
     }
 
     private void showProgress(final boolean show) {
-        changingOn = show;
+        inProgress = show;
         MRKUtil.showProgressBar(this, passwordForm, progressBar, show);
     }
 
     private void attemptModify() {
-        if (changingOn) {
+        if (inProgress) {
             return;
         }
 
-        changingOn = true;
+        inProgress = true;
         oldField.setError(null);
         newField.setError(null);
         confirmField.setError(null);
@@ -109,7 +115,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
 
         if (cancel) {
             focusView.requestFocus();
-            changingOn = false;
+            inProgress = false;
         } else {
             showProgress(true);
             String email = SharedPrefUtil.getInstance(this).getUserData().getEmail();

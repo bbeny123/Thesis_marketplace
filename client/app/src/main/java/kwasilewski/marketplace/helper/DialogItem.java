@@ -36,7 +36,7 @@ public class DialogItem {
         };
     }
 
-    public String getName() {
+    private String getName() {
         return name;
     }
 
@@ -44,7 +44,7 @@ public class DialogItem {
         this.name = name;
     }
 
-    public Integer getIcon() {
+    private Integer getIcon() {
         return icon;
     }
 

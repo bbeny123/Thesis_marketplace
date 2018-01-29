@@ -11,7 +11,7 @@ import android.graphics.Shader;
 
 class PhotoTransform implements com.squareup.picasso.Transformation {
 
-    private boolean miniature;
+    private final boolean miniature;
 
     public PhotoTransform(boolean miniature) {
         this.miniature = miniature;

@@ -7,7 +7,6 @@
 
     <dimen name="button_net_error_width">200dp</dimen>
     <dimen name="menu_header_height">100dp</dimen>
-    <dimen name="toolbar_size">?attr/actionBarSize</dimen>
 
     <dimen name="view_margin">24dp</dimen>
     <dimen name="view_margin_fields">10dp</dimen>

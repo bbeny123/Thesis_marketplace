@@ -126,7 +126,7 @@
         <Button
             android:id="@+id/ad_list_button_edit_inactive"
             android:layout_width="0dp"
-            android:layout_height="@dimen/blist_buttons_height"
+            android:layout_height="@dimen/list_buttons_height"
             android:layout_weight="0.5"
             android:text="@string/button_edit" />
 

@@ -124,9 +124,10 @@ public class AdManager {
     public void pullAd(Long id, ErrorListener errorListener) {
         if (token == null) {
             pullGuestAd(id, errorListener);
+        } else {
+            callAd = adService.getUserAd(token, id);
+            callAd.enqueue(getRetrofitCallback(adListener::adReceived, errorListener));
         }
-        callAd = adService.getUserAd(token, id);
-        callAd.enqueue(getRetrofitCallback(adListener::adReceived, errorListener));
     }
 
     private void pullGuestAd(Long id, ErrorListener errorListener) {

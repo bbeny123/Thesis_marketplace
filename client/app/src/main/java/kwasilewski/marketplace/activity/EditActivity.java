@@ -32,6 +32,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     private Long adId;
 
     private AdDetailsData ad;
+    private boolean activeStart;
 
     private boolean inProgress = false;
     private HintManager hintManager;
@@ -219,6 +220,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     @Override
     public void adReceived(AdDetailsData ad) {
         this.ad = ad;
+        activeStart = ad.isActive();
 
         initButton();
         initFields();
@@ -262,7 +264,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     @Override
     public void adModified(ResponseBody responseBody) {
         MRKUtil.toast(this, getString(R.string.toast_ad_modified));
-        if (ad.isActive()) {
+        if (activeStart != ad.isActive()) {
             Intent resultIntent = new Intent();
             resultIntent.putExtra(AppConstants.AD_POS_KEY, position);
             setResult(RESULT_OK, resultIntent);

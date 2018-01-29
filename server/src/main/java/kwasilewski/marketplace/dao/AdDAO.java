@@ -28,7 +28,10 @@ public class AdDAO {
 
     @Transactional
     public void modify(UserContext ctx, AdData ad) throws DataAccessException, MKTException {
-        if (ad.getId() == null || find(ctx, ad.getId(), false) == null) throw new MKTException(MKTError.NOT_AUTHORIZED);
+        AdData preModifyAd = ad.getId() != null ? find(ctx, ad.getId(), false) : null;
+        if (preModifyAd == null) throw new MKTException(MKTError.NOT_AUTHORIZED);
+        ad.setDate(preModifyAd.getDate());
+        ad.setViews(preModifyAd.getViews());
         this.em.merge(ad);
     }
 

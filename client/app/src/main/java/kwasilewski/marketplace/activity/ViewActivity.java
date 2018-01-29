@@ -34,7 +34,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     private int position;
     private Long adId;
 
-    private boolean inProgress = false;
+    private boolean inProgress;
     private AdManager adManager;
     private AdDetailsData ad;
     private String token;
@@ -95,7 +95,13 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     @Override
     protected void onResume() {
         super.onResume();
-        pullAd();
+        showProgress(true);
+        adManager.pullAd(adId, new ErrorListener() {
+            @Override
+            public void notFound(Activity activity) {
+                addNotExists();
+            }
+        });
     }
 
     @Override
@@ -131,16 +137,6 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     private void showProgress(final boolean show) {
         inProgress = show;
         MRKUtil.showProgressBar(this, adForm, progressBar, show);
-    }
-
-    private void pullAd() {
-        showProgress(true);
-        adManager.pullAd(adId, new ErrorListener() {
-            @Override
-            public void notFound(Activity activity) {
-                addNotExists();
-            }
-        });
     }
 
     private void setPhotoAdapter() {
@@ -197,9 +193,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     }
 
     private void edit() {
-        Intent intent = new Intent(this, EditActivity.class);
-        intent.putExtra(AppConstants.AD_ID_KEY, adId);
-        startActivityForResult(intent, AppConstants.REMOVABLE_CODE);
+        MRKUtil.startEditActivity(this, adId, position);
     }
 
     private void changeStatus() {

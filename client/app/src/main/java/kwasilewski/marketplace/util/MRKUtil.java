@@ -16,6 +16,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import kwasilewski.marketplace.R;
+import kwasilewski.marketplace.activity.EditActivity;
 import kwasilewski.marketplace.activity.FilterActivity;
 
 public class MRKUtil {
@@ -102,6 +103,13 @@ public class MRKUtil {
         intent.putExtra(AppConstants.CATEGORY_KEY, catId);
         intent.putExtra(AppConstants.SUBCATEGORY_KEY, sctId);
         return intent;
+    }
+
+    public static void startEditActivity(final Activity activity, final Long adId, final int position) {
+        Intent editIntent = new Intent(activity, EditActivity.class);
+        editIntent.putExtra(AppConstants.AD_ID_KEY, adId);
+        editIntent.putExtra(AppConstants.AD_POS_KEY, position);
+        activity.startActivityForResult(editIntent, AppConstants.REMOVABLE_CODE);
     }
 
 }

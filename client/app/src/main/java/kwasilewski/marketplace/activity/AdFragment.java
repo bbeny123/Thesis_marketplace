@@ -303,10 +303,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     @Override
     public void editAd(final Long id, int position) {
-        Intent editIntent = new Intent(getActivity(), EditActivity.class);
-        editIntent.putExtra(AppConstants.AD_ID_KEY, id);
-        editIntent.putExtra(AppConstants.AD_POS_KEY, position);
-        startActivityForResult(editIntent, AppConstants.REMOVABLE_CODE);
+        MRKUtil.startEditActivity(getActivity(), id, position);
     }
 
     @Override

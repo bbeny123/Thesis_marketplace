@@ -127,7 +127,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppConstants.LOGIN_CODE && resultCode == AppCompatActivity.RESULT_OK) {
             adManager.updateToken();
-            modifyAd();
+            adManager.modifyAd(adId, ad, this);
         }
     }
 
@@ -212,13 +212,6 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         } else {
             showProgress(true);
             ad.update(title, price, subcategory, province, description, city, phone, active);
-            modifyAd();
-        }
-    }
-
-    private void modifyAd() {
-        if (!inProgress) {
-            inProgress = true;
             adManager.modifyAd(adId, ad, this);
         }
     }

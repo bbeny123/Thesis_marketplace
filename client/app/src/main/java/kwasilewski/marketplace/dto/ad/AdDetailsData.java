@@ -68,4 +68,5 @@ public class AdDetailsData extends AdData {
     public void setOwner(boolean owner) {
         this.owner = owner;
     }
+
 }

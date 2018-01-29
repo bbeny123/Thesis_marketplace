@@ -99,10 +99,10 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         provinceField = findViewById(R.id.new_province);
         provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
         categoryField = findViewById(R.id.new_category);
-        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
+        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField, true));
         subcategoryField = findViewById(R.id.new_subcategory);
         subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
-        SpinnerUtil.enableSpinner(subcategoryField, false);
+        SpinnerUtil.disableSpinner(subcategoryField);
 
         Button addButton = findViewById(R.id.new_add_button);
         addButton.setOnClickListener(

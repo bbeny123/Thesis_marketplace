@@ -55,11 +55,11 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
 
         categoryField = findViewById(R.id.filter_category);
-        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField));
+        categoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, categoryField, this, subcategoryField, true));
 
         subcategoryField = findViewById(R.id.filter_subcategory);
         subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
-        SpinnerUtil.enableSpinner(subcategoryField, false);
+        SpinnerUtil.disableSpinner(subcategoryField);
 
         Button searchButton = findViewById(R.id.filter_search_button);
         searchButton.setOnClickListener(v -> searchAds());
@@ -131,7 +131,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         categoryField.setItemId(null);
         subcategoryField.setText(null);
         subcategoryField.setItemId(null);
-        SpinnerUtil.enableSpinner(subcategoryField, false);
+        SpinnerUtil.disableSpinner(subcategoryField);
         filterView.clearFocus();
         MRKUtil.hideKeyboard(this);
     }

@@ -30,16 +30,6 @@ public class AdData extends AdMinimalData {
         this.photos = photos;
     }
 
-    public AdData(String title, String price, Long sctId, Long prvId, String description, String city, String phone, boolean active) {
-        super(title, price);
-        this.sctId = sctId;
-        this.prvId = prvId;
-        this.description = description;
-        this.city = city;
-        this.phone = phone;
-        this.active = active;
-    }
-
     public Long getCatId() {
         return catId;
     }
@@ -96,16 +86,16 @@ public class AdData extends AdMinimalData {
         this.photos = photos;
     }
 
-    public List<byte[]> getDecodedPhotos() {
-        return photos.stream().map(photo -> Base64.decode(photo, Base64.DEFAULT)).collect(Collectors.toList());
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<byte[]> getDecodedPhotos() {
+        return photos.stream().map(photo -> Base64.decode(photo, Base64.DEFAULT)).collect(Collectors.toList());
     }
 
     public void update(String title, String price, Long sctId, Long prvId, String description, String city, String phone, boolean active) {
@@ -118,4 +108,5 @@ public class AdData extends AdMinimalData {
         this.phone = phone;
         this.active = active;
     }
+
 }

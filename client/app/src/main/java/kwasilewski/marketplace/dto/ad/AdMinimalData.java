@@ -20,11 +20,6 @@ public class AdMinimalData {
         this.miniature = miniature;
     }
 
-    AdMinimalData(String title, String price) {
-        this.title = title;
-        this.price = price;
-    }
-
     public Long getId() {
         return id;
     }

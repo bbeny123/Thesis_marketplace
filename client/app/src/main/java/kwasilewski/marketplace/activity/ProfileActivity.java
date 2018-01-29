@@ -55,8 +55,8 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         progressBar = findViewById(R.id.profile_progress);
         updateForm = findViewById(R.id.profile_form);
 
-        firstNameField = findViewById(R.id.profile_first_name);
-        lastNameField = findViewById(R.id.profile_last_name);
+        firstNameField = findViewById(R.id.profile_name_first);
+        lastNameField = findViewById(R.id.profile_name_last);
         cityField = findViewById(R.id.profile_city);
         phoneField = findViewById(R.id.profile_phone);
         phoneField.setOnEditorActionListener((textView, id, keyEvent) -> {
@@ -70,10 +70,10 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         provinceField = findViewById(R.id.profile_province);
         provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
 
-        Button modifyButton = findViewById(R.id.profile_modify_button);
+        Button modifyButton = findViewById(R.id.profile_button_modify);
         modifyButton.setOnClickListener(view -> attemptModify());
 
-        Button passwordButton = findViewById(R.id.profile_password_button);
+        Button passwordButton = findViewById(R.id.profile_button_password);
         passwordButton.setOnClickListener(v -> goToPasswordChange());
     }
 

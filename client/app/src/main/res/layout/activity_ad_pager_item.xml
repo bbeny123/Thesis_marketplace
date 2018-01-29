@@ -5,12 +5,12 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/pager_imageView"
+        android:id="@+id/pager_photo"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:contentDescription="@string/label_photo"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_photo_camera_white_24dp" />
+        android:src="@android:drawable/ic_menu_camera" />
 
 </LinearLayout>

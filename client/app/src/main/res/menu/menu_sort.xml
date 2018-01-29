@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/sort_newest"
+        android:id="@+id/menu_sort_newest"
         android:title="@string/menu_sort_default" />
     <item
-        android:id="@+id/sort_cheapest"
+        android:id="@+id/menu_sort_cheapest"
         android:title="@string/menu_sort_cheapest" />
     <item
-        android:id="@+id/sort_most_expensive"
+        android:id="@+id/menu_sort_most_expensive"
         android:title="@string/menu_sort_most_expensive" />
 </menu>

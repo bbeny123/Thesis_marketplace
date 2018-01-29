@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/background" />
     <padding
-        android:left="1dp"
-        android:right="1dp"
-        android:top="1dp" />
-    <corners android:radius="5dp" />
+        android:left="@dimen/rounded_corner_padding"
+        android:right="@dimen/rounded_corner_padding"
+        android:top="@dimen/rounded_corner_padding" />
+    <corners android:radius="@dimen/rounded_corner_radius" />
 </shape>

@@ -39,7 +39,7 @@ public class PhotoAdapterItem extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_ad_pager_item, container, false);
-        ImageView imageView = view.findViewById(R.id.pager_imageView);
+        ImageView imageView = view.findViewById(R.id.pager_photo);
         imageView.setImageBitmap(BitmapFactory.decodeByteArray(decodedPhoto, 0, decodedPhoto.length));
         return view;
     }

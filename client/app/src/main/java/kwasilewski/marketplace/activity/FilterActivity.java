@@ -44,11 +44,11 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
 
         hintManager = new HintManager(this, this);
 
-        progressBar = findViewById(R.id.filter_progress_bar);
-        filterView = findViewById(R.id.filter_view);
+        progressBar = findViewById(R.id.filter_progress);
+        filterView = findViewById(R.id.filter_form);
         titleField = findViewById(R.id.filter_title);
-        priceFromField = findViewById(R.id.filter_price_from);
-        priceToField = findViewById(R.id.filter_price_to);
+        priceFromField = findViewById(R.id.filter_price_min);
+        priceToField = findViewById(R.id.filter_price_max);
         priceToField.addTextChangedListener(ValidUtil.positiveNumber());
 
         provinceField = findViewById(R.id.filter_province);
@@ -61,7 +61,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
         SpinnerUtil.disableSpinner(subcategoryField);
 
-        Button searchButton = findViewById(R.id.filter_search_button);
+        Button searchButton = findViewById(R.id.filter_button_search);
         searchButton.setOnClickListener(v -> searchAds());
 
         setDataFromBundles(getIntent().getExtras());
@@ -89,7 +89,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         MRKUtil.backButtonClicked(this, item);
-        if (item.getItemId() == R.id.filters_reset) {
+        if (item.getItemId() == R.id.menu_filter_reset) {
             resetFilters();
         }
         return super.onOptionsItemSelected(item);

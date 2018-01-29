@@ -16,8 +16,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/ad_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/toolbar_size"
+            android:background="@color/toolbar_background"
             app:popupTheme="@style/PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -33,9 +33,9 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big"
             android:visibility="gone" />
 
         <ScrollView
@@ -58,20 +58,20 @@
                     android:id="@+id/ad_indicator"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    app:lineWidth="30dp"
+                    android:padding="@dimen/margin_bottom_small"
+                    app:lineWidth="@dimen/view_indicator_width"
                     app:selectedColor="@color/pager_selected"
-                    app:strokeWidth="4dp"
+                    app:strokeWidth="@dimen/margin_small"
                     app:unselectedColor="@color/pager_unselected" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingBottom="24dp"
-                    android:paddingLeft="24dp"
-                    android:paddingRight="24dp"
-                    android:paddingTop="@dimen/activity_vertical_margin">
+                    android:paddingBottom="@dimen/view_margin"
+                    android:paddingLeft="@dimen/view_margin"
+                    android:paddingRight="@dimen/view_margin"
+                    android:paddingTop="@dimen/margin_border">
 
                     <TextView
                         android:id="@+id/ad_price"
@@ -92,22 +92,22 @@
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qui" />
 
                     <LinearLayout
-                        android:id="@+id/ad_description_form"
+                        android:id="@+id/ad_form_description"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginBottom="6dp"
-                            android:layout_marginTop="6dp"
+                            android:layout_height="@dimen/view_separator_height"
+                            android:layout_marginBottom="@dimen/margin_medium"
+                            android:layout_marginTop="@dimen/margin_medium"
                             android:background="@color/separator" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_marginBottom="4dp"
+                            android:layout_marginBottom="@dimen/margin_small"
                             android:layout_weight="1"
                             android:lineSpacingExtra="8sp"
                             android:text="@string/label_description_view"
@@ -125,17 +125,17 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
+                        android:layout_height="@dimen/view_separator_height"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        android:layout_marginTop="@dimen/margin_medium"
                         android:background="@color/separator" />
 
                     <TextView
-                        android:id="@+id/ad_user_name"
+                        android:id="@+id/ad_owner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:drawablePadding="6dp"
+                        android:layout_marginBottom="@dimen/view_margin_fields"
+                        android:drawablePadding="@dimen/margin_medium"
                         android:drawableStart="@drawable/ic_account_white"
                         android:gravity="center|start"
                         android:textSize="18sp"
@@ -146,8 +146,8 @@
                         android:id="@+id/ad_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:drawablePadding="6dp"
+                        android:layout_marginBottom="@dimen/view_margin_fields"
+                        android:drawablePadding="@dimen/margin_medium"
                         android:drawableStart="@drawable/ic_location"
                         android:gravity="center|start"
                         android:textAllCaps="false"
@@ -159,8 +159,8 @@
                         android:id="@+id/ad_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:drawablePadding="6dp"
+                        android:layout_marginBottom="@dimen/view_margin_fields"
+                        android:drawablePadding="@dimen/margin_medium"
                         android:drawableStart="@drawable/ic_phone"
                         android:gravity="center|start"
                         android:textSize="18sp"
@@ -171,8 +171,8 @@
                         android:id="@+id/ad_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:drawablePadding="6dp"
+                        android:layout_marginBottom="@dimen/view_margin_fields"
+                        android:drawablePadding="@dimen/margin_medium"
                         android:drawableStart="@drawable/ic_mail"
                         android:gravity="center|start"
                         android:textSize="18sp"
@@ -183,8 +183,8 @@
                         android:id="@+id/ad_views"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:drawablePadding="6dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:drawablePadding="@dimen/margin_medium"
                         android:drawableStart="@drawable/ic_views"
                         android:gravity="center|start"
                         android:textSize="18sp"
@@ -192,7 +192,7 @@
                         tools:text="200" />
 
                     <Button
-                        android:id="@+id/view_favourite_button"
+                        android:id="@+id/ad_button_favourite"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                         android:visibility="gone" />
 
                     <Button
-                        android:id="@+id/view_edit_button"
+                        android:id="@+id/ad_button_edit"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -210,7 +210,7 @@
                         android:visibility="gone" />
 
                     <Button
-                        android:id="@+id/view_refresh_button"
+                        android:id="@+id/ad_button_refresh"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
                         android:visibility="gone" />
 
                     <Button
-                        android:id="@+id/view_status_button"
+                        android:id="@+id/ad_button_status"
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

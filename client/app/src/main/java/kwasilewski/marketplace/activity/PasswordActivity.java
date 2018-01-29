@@ -44,11 +44,11 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         progressBar = findViewById(R.id.password_progress);
         passwordForm = findViewById(R.id.password_form);
 
-        oldField = findViewById(R.id.password_old_password);
-        newField = findViewById(R.id.password_new_password);
-        confirmField = findViewById(R.id.password_confirm_password);
+        oldField = findViewById(R.id.password_old);
+        newField = findViewById(R.id.password_new);
+        confirmField = findViewById(R.id.password_confirm);
 
-        Button modifyButton = findViewById(R.id.password_modify_button);
+        Button modifyButton = findViewById(R.id.password_button);
         modifyButton.setOnClickListener(view -> attemptModify());
     }
 

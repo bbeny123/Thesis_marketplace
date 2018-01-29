@@ -99,7 +99,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
         menu.clear();
         inflater.inflate(R.menu.menu_search, menu);
 
-        MenuItem searchBar = menu.findItem(R.id.action_search);
+        MenuItem searchBar = menu.findItem(R.id.menu_search);
         searchView = (MRKSearchView) searchBar.getActionView();
         searchView.prepareSearchView(searchBar, this);
         searchView.setQueryHint(getString(R.string.label_search));
@@ -173,13 +173,13 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
 
     private boolean sortItemClicked(int id) {
         switch (id) {
-            case R.id.sort_newest:
+            case R.id.menu_sort_newest:
                 sort(R.string.menu_sort_default, AdMinimalData.SortingMethod.NEWEST);
                 break;
-            case R.id.sort_cheapest:
+            case R.id.menu_sort_cheapest:
                 sort(R.string.menu_sort_cheapest, AdMinimalData.SortingMethod.CHEAPEST);
                 break;
-            case R.id.sort_most_expensive:
+            case R.id.menu_sort_most_expensive:
                 sort(R.string.menu_sort_most_expensive, AdMinimalData.SortingMethod.MOSTEXPENSIVE);
                 break;
         }

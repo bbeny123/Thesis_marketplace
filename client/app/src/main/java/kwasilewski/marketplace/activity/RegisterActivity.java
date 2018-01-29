@@ -57,8 +57,8 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
 
         emailField = findViewById(R.id.register_email);
         passwordField = findViewById(R.id.register_password);
-        firstNameField = findViewById(R.id.register_first_name);
-        lastNameField = findViewById(R.id.register_last_name);
+        firstNameField = findViewById(R.id.register_name_first);
+        lastNameField = findViewById(R.id.register_name_last);
         cityField = findViewById(R.id.register_city);
         phoneField = findViewById(R.id.register_phone);
         phoneField.setOnEditorActionListener((textView, id, keyEvent) -> {

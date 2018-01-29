@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/filters_reset"
+        android:id="@+id/menu_filter_reset"
         android:gravity="center|end"
         android:textAllCaps="true"
         android:textStyle="bold"

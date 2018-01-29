@@ -5,12 +5,12 @@
             <solid android:color="@color/item_background" />
 
             <padding
-                android:bottom="5dp"
-                android:left="5dp"
-                android:right="5dp"
-                android:top="5dp" />
+                android:bottom="@dimen/add_photo_padding"
+                android:left="@dimen/add_photo_padding"
+                android:right="@dimen/add_photo_padding"
+                android:top="@dimen/add_photo_padding" />
 
-            <corners android:radius="5dp" />
+            <corners android:radius="@dimen/rounded_corner_radius" />
         </shape>
     </item>
     <item
@@ -19,5 +19,5 @@
     <item
         android:drawable="@drawable/ic_add"
         android:gravity="bottom|right"
-        android:right="-2dp" />
+        android:right="@dimen/list_buttons_margin_top" />
 </layer-list>

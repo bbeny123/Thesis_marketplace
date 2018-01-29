@@ -1,7 +1,29 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_border">16dp</dimen>
+    <dimen name="margin_big">8dp</dimen>
+    <dimen name="margin_medium">6dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_bottom_small">5dp</dimen>
+
+    <dimen name="button_net_error_width">200dp</dimen>
+    <dimen name="menu_header_height">100dp</dimen>
+    <dimen name="toolbar_size">?attr/actionBarSize</dimen>
+
+    <dimen name="view_margin">24dp</dimen>
+    <dimen name="view_margin_fields">10dp</dimen>
+    <dimen name="view_separator_height">2dp</dimen>
+    <dimen name="view_indicator_width">30dp</dimen>
+
+    <dimen name="rounded_corner_padding">1dp</dimen>
+    <dimen name="rounded_corner_radius">5dp</dimen>
+    <dimen name="add_photo_padding">5dp</dimen>
+
+    <dimen name="list_bar_margin">14dp</dimen>
+    <dimen name="list_bar_icon_margin">3dp</dimen>
+    <dimen name="list_thumbnail_size">95dp</dimen>
+    <dimen name="list_thumbnail_margin">7dp</dimen>
+    <dimen name="list_buttons_margin_top">-2dp</dimen>
+    <dimen name="list_buttons_margin_bottom">-6dp</dimen>
+    <dimen name="list_buttons_padding">12dp</dimen>
+    <dimen name="list_buttons_height">45dp</dimen>
 </resources>

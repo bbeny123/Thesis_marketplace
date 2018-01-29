@@ -4,24 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="@dimen/margin_bottom_small"
     android:background="@color/item_background"
     android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp">
+    android:paddingBottom="@dimen/margin_bottom_small"
+    android:paddingTop="@dimen/margin_bottom_small">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin">
+        android:paddingEnd="@dimen/margin_border"
+        android:paddingStart="@dimen/margin_border">
 
         <ImageView
             android:id="@+id/ad_list_thumbnail"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="@dimen/list_thumbnail_size"
+            android:layout_height="@dimen/list_thumbnail_size"
+            android:layout_marginEnd="@dimen/margin_big"
             android:contentDescription="@string/label_thumbnail"
             android:scaleType="centerCrop"
             app:srcCompat="@android:drawable/ic_menu_camera" />
@@ -29,7 +29,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="7dp"
+            android:layout_marginStart="@dimen/list_thumbnail_margin"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -37,8 +37,8 @@
                 android:id="@+id/ad_list_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:lineSpacingExtra="8sp"
+                android:layout_marginBottom="@dimen/margin_big"
+                android:lineSpacingExtra="@dimen/margin_big"
                 android:lines="2"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:drawableEnd="@drawable/ic_views"
-                    android:drawablePadding="6dp"
+                    android:drawablePadding="@dimen/margin_medium"
                     android:singleLine="true"
                     android:textAlignment="textEnd"
                     android:textSize="14sp"
@@ -78,82 +78,82 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ad_list_active_buttons"
+        android:id="@+id/ad_list_form_active"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-6dp"
-        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="@dimen/list_buttons_margin_bottom"
+        android:layout_marginTop="@dimen/list_buttons_margin_top"
         android:orientation="horizontal"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
+        android:paddingEnd="@dimen/list_buttons_padding"
+        android:paddingStart="@dimen/list_buttons_padding"
         android:visibility="gone">
 
         <Button
-            android:id="@+id/ad_list_active_refresh"
+            android:id="@+id/ad_list_button_refresh"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/list_buttons_height"
             android:layout_weight="0.33"
             android:enabled="false"
             android:text="@string/button_refresh" />
 
         <Button
-            android:id="@+id/ad_list_active_edit"
+            android:id="@+id/ad_list_button_edit_active"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/list_buttons_height"
             android:layout_weight="0.34"
             android:text="@string/button_edit" />
 
         <Button
-            android:id="@+id/ad_list_active_finish"
+            android:id="@+id/ad_list_button_finish"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/list_buttons_height"
             android:layout_weight="0.33"
             android:text="@string/button_finish" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ad_list_inactive_buttons"
+        android:id="@+id/ad_list_form_inactive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="-6dp"
-        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="@dimen/list_buttons_margin_bottom"
+        android:layout_marginTop="@dimen/list_buttons_margin_top"
         android:orientation="horizontal"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
+        android:paddingEnd="@dimen/list_buttons_padding"
+        android:paddingStart="@dimen/list_buttons_padding"
         android:visibility="gone">
 
         <Button
-            android:id="@+id/ad_list_inactive_edit"
+            android:id="@+id/ad_list_button_edit_inactive"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/blist_buttons_height"
             android:layout_weight="0.5"
             android:text="@string/button_edit" />
 
         <Button
-            android:id="@+id/ad_list_inactive_activate"
+            android:id="@+id/ad_list_button_activate"
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/list_buttons_height"
             android:layout_weight="0.5"
             android:text="@string/button_activate" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ad_list_favourite_buttons"
+        android:id="@+id/ad_list_form_favourite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="-6dp"
-        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="@dimen/list_buttons_margin_bottom"
+        android:layout_marginTop="@dimen/list_buttons_margin_top"
         android:orientation="horizontal"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
+        android:paddingEnd="@dimen/list_buttons_padding"
+        android:paddingStart="@dimen/list_buttons_padding"
         android:visibility="gone">
 
         <Button
-            android:id="@+id/ad_list_favourite_remove"
+            android:id="@+id/ad_list_button_favourite"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/list_buttons_height"
             android:text="@string/button_favourite_remove" />
 
     </LinearLayout>

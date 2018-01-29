@@ -16,8 +16,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/new_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/toolbar_size"
+            android:background="@color/toolbar_background"
             app:popupTheme="@style/PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -27,28 +27,28 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/margin_border"
+        android:paddingLeft="@dimen/margin_border"
+        android:paddingRight="@dimen/margin_border">
 
         <ProgressBar
             android:id="@+id/new_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big"
             android:visibility="gone" />
 
         <ScrollView
             android:id="@+id/new_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,65 +62,65 @@
                     android:orientation="horizontal">
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image1"
+                        android:id="@+id/new_photo1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image2"
+                        android:id="@+id/new_photo2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image3"
+                        android:id="@+id/new_photo3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image4"
+                        android:id="@+id/new_photo4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image5"
+                        android:id="@+id/new_photo5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
@@ -135,65 +135,65 @@
                     android:orientation="horizontal">
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image6"
+                        android:id="@+id/new_photo6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image7"
+                        android:id="@+id/new_photo7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image8"
+                        android:id="@+id/new_photo8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image9"
+                        android:id="@+id/new_photo9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
-                        android:id="@+id/new_image10"
+                        android:id="@+id/new_photo10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="@dimen/margin_big"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/label_photo_add"
@@ -319,9 +319,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/label_phone"
-                        android:imeActionId="6"
-                        android:imeActionLabel="@string/button_create"
-                        android:imeOptions="actionUnspecified"
                         android:inputType="phone"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -330,11 +327,11 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/new_add_button"
+                    android:id="@+id/new_button_add"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/margin_big"
                     android:text="@string/button_create"
                     android:textStyle="bold" />
 

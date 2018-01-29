@@ -16,8 +16,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/register_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/toolbar_size"
+            android:background="@color/toolbar_background"
             app:popupTheme="@style/PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -27,28 +27,28 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/margin_border"
+        android:paddingLeft="@dimen/margin_border"
+        android:paddingRight="@dimen/margin_border">
 
         <ProgressBar
             android:id="@+id/register_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big"
             android:visibility="gone" />
 
         <ScrollView
             android:id="@+id/register_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/register_first_name"
+                        android:id="@+id/register_name_first"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/register_last_name"
+                        android:id="@+id/register_name_last"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits=" -abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -177,7 +177,7 @@
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/margin_big"
                     android:text="@string/button_sign_up"
                     android:textStyle="bold" />
 

@@ -16,8 +16,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/login_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/toolbar_size"
+            android:background="@color/toolbar_background"
             app:popupTheme="@style/PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -27,28 +27,28 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/margin_border"
+        android:paddingLeft="@dimen/margin_border"
+        android:paddingRight="@dimen/margin_border">
 
         <ProgressBar
             android:id="@+id/login_progress"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big"
             android:visibility="gone" />
 
         <ScrollView
             android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,16 +95,16 @@
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margin_border"
                     android:text="@string/button_sign_in"
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/login_register_button"
+                    android:id="@+id/login_button_register"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/margin_border"
                     android:text="@string/button_register"
                     android:textStyle="bold" />
 

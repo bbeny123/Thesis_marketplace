@@ -80,16 +80,16 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         priceText = findViewById(R.id.ad_price);
         titleText = findViewById(R.id.ad_title);
         descriptionText = findViewById(R.id.ad_description);
-        nameText = findViewById(R.id.ad_user_name);
+        nameText = findViewById(R.id.ad_owner);
         locationText = findViewById(R.id.ad_location);
         phoneText = findViewById(R.id.ad_phone);
         emailText = findViewById(R.id.ad_email);
         viewsText = findViewById(R.id.ad_views);
 
-        favouriteButton = findViewById(R.id.view_favourite_button);
-        refreshButton = findViewById(R.id.view_refresh_button);
-        editButton = findViewById(R.id.view_edit_button);
-        statusButton = findViewById(R.id.view_status_button);
+        favouriteButton = findViewById(R.id.ad_button_favourite);
+        refreshButton = findViewById(R.id.ad_button_refresh);
+        editButton = findViewById(R.id.ad_button_edit);
+        statusButton = findViewById(R.id.ad_button_status);
     }
 
     @Override
@@ -227,7 +227,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         locationText.setText(String.format(getString(R.string.text_ad_location), ad.getCity(), ad.getProvince()));
 
         if (TextUtils.isEmpty(ad.getDescription())) {
-            View descriptionForm = findViewById(R.id.ad_description_form);
+            View descriptionForm = findViewById(R.id.ad_form_description);
             descriptionForm.setVisibility(View.GONE);
         } else {
             descriptionText.setText(ad.getDescription());

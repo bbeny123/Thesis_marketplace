@@ -100,30 +100,30 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
             switch (listMode) {
                 case AppConstants.MODE_ACTIVE: {
-                    View buttonsContainer = view.findViewById(R.id.ad_list_active_buttons);
+                    View buttonsContainer = view.findViewById(R.id.ad_list_form_active);
                     buttonsContainer.setVisibility(View.VISIBLE);
-                    editButton = view.findViewById(R.id.ad_list_active_edit);
-                    refreshButton = view.findViewById(R.id.ad_list_active_refresh);
-                    statusButton = view.findViewById(R.id.ad_list_active_finish);
+                    editButton = view.findViewById(R.id.ad_list_button_edit_active);
+                    refreshButton = view.findViewById(R.id.ad_list_button_refresh);
+                    statusButton = view.findViewById(R.id.ad_list_button_finish);
                     favouriteButton = null;
                     break;
                 }
                 case AppConstants.MODE_INACTIVE: {
-                    View buttonsContainer = view.findViewById(R.id.ad_list_inactive_buttons);
+                    View buttonsContainer = view.findViewById(R.id.ad_list_form_inactive);
                     buttonsContainer.setVisibility(View.VISIBLE);
-                    editButton = view.findViewById(R.id.ad_list_inactive_edit);
+                    editButton = view.findViewById(R.id.ad_list_button_edit_inactive);
                     refreshButton = null;
-                    statusButton = view.findViewById(R.id.ad_list_inactive_activate);
+                    statusButton = view.findViewById(R.id.ad_list_button_activate);
                     favouriteButton = null;
                     break;
                 }
                 case AppConstants.MODE_FAVOURITE: {
-                    View buttonsContainer = view.findViewById(R.id.ad_list_favourite_buttons);
+                    View buttonsContainer = view.findViewById(R.id.ad_list_form_favourite);
                     buttonsContainer.setVisibility(View.VISIBLE);
                     editButton = null;
                     refreshButton = null;
                     statusButton = null;
-                    favouriteButton = view.findViewById(R.id.ad_list_favourite_remove);
+                    favouriteButton = view.findViewById(R.id.ad_list_button_favourite);
                     break;
                 }
                 default:

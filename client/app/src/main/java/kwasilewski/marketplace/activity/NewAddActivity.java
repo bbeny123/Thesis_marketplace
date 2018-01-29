@@ -88,13 +88,6 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         descriptionField = findViewById(R.id.new_description);
         cityField = findViewById(R.id.new_city);
         phoneField = findViewById(R.id.new_phone);
-        phoneField.setOnEditorActionListener((textView, id, keyEvent) -> {
-            if (MRKUtil.checkIme(id)) {
-                attemptAdd();
-                return true;
-            }
-            return false;
-        });
 
         provinceField = findViewById(R.id.new_province);
         provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));
@@ -104,20 +97,20 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
         SpinnerUtil.disableSpinner(subcategoryField);
 
-        Button addButton = findViewById(R.id.new_add_button);
+        Button addButton = findViewById(R.id.new_button_add);
         addButton.setOnClickListener(
                 view -> attemptAdd());
 
-        photos.add(findViewById(R.id.new_image1));
-        photos.add(findViewById(R.id.new_image2));
-        photos.add(findViewById(R.id.new_image3));
-        photos.add(findViewById(R.id.new_image4));
-        photos.add(findViewById(R.id.new_image5));
-        photos.add(findViewById(R.id.new_image6));
-        photos.add(findViewById(R.id.new_image7));
-        photos.add(findViewById(R.id.new_image8));
-        photos.add(findViewById(R.id.new_image9));
-        photos.add(findViewById(R.id.new_image10));
+        photos.add(findViewById(R.id.new_photo1));
+        photos.add(findViewById(R.id.new_photo2));
+        photos.add(findViewById(R.id.new_photo3));
+        photos.add(findViewById(R.id.new_photo4));
+        photos.add(findViewById(R.id.new_photo5));
+        photos.add(findViewById(R.id.new_photo6));
+        photos.add(findViewById(R.id.new_photo7));
+        photos.add(findViewById(R.id.new_photo8));
+        photos.add(findViewById(R.id.new_photo9));
+        photos.add(findViewById(R.id.new_photo10));
         photos.getPhotos().forEach(photo -> photo.setOnClickListener(v -> clickPhoto(((PhotoView) v).getPosition())));
 
         setUserData();

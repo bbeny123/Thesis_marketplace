@@ -2,6 +2,7 @@
 <resources>
     <color name="background">?android:colorBackground</color>
     <color name="item_background">#55111111</color>
+    <color name="toolbar_background">?attr/colorPrimary</color>
 
     <color name="separator">#5c5c5c</color>
 

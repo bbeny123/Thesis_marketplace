@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         Button signInButton = findViewById(R.id.login_button);
         signInButton.setOnClickListener(v -> attemptLogin());
 
-        Button registerButton = findViewById(R.id.login_register_button);
+        Button registerButton = findViewById(R.id.login_button_register);
         registerButton.setOnClickListener(view -> goToRegister());
     }
 

@@ -14,7 +14,7 @@ public class NetErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_net_error);
 
-        Button refreshButton = findViewById(R.id.net_error_refresh_button);
+        Button refreshButton = findViewById(R.id.net_error_button_refresh);
         refreshButton.setOnClickListener(view -> refresh());
     }
 

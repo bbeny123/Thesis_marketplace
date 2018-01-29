@@ -89,7 +89,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         subcategoryField = findViewById(R.id.edit_subcategory);
         subcategoryField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, subcategoryField));
 
-        Button saveButton = findViewById(R.id.edit_save_button);
+        Button saveButton = findViewById(R.id.edit_button_save);
         saveButton.setOnClickListener(v -> attemptModify(ad.isActive()));
     }
 
@@ -229,7 +229,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
     }
 
     private void initButton() {
-        Button activeButton = findViewById(R.id.edit_active_button);
+        Button activeButton = findViewById(R.id.edit_button_active);
         activeButton.setVisibility(ad.isActive() ? View.GONE : View.VISIBLE);
         if (!ad.isActive()) {
             activeButton.setOnClickListener(v -> attemptModify(true));

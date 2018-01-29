@@ -60,9 +60,9 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     app:lineWidth="30dp"
-                    app:selectedColor="#FF880000"
+                    app:selectedColor="@color/pager_selected"
                     app:strokeWidth="4dp"
-                    app:unselectedColor="#FF888888" />
+                    app:unselectedColor="@color/pager_unselected" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                             android:layout_height="2dp"
                             android:layout_marginBottom="6dp"
                             android:layout_marginTop="6dp"
-                            android:background="#5c5c5c" />
+                            android:background="@color/separator" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                         android:layout_height="2dp"
                         android:layout_marginBottom="6dp"
                         android:layout_marginTop="6dp"
-                        android:background="#5c5c5c" />
+                        android:background="@color/separator" />
 
                     <TextView
                         android:id="@+id/ad_user_name"

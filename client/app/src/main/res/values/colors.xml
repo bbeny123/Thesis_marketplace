@@ -1,2 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources />
+<resources>
+    <color name="background">?android:colorBackground</color>
+    <color name="item_background">#55111111</color>
+
+    <color name="separator">#5c5c5c</color>
+
+    <color name="pager_selected">#FF880000</color>
+    <color name="pager_unselected">#FF888888</color>
+
+    <color name="menu_start">#6c7171</color>
+    <color name="menu_center">#656969</color>
+    <color name="menu_end">#373939</color>
+
+    <color name="ic_launcher_background">#1ED760</color>
+</resources>

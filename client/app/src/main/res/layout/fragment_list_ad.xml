@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:background="#55111111"
+        android:background="@color/item_background"
         android:baselineAligned="false"
         android:paddingBottom="6dp"
         android:paddingTop="6dp"

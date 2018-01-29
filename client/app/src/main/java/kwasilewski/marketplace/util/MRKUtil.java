@@ -33,7 +33,7 @@ public class MRKUtil {
     }
 
     public static void connectionProblem(final Activity activity) {
-        toast(activity, activity.getString(R.string.error_connection_problem));
+        toast(activity, activity.getString(R.string.toast_connection_problem));
     }
 
     public static void showProgressBar(final Activity activity, final View viewToHide, final View progressBar, final boolean show) {

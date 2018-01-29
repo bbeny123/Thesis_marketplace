@@ -69,7 +69,7 @@
                 android:background="@drawable/shape_rounded_corner"
                 android:gravity="center|end"
                 android:padding="6dp"
-                android:text="@string/label_sort_default"
+                android:text="@string/menu_sort_default"
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 

@@ -140,7 +140,7 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
         }
 
         private void setPrice(String price) {
-            this.price.setText(String.format(activity.getString(R.string.ad_price_text), price));
+            this.price.setText(String.format(activity.getString(R.string.text_ad_price), price));
         }
 
         private void setViews(String views) {
@@ -198,7 +198,7 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
         @Override
         public void favouriteRemoved(ResponseBody responseBody) {
-            MRKUtil.toast(activity, activity.getString(R.string.toast_removed_favourite));
+            MRKUtil.toast(activity, activity.getString(R.string.toast_favourite_removed));
             listener.removeAd(getAdapterPosition());
         }
 
@@ -210,13 +210,13 @@ public class AdListViewAdapter extends RecyclerView.Adapter<AdListViewAdapter.Vi
 
         @Override
         public void notAcceptable(Activity activity) {
-            MRKUtil.toast(activity, activity.getString(R.string.toast_not_favourite));
+            MRKUtil.toast(activity, activity.getString(R.string.toast_favourite_not_exist));
             listener.removeAd(getAdapterPosition());
         }
 
         @Override
         public void unhandledError(Activity activity, String error) {
-            MRKUtil.toast(activity, activity.getString(R.string.toast_not_favourite));
+            MRKUtil.toast(activity, activity.getString(R.string.toast_favourite_not_exist));
             listener.unhandledError(activity, error);
         }
     }

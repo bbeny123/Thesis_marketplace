@@ -110,7 +110,7 @@
                             android:layout_marginBottom="4dp"
                             android:layout_weight="1"
                             android:lineSpacingExtra="8sp"
-                            android:text="@string/ad_description"
+                            android:text="@string/label_description_view"
                             android:textSize="12sp"
                             android:textStyle="bold" />
 
@@ -196,7 +196,7 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_ad_favourite"
+                        android:text="@string/button_favourite_add"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -205,7 +205,7 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_edit"
+                        android:text="@string/button_edit"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -214,7 +214,7 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_refresh"
+                        android:text="@string/button_refresh"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
@@ -223,7 +223,7 @@
                         style="?android:textAppearanceSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/action_activate"
+                        android:text="@string/button_activate"
                         android:textStyle="bold"
                         android:visibility="gone" />
                 </LinearLayout>

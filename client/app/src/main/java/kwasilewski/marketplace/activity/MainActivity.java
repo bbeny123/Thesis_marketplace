@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.menu_open, R.string.menu_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nameField = headerView.findViewById(R.id.nav_user);
         emailField = headerView.findViewById(R.id.nav_email);
 
-        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
+        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_app_name));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_ads:
-                startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
+                startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_app_name));
                 break;
             case R.id.nav_favourites:
                 startAdListFragment(AppConstants.MODE_FAVOURITE, R.id.nav_favourites, getString(R.string.title_favourites));
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void logout() {
         SharedPrefUtil.getInstance(this).removeUserData();
-        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_default));
+        startAdListFragment(AppConstants.MODE_NORMAL, R.id.nav_ads, getString(R.string.title_app_name));
         prepareActivity();
         MRKUtil.toast(this, getString(R.string.toast_logout_successful));
     }

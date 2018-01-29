@@ -1,113 +1,114 @@
 <resources>
-    <string name="app_name">Marketplace</string>
+    <string name="title_app_name">Marketplace</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_register">Sign up</string>
     <string name="title_activity_profile">Update Profile</string>
     <string name="title_activity_password">Password change</string>
     <string name="title_activity_new_add">Creating Ad</string>
     <string name="title_activity_ad">Ad Details</string>
-    <string name="title_default">@string/app_name</string>
     <string name="title_favourites">Favourite Ads</string>
     <string name="title_active">Active Ads</string>
     <string name="title_inactive">Inactive Ads</string>
+    <string name="title_activity_filter">Filters</string>
+    <string name="title_activity_edit">Editing Ad</string>
 
-    <!-- Strings related to login and register -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="prompt_old_password">Old Password</string>
-    <string name="prompt_new_password">New Password</string>
-    <string name="prompt_confirm_password">Confirm New Password</string>
-    <string name="prompt_first_name">First Name</string>
-    <string name="prompt_last_name">Last Name</string>
-    <string name="prompt_city">City</string>
-    <string name="prompt_province">Province</string>
-    <string name="prompt_phone">Phone</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_up">Sign up</string>
-    <string name="action_register">Register</string>
-    <string name="action_refresh">Refresh</string>
-    <string name="action_modify">Save changes</string>
-    <string name="action_change_password">Change password</string>
-    <string name="error_invalid_email">Invalid email.</string>
-    <string name="error_invalid_password">Password too short.</string>
-    <string name="error_invalid_password_email">Invalid password or email.</string>
-    <string name="error_email_taken">That email is taken. Try another.</string>
-    <string name="error_passwords_match">Passwords do not match.</string>
-    <string name="error_password_match">Password does not match.</string>
-    <string name="error_incorrect_phone">Invalid phone number.</string>
-    <string name="error_field_required">That field is required.</string>
-    <string name="error_connection_problem">Connection problem. Try again later.</string>
-    <string name="error_net_connection_problem">Internet connection problem.</string>
-    <string name="toast_register_successful">Register success. You may login now.</string>
-    <string name="toast_logout_successful">Logout successful.</string>
-    <string name="toast_profile_edited">Profile successfully updated.</string>
-    <string name="toast_password_changed">Password successfully changed.</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_password_old">Old Password</string>
+    <string name="label_password_new">New Password</string>
+    <string name="label_password_confirm">Confirm New Password</string>
+    <string name="label_name_first">First Name</string>
+    <string name="label_name_last">Last Name</string>
+    <string name="label_city">City</string>
+    <string name="label_province">Province</string>
+    <string name="label_phone">Phone</string>
 
-    <!-- Strings related to drawer -->
-    <string name="nav_drawer_open">Open navigation drawer</string>
-    <string name="nav_drawer_close">Close navigation drawer</string>
-    <string name="nav_ads">Ads</string>
-    <string name="nav_favourites">Favourites</string>
-    <string name="nav_my_ads">My Ads</string>
-    <string name="nav_new">New Ad</string>
-    <string name="nav_active">Active</string>
-    <string name="nav_inactive">Inactive</string>
-    <string name="nav_account">Account</string>
-    <string name="nav_profile">Profile</string>
-    <string name="nav_logout">Logout</string>
-    <string name="nav_login">Login</string>
-
-    <string name="new_image_description">Add Image</string>
-    <string name="prompt_title">Title</string>
-    <string name="prompt_price">Price (PLN)</string>
-    <string name="prompt_category">Category</string>
-    <string name="prompt_subcategory">Subcategory</string>
-    <string name="prompt_description">Description</string>
-    <string name="action_add_add">Create ad</string>
-    <string name="action_set_thumbnail">Set as a thumbnail</string>
-    <string name="action_remove_photo">Remove photo</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="toast_permissions">Camera and file permissions are required to add photo!</string>
-    <string name="toast_ad_created">Ad successfully created.</string>
-    <string name="ad_image_description">Photo</string>
-    <string name="ad_thumbnail_description">Thumbnail</string>
-    <string name="ad_description">Description:</string>
-    <string name="action_ad_favourite">Add to favourite</string>
-    <string name="action_ad_remove_favourite">Remove from favourite</string>
-    <string name="ad_price_text">%1$s PLN</string>
-    <string name="ad_location_text">%1$s - %2$s</string>
-    <string name="toast_ad_not_available">That ad is no longer available.</string>
-    <string name="toast_added_favourite">Ad successfully added to favourite.</string>
-    <string name="toast_removed_favourite">Ad successfully removed from favourite.</string>
-    <string name="toast_already_favourite">Ad is already favourite.</string>
-    <string name="toast_not_favourite">Ad is not favourite.</string>
-    <string name="toast_own_add_favourite">Cannot add own ad to favourite.</string>
-    <string name="toast_token_expired">Your sessions has expired. Sign in to continue!</string>
-    <string name="toast_ad_modified">Ad successfully modified.</string>
-
-    <string name="action_edit">Edit</string>
-    <string name="action_finish">Finish</string>
-    <string name="action_activate">Activate</string>
+    <string name="label_photo">Photo</string>
+    <string name="label_photo_add">Add Photo</string>
+    <string name="label_title">Title</string>
+    <string name="label_price">Price (PLN)</string>
+    <string name="label_price_min">Price from</string>
+    <string name="label_price_max">Price to</string>
+    <string name="label_category">Category</string>
+    <string name="label_subcategory">Subcategory</string>
+    <string name="label_thumbnail">Thumbnail</string>
+    <string name="label_description">Description</string>
+    <string name="label_description_view">Description:</string>
 
     <string name="label_filters">Filters</string>
     <string name="label_search">Search…</string>
-    <string name="label_reset">Reset</string>
-    <string name="label_filters_active">%1$d Active</string>
-    <string name="label_sort_default">Date (Newest)</string>
-    <string name="label_sort_cheapest">Price (Lowest)</string>
-    <string name="label_sort_most_expensive">Price (Highest)</string>
-    <string name="title_activity_filter">Filters</string>
 
-    <string name="label_price_from">Price from</string>
-    <string name="label_price_to">Price to</string>
-    <string name="label_search_button">Search</string>
+    <string name="text_ad_filters">%1$d Active</string>
+    <string name="text_ad_price">%1$s PLN</string>
+    <string name="text_ad_location">%1$s - %2$s</string>
 
+    <string name="button_sign_in">Sign in</string>
+    <string name="button_sign_up">Sign up</string>
+    <string name="button_register">Register</string>
+    <string name="button_modify">Save changes</string>
+    <string name="button_modify_activate">Save and activate</string>
+    <string name="button_password_change">Change password</string>
+
+    <string name="button_search">Search</string>
+    <string name="button_reset">Reset</string>
+    <string name="button_create">Create ad</string>
+    <string name="button_remove">Remove photo</string>
+    <string name="button_thumbnail">Set as a thumbnail</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_refresh">Refresh</string>
+    <string name="button_activate">Activate</string>
+    <string name="button_finish">Finish</string>
+    <string name="button_favourite_add">Add to favourite</string>
+    <string name="button_favourite_remove">Remove from favourite</string>
+
+    <string name="toast_permissions">Camera and file permissions are required to add photo!</string>
+    <string name="toast_connection_problem">Connection problem. Try again later.</string>
+    <string name="toast_token_expired">Your sessions has expired. Sign in to continue!</string>
+    <string name="toast_register_successful">Register success. You may login now.</string>
+    <string name="toast_logout_successful">Logout successful.</string>
+    <string name="toast_password_changed">Password successfully changed.</string>
+    <string name="toast_profile_edited">Profile successfully updated.</string>
+
+    <string name="toast_ad_created">Ad successfully created.</string>
+    <string name="toast_ad_not_available">That ad is no longer available.</string>
+    <string name="toast_ad_modified">Ad successfully modified.</string>
     <string name="toast_ad_not_exist">That ad does not exist anymore.</string>
     <string name="toast_ad_refreshed">Ad successfully refreshed.</string>
     <string name="toast_ad_activated">Ad successfully activated.</string>
     <string name="toast_ad_deactivated">Ad successfully finished.</string>
+    <string name="toast_favourite_added">Ad successfully added to favourite.</string>
+    <string name="toast_favourite_removed">Ad successfully removed from favourite.</string>
+    <string name="toast_favourite_already">Ad is already favourite.</string>
+    <string name="toast_favourite_not_exist">Ad is not favourite.</string>
+    <string name="toast_favourite_own">Cannot add own ad to favourite.</string>
 
-    <string name="button_edit_activate">Save and activate</string>
+    <string name="error_email_invalid">Invalid email.</string>
+    <string name="error_email_taken">That email is taken. Try another.</string>
+    <string name="error_password_short">Password too short.</string>
+    <string name="error_password_not_match">Password does not match.</string>
+    <string name="error_passwords_not_match">Passwords do not match.</string>
+    <string name="error_credentials_invalid">Invalid password or email.</string>
+    <string name="error_phone_invalid">Invalid phone number.</string>
+    <string name="error_field_required">That field is required.</string>
+    <string name="error_connection_problem">Internet connection problem.</string>
+
+    <string name="menu_open">Open navigation drawer</string>
+    <string name="menu_close">Close navigation drawer</string>
+    <string name="menu_ads">Ads</string>
+    <string name="menu_favourites">Favourites</string>
+    <string name="menu_my_ads">My Ads</string>
+    <string name="menu_new">New Ad</string>
+    <string name="menu_active">Active</string>
+    <string name="menu_inactive">Inactive</string>
+    <string name="menu_account">Account</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_login">Login</string>
+
+    <string name="menu_sort_default">Date (Newest)</string>
+    <string name="menu_sort_cheapest">Price (Lowest)</string>
+    <string name="menu_sort_most_expensive">Price (Highest)</string>
 
     <string-array name="ad_list_empty">
         <item>There is no Ads related to your search.</item>
@@ -115,6 +116,4 @@
         <item>You do not have any inactive Ads!</item>
         <item>You do not have any favourite Ads!</item>
     </string-array>
-    <string name="title_activity_edit">Editing Ad</string>
-
 </resources>

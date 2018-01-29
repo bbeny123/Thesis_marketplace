@@ -204,11 +204,11 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
     }
 
     private void setFavouriteButtonText() {
-        favouriteButton.setText(ad.isFavourite() ? getString(R.string.action_ad_remove_favourite) : getString(R.string.action_ad_favourite));
+        favouriteButton.setText(ad.isFavourite() ? getString(R.string.button_favourite_remove) : getString(R.string.button_favourite_add));
     }
 
     private void setStatusButtonText() {
-        statusButton.setText(ad.isActive() ? getString(R.string.action_finish) : getString(R.string.action_activate));
+        statusButton.setText(ad.isActive() ? getString(R.string.button_finish) : getString(R.string.button_activate));
     }
 
     @Override
@@ -223,8 +223,8 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
         phoneText.setText(ad.getPhone());
         emailText.setText(ad.getEmail());
         viewsText.setText(ad.getViews());
-        priceText.setText(String.format(getString(R.string.ad_price_text), ad.getPrice()));
-        locationText.setText(String.format(getString(R.string.ad_location_text), ad.getCity(), ad.getProvince()));
+        priceText.setText(String.format(getString(R.string.text_ad_price), ad.getPrice()));
+        locationText.setText(String.format(getString(R.string.text_ad_location), ad.getCity(), ad.getProvince()));
 
         if (TextUtils.isEmpty(ad.getDescription())) {
             View descriptionForm = findViewById(R.id.ad_description_form);
@@ -248,7 +248,7 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
 
     private void favouriteActionSuccess(boolean favourite) {
         ad.setFavourite(favourite);
-        MRKUtil.toast(this, favourite ? getString(R.string.toast_added_favourite) : getString(R.string.toast_removed_favourite));
+        MRKUtil.toast(this, favourite ? getString(R.string.toast_favourite_added) : getString(R.string.toast_favourite_removed));
         setFavouriteButtonText();
         inProgress = false;
     }
@@ -276,13 +276,13 @@ public class ViewActivity extends AppCompatActivity implements AdListener, Error
 
     @Override
     public void notAcceptable(Activity activity) {
-        MRKUtil.toast(this, ad.isFavourite() ? getString(R.string.toast_already_favourite) : getString(R.string.toast_not_favourite));
+        MRKUtil.toast(this, ad.isFavourite() ? getString(R.string.toast_favourite_already) : getString(R.string.toast_favourite_not_exist));
         inProgress = false;
     }
 
     @Override
     public void unauthorized(Activity activity) {
-        MRKUtil.toast(this, getString(R.string.toast_own_add_favourite));
+        MRKUtil.toast(this, getString(R.string.toast_favourite_own));
         inProgress = false;
     }
 

@@ -8,55 +8,55 @@
             android:id="@+id/nav_ads"
             android:checkable="true"
             android:icon="@drawable/ic_basket"
-            android:title="@string/nav_ads" />
+            android:title="@string/menu_ads" />
     </group>
 
     <group android:id="@+id/nav_logged">
-        <item android:title="@string/nav_my_ads">
+        <item android:title="@string/menu_my_ads">
             <menu>
                 <item
                     android:id="@+id/nav_favourites"
                     android:checkable="true"
                     android:icon="@drawable/ic_favorite"
-                    android:title="@string/nav_favourites" />
+                    android:title="@string/menu_favourites" />
                 <item
                     android:id="@+id/nav_new"
                     android:icon="@drawable/ic_add"
-                    android:title="@string/nav_new" />
+                    android:title="@string/menu_new" />
                 <item
                     android:id="@+id/nav_active"
                     android:checkable="true"
                     android:icon="@drawable/ic_check"
-                    android:title="@string/nav_active" />
+                    android:title="@string/menu_active" />
                 <item
                     android:id="@+id/nav_inactive"
                     android:checkable="true"
                     android:icon="@drawable/ic_close_black"
-                    android:title="@string/nav_inactive" />
+                    android:title="@string/menu_inactive" />
             </menu>
         </item>
 
-        <item android:title="@string/nav_account">
+        <item android:title="@string/menu_account">
             <menu>
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_account"
-                    android:title="@string/nav_profile" />
+                    android:title="@string/menu_profile" />
                 <item
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/ic_logout"
-                    android:title="@string/nav_logout" />
+                    android:title="@string/menu_logout" />
             </menu>
         </item>
     </group>
 
     <group android:id="@+id/nav_not_logged">
-        <item android:title="@string/nav_account">
+        <item android:title="@string/menu_account">
             <menu>
                 <item
                     android:id="@+id/nav_login"
                     android:icon="@drawable/ic_input"
-                    android:title="@string/nav_login" />
+                    android:title="@string/menu_login" />
             </menu>
         </item>
     </group>

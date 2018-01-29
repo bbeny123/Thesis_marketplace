@@ -6,6 +6,6 @@
         android:gravity="center|end"
         android:textAllCaps="true"
         android:textStyle="bold"
-        android:title="@string/label_reset"
+        android:title="@string/button_reset"
         app:showAsAction="always" />
 </menu>

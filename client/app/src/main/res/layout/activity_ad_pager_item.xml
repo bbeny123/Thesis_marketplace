@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:contentDescription="@string/ad_image_description"
+        android:contentDescription="@string/label_photo"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_photo_camera_white_24dp" />
 

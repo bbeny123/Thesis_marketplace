@@ -64,7 +64,7 @@
                         android:id="@+id/filter_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_title"
+                        android:hint="@string/label_title"
                         android:inputType="textCapWords"
                         android:maxLength="60"
                         android:singleLine="true" />
@@ -80,7 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits="0123456789"
-                        android:hint="@string/label_price_from"
+                        android:hint="@string/label_price_min"
                         android:inputType="number"
                         android:maxLength="10"
                         android:singleLine="true" />
@@ -96,7 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits="0123456789"
-                        android:hint="@string/label_price_to"
+                        android:hint="@string/label_price_max"
                         android:inputType="number"
                         android:maxLength="10"
                         android:singleLine="true" />
@@ -111,7 +111,7 @@
                         android:id="@+id/filter_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_category"
+                        android:hint="@string/label_category"
                         android:inputType="textNoSuggestions"
                         android:singleLine="true" />
 
@@ -125,7 +125,7 @@
                         android:id="@+id/filter_subcategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_subcategory"
+                        android:hint="@string/label_subcategory"
                         android:inputType="textNoSuggestions"
                         android:singleLine="true" />
 
@@ -139,7 +139,7 @@
                         android:id="@+id/filter_province"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_province"
+                        android:hint="@string/label_province"
                         android:inputType="textNoSuggestions"
                         android:singleLine="true" />
 
@@ -151,7 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/label_search_button"
+                    android:text="@string/button_search"
                     android:textStyle="bold" />
 
             </LinearLayout>

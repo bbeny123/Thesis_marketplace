@@ -63,7 +63,7 @@
                         android:id="@+id/login_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_email"
+                        android:hint="@string/label_email"
                         android:inputType="textEmailAddress"
                         android:maxLength="60"
                         android:maxLines="1"
@@ -79,9 +79,9 @@
                         android:id="@+id/login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_password"
+                        android:hint="@string/label_password"
                         android:imeActionId="6"
-                        android:imeActionLabel="@string/action_sign_in"
+                        android:imeActionLabel="@string/button_sign_in"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLength="30"
@@ -96,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in"
+                    android:text="@string/button_sign_in"
                     android:textStyle="bold" />
 
                 <Button
@@ -105,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/action_register"
+                    android:text="@string/button_register"
                     android:textStyle="bold" />
 
             </LinearLayout>

@@ -71,7 +71,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -84,7 +84,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -97,7 +97,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -110,7 +110,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -123,7 +123,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                 </LinearLayout>
@@ -144,7 +144,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -157,7 +157,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -170,7 +170,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -183,7 +183,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                     <kwasilewski.marketplace.helper.PhotoView
@@ -196,7 +196,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_weight="0.20"
                         android:adjustViewBounds="true"
-                        android:contentDescription="@string/new_image_description"
+                        android:contentDescription="@string/label_photo_add"
                         app:srcCompat="@drawable/ic_add_photo" />
 
                 </LinearLayout>
@@ -209,7 +209,7 @@
                         android:id="@+id/new_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_title"
+                        android:hint="@string/label_title"
                         android:inputType="textCapWords"
                         android:maxLength="60"
                         android:maxLines="1"
@@ -226,7 +226,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits="0123456789"
-                        android:hint="@string/prompt_price"
+                        android:hint="@string/label_price"
                         android:inputType="number"
                         android:maxLength="10"
                         android:maxLines="1"
@@ -242,7 +242,7 @@
                         android:id="@+id/new_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_category"
+                        android:hint="@string/label_category"
                         android:inputType="textNoSuggestions"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -257,7 +257,7 @@
                         android:id="@+id/new_subcategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_subcategory"
+                        android:hint="@string/label_subcategory"
                         android:inputType="textNoSuggestions"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -272,7 +272,7 @@
                         android:id="@+id/new_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_description"
+                        android:hint="@string/label_description"
                         android:inputType="textMultiLine"
                         android:maxLength="1000"
                         android:singleLine="true" />
@@ -287,7 +287,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits=" -abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        android:hint="@string/prompt_city"
+                        android:hint="@string/label_city"
                         android:inputType="textCapWords"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -303,7 +303,7 @@
                         android:id="@+id/new_province"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_province"
+                        android:hint="@string/label_province"
                         android:inputType="textNoSuggestions"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -318,9 +318,9 @@
                         android:id="@+id/new_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/prompt_phone"
+                        android:hint="@string/label_phone"
                         android:imeActionId="6"
-                        android:imeActionLabel="@string/action_add_add"
+                        android:imeActionLabel="@string/button_create"
                         android:imeOptions="actionUnspecified"
                         android:inputType="phone"
                         android:maxLength="20"
@@ -335,7 +335,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/action_add_add"
+                    android:text="@string/button_create"
                     android:textStyle="bold" />
 
             </LinearLayout>

@@ -174,13 +174,13 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private boolean sortItemClicked(int id) {
         switch (id) {
             case R.id.sort_newest:
-                sort(R.string.label_sort_default, AdMinimalData.SortingMethod.NEWEST);
+                sort(R.string.menu_sort_default, AdMinimalData.SortingMethod.NEWEST);
                 break;
             case R.id.sort_cheapest:
-                sort(R.string.label_sort_cheapest, AdMinimalData.SortingMethod.CHEAPEST);
+                sort(R.string.menu_sort_cheapest, AdMinimalData.SortingMethod.CHEAPEST);
                 break;
             case R.id.sort_most_expensive:
-                sort(R.string.label_sort_most_expensive, AdMinimalData.SortingMethod.MOSTEXPENSIVE);
+                sort(R.string.menu_sort_most_expensive, AdMinimalData.SortingMethod.MOSTEXPENSIVE);
                 break;
         }
         return true;
@@ -214,7 +214,7 @@ public class AdFragment extends Fragment implements AdListViewAdapter.OnButtonsC
     private void setFilterLabel() {
         long activeFilters = Stream.of(TextUtils.isEmpty(title), prvId == 0, catId == 0, TextUtils.isEmpty(priceMin), TextUtils.isEmpty(priceMax)).filter(bool -> !bool).count();
         if (activeFilters != 0) {
-            filterActiveText.setText(String.format(getString(R.string.label_filters_active), activeFilters));
+            filterActiveText.setText(String.format(getString(R.string.text_ad_filters), activeFilters));
             filterActiveText.setVisibility(View.VISIBLE);
             filterText.setText(null);
         } else {

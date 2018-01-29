@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
     public void unauthorized(Activity activity) {
         inProgress = false;
         showProgress(false);
-        passwordEditText.setError(getString(R.string.error_invalid_password_email));
+        passwordEditText.setError(getString(R.string.error_credentials_invalid));
         passwordEditText.requestFocus();
     }
 

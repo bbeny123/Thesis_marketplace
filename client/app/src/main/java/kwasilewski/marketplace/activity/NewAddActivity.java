@@ -195,9 +195,9 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
     private void photoDialog(final int position) {
         List<DialogItem> items = new ArrayList<>();
         if (position != 0) {
-            items.add(new DialogItem(getString(R.string.action_set_thumbnail), android.R.drawable.ic_menu_gallery));
+            items.add(new DialogItem(getString(R.string.button_thumbnail), android.R.drawable.ic_menu_gallery));
         }
-        items.add(new DialogItem(getString(R.string.action_remove_photo), android.R.drawable.ic_menu_delete));
+        items.add(new DialogItem(getString(R.string.button_remove), android.R.drawable.ic_menu_delete));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setAdapter(DialogItem.getDialogAdapter(this, items), (dialog, which) -> {
@@ -207,7 +207,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
                 photos.remove(this, position);
             }
         });
-        builder.setPositiveButton(getString(R.string.action_cancel), null);
+        builder.setPositiveButton(getString(R.string.button_cancel), null);
         builder.show();
     }
 

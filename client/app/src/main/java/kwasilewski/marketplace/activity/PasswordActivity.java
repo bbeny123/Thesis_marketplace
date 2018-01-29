@@ -103,7 +103,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         }
 
         if (!cancel && !TextUtils.equals(newText, confirmText)) {
-            confirmField.setError(getString(R.string.error_passwords_match));
+            confirmField.setError(getString(R.string.error_passwords_not_match));
             focusView = confirmField;
             cancel = true;
         }
@@ -132,7 +132,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
     @Override
     public void notAcceptable(Activity activity) {
         showProgress(false);
-        oldField.setError(getString(R.string.error_password_match));
+        oldField.setError(getString(R.string.error_password_not_match));
         oldField.requestFocus();
     }
 

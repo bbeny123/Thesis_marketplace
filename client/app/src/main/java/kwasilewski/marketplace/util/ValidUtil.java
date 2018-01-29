@@ -34,7 +34,7 @@ public class ValidUtil {
         if (fieldEmpty(context, email, emailField)) {
             return false;
         } else if (!email.contains("@")) {
-            emailField.setError(context.getString(R.string.error_invalid_email));
+            emailField.setError(context.getString(R.string.error_email_invalid));
             return false;
         }
         return true;
@@ -44,7 +44,7 @@ public class ValidUtil {
         if (fieldEmpty(context, password, passwordField)) {
             return false;
         } else if (password.length() < 4) {
-            passwordField.setError(context.getString(R.string.error_invalid_password));
+            passwordField.setError(context.getString(R.string.error_password_short));
             return false;
         }
         return true;
@@ -54,7 +54,7 @@ public class ValidUtil {
         if (TextUtils.isEmpty(phone)) {
             return nullable || !fieldEmpty(context, phone, phoneField);
         } else if (!PhoneNumberUtils.isGlobalPhoneNumber(phone)) {
-            phoneField.setError(context.getString(R.string.error_incorrect_phone));
+            phoneField.setError(context.getString(R.string.error_phone_invalid));
             return false;
         }
         return true;

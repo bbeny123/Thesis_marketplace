@@ -96,12 +96,12 @@ public class LoginActivity extends AppCompatActivity implements UserListener, Er
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPasswordValid(this, password, passwordEditText)) {
+        if (!ValidUtil.passwordValid(this, password, passwordEditText)) {
             focusView = passwordEditText;
             cancel = true;
         }
 
-        if (!ValidUtil.isEmailValid(this, email, emailEditText)) {
+        if (!ValidUtil.emailValid(this, email, emailEditText)) {
             focusView = emailEditText;
             cancel = true;
         }

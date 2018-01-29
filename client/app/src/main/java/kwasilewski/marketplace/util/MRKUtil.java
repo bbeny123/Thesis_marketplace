@@ -22,7 +22,7 @@ public class MRKUtil {
 
     private static Toast toast;
 
-    public static void toast(final Activity activity, String msg) {
+    public static void toast(final Activity activity, final String msg) {
         hideKeyboard(activity);
         if (toast != null) {
             toast.cancel();
@@ -48,7 +48,7 @@ public class MRKUtil {
         }
     }
 
-    public static void setToolbar(final AppCompatActivity activity, android.support.v7.widget.Toolbar toolbar) {
+    public static void setToolbar(final AppCompatActivity activity, final android.support.v7.widget.Toolbar toolbar) {
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -56,13 +56,13 @@ public class MRKUtil {
         }
     }
 
-    public static void backButtonClicked(Activity activity, MenuItem item) {
+    public static void backButtonClicked(final Activity activity, final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             activity.finish();
         }
     }
 
-    public static boolean checkIme(int id) {
+    public static boolean checkIme(final int id) {
         return id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL;
     }
 
@@ -75,27 +75,25 @@ public class MRKUtil {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static boolean compareNumericStrings(String s1, String s2) {
+    public static boolean compareNumericStrings(final String s1, final String s2) {
         return !s1.isEmpty() && !s2.isEmpty() && Long.parseLong(s1) > Long.parseLong(s2);
     }
 
-    public static String encodePassword(String email, String password) {
+    public static String encodePassword(final String email, final String password) {
         MessageDigest messageDigest;
         try {
             messageDigest = MessageDigest.getInstance("SHA1");
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
-        String combinedPassword = email + password;
-        byte[] result = messageDigest.digest(combinedPassword.getBytes());
         StringBuilder sb = new StringBuilder();
-        for (byte aResult : result) {
+        for (byte aResult : messageDigest.digest((email + password).getBytes())) {
             sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
         }
         return sb.toString();
     }
 
-    public static Intent getFilterIntent(Context context, String title, String priceMin, String priceMax, Long prvId, Long catId, Long sctId) {
+    public static Intent getFilterIntent(final Context context, final String title, final String priceMin, final String priceMax, final Long prvId, final Long catId, final Long sctId) {
         Intent intent = new Intent(context, FilterActivity.class);
         intent.putExtra(AppConstants.TITLE_KEY, title);
         intent.putExtra(AppConstants.PRICE_MIN_KEY, priceMin);

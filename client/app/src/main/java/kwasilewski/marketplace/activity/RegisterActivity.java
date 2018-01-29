@@ -122,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPhoneValid(this, phone, phoneField, true)) {
+        if (!ValidUtil.phoneValid(this, phone, phoneField, true)) {
             focusView = phoneField;
             cancel = true;
         }
@@ -142,12 +142,12 @@ public class RegisterActivity extends AppCompatActivity implements UserListener,
             cancel = true;
         }
 
-        if (!ValidUtil.isPasswordValid(this, password, passwordField)) {
+        if (!ValidUtil.passwordValid(this, password, passwordField)) {
             focusView = passwordField;
             cancel = true;
         }
 
-        if (!ValidUtil.isEmailValid(this, email, emailField)) {
+        if (!ValidUtil.emailValid(this, email, emailField)) {
             focusView = emailField;
             cancel = true;
         }

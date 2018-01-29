@@ -49,7 +49,7 @@ public class FilterActivity extends AppCompatActivity implements HintListener, E
         titleField = findViewById(R.id.filter_title);
         priceFromField = findViewById(R.id.filter_price_from);
         priceToField = findViewById(R.id.filter_price_to);
-        priceToField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
+        priceToField.addTextChangedListener(ValidUtil.positiveNumber());
 
         provinceField = findViewById(R.id.filter_province);
         provinceField.setOnItemClickListener((adapterView, view, position, l) -> SpinnerUtil.getClickedItemId(adapterView, position, provinceField));

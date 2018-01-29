@@ -74,7 +74,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
 
         titleField = findViewById(R.id.edit_title);
         priceField = findViewById(R.id.edit_price);
-        priceField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
+        priceField.addTextChangedListener(ValidUtil.positiveNumber());
         descriptionField = findViewById(R.id.edit_description);
         cityField = findViewById(R.id.edit_city);
         phoneField = findViewById(R.id.edit_phone);
@@ -172,7 +172,7 @@ public class EditActivity extends AppCompatActivity implements HintListener, AdL
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPhoneValid(this, phone, phoneField, false)) {
+        if (!ValidUtil.phoneValid(this, phone, phoneField, false)) {
             focusView = phoneField;
             cancel = true;
         }

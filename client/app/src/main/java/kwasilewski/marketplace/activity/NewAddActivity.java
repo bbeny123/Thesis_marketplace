@@ -53,7 +53,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
     private final PhotoViewList photos = new PhotoViewList();
 
-    private boolean inProgress = false;
+    private boolean inProgress;
     private HintManager hintManager;
     private AdManager adManager;
 
@@ -84,7 +84,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
 
         titleField = findViewById(R.id.new_title);
         priceField = findViewById(R.id.new_price);
-        priceField.addTextChangedListener(ValidUtil.getTextWatcherPositiveNumber());
+        priceField.addTextChangedListener(ValidUtil.positiveNumber());
         descriptionField = findViewById(R.id.new_description);
         cityField = findViewById(R.id.new_city);
         phoneField = findViewById(R.id.new_phone);
@@ -105,7 +105,8 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         SpinnerUtil.enableSpinner(subcategoryField, false);
 
         Button addButton = findViewById(R.id.new_add_button);
-        addButton.setOnClickListener(view -> attemptAdd());
+        addButton.setOnClickListener(
+                view -> attemptAdd());
 
         photos.add(findViewById(R.id.new_image1));
         photos.add(findViewById(R.id.new_image2));
@@ -252,7 +253,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPhoneValid(this, phone, phoneField, false)) {
+        if (!ValidUtil.phoneValid(this, phone, phoneField, false)) {
             focusView = phoneField;
             cancel = true;
         }
@@ -295,7 +296,7 @@ public class NewAddActivity extends AppCompatActivity implements HintListener, A
     }
 
     private void showProgress(final boolean show) {
-        inProgress = true;
+        inProgress = show;
         MRKUtil.showProgressBar(this, newForm, progressBar, show);
     }
 

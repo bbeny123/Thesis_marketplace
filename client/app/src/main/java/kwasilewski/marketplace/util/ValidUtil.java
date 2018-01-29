@@ -14,55 +14,53 @@ import kwasilewski.marketplace.helper.HintSpinner;
 
 public class ValidUtil {
 
-    public static boolean spinnerEmpty(Context context, Long selectedItem, HintSpinner spinner) {
-        if (selectedItem == null) {
+    public static boolean spinnerEmpty(final Context context, Long value, HintSpinner spinner) {
+        if (value == null) {
             spinner.setError(context.getString(R.string.error_field_required));
             return true;
         }
         return false;
     }
 
-    public static boolean fieldEmpty(Context context, String fieldText, TextInputEditText field) {
-        if (TextUtils.isEmpty(fieldText)) {
+    public static boolean fieldEmpty(final Context context, String text, TextInputEditText field) {
+        if (TextUtils.isEmpty(text)) {
             field.setError(context.getString(R.string.error_field_required));
             return true;
         }
         return false;
     }
 
-    public static boolean isEmailValid(Context context, String email, TextInputEditText emailEditText) {
-        if (fieldEmpty(context, email, emailEditText)) {
+    public static boolean emailValid(final Context context, String email, TextInputEditText emailField) {
+        if (fieldEmpty(context, email, emailField)) {
             return false;
         } else if (!email.contains("@")) {
-            emailEditText.setError(context.getString(R.string.error_invalid_email));
+            emailField.setError(context.getString(R.string.error_invalid_email));
             return false;
         }
         return true;
     }
 
-    public static boolean isPasswordValid(Context context, String password, TextInputEditText passwordEditText) {
-        if (fieldEmpty(context, password, passwordEditText)) {
+    public static boolean passwordValid(final Context context, String password, TextInputEditText passwordField) {
+        if (fieldEmpty(context, password, passwordField)) {
             return false;
         } else if (password.length() < 4) {
-            passwordEditText.setError(context.getString(R.string.error_invalid_password));
+            passwordField.setError(context.getString(R.string.error_invalid_password));
             return false;
         }
         return true;
     }
 
-    public static boolean isPhoneValid(Context context, String phoneText, TextInputEditText phone, boolean nullable) {
-        if (nullable && TextUtils.isEmpty(phoneText)) {
-            return true;
-        } else if (fieldEmpty(context, phoneText, phone)) {
-            return false;
-        } else if (!PhoneNumberUtils.isGlobalPhoneNumber(phoneText)) {
-            phone.setError(context.getString(R.string.error_incorrect_phone));
+    public static boolean phoneValid(final Context context, String phone, TextInputEditText phoneField, boolean nullable) {
+        if (TextUtils.isEmpty(phone)) {
+            return nullable || !fieldEmpty(context, phone, phoneField);
+        } else if (!PhoneNumberUtils.isGlobalPhoneNumber(phone)) {
+            phoneField.setError(context.getString(R.string.error_incorrect_phone));
             return false;
         }
         return true;
     }
 
-    public static TextWatcher getTextWatcherPositiveNumber() {
+    public static TextWatcher positiveNumber() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

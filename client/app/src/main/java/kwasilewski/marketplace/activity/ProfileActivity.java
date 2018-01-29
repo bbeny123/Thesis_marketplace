@@ -143,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity implements HintListener, 
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPhoneValid(this, phone, phoneField, true)) {
+        if (!ValidUtil.phoneValid(this, phone, phoneField, true)) {
             focusView = phoneField;
             cancel = true;
         }

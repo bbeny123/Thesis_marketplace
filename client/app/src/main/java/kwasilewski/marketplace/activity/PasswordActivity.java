@@ -86,7 +86,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
         boolean cancel = false;
         View focusView = null;
 
-        if (!ValidUtil.isPasswordValid(this, newText, newField)) {
+        if (!ValidUtil.passwordValid(this, newText, newField)) {
             focusView = newField;
             cancel = true;
         }
@@ -102,7 +102,7 @@ public class PasswordActivity extends AppCompatActivity implements UserListener,
             cancel = true;
         }
 
-        if (!ValidUtil.isPasswordValid(this, oldText, oldField)) {
+        if (!ValidUtil.passwordValid(this, oldText, oldField)) {
             focusView = oldField;
             cancel = true;
         }

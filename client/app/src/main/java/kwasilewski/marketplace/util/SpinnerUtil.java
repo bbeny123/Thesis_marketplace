@@ -26,9 +26,11 @@ public class SpinnerUtil {
         spinner.setError(null);
     }
 
-    public static void enableSpinner(HintSpinner spinner, boolean enabled) {
-        spinner.setEnabled(enabled);
-        spinner.setClickable(enabled);
+    public static void setSpinnerAdapterAndName(Context context, HintSpinner spinner, List<? extends HintData> hintData) {
+        if (hintData != null) {
+            hintData.stream().filter(hint -> hint.getId().equals(spinner.getItemId())).findAny().ifPresent(hint -> spinner.setText(hint.getName()));
+        }
+        setHintAdapter(context, spinner, hintData);
     }
 
     public static void setHintAdapter(Context context, HintSpinner spinner, List<? extends HintData> hintData) {
@@ -43,11 +45,9 @@ public class SpinnerUtil {
         enableSpinner(spinner, true);
     }
 
-    public static void setSpinnerAdapterAndName(Context context, HintSpinner spinner, List<? extends HintData> hintData) {
-        if (hintData != null) {
-            hintData.stream().filter(hint -> hint.getId().equals(spinner.getItemId())).findAny().ifPresent(hint -> spinner.setText(hint.getName()));
-        }
-        setHintAdapter(context, spinner, hintData);
+    public static void enableSpinner(HintSpinner spinner, boolean enabled) {
+        spinner.setEnabled(enabled);
+        spinner.setClickable(enabled);
     }
 
 }
